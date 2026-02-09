@@ -30,27 +30,18 @@ namespace AppEscritorioUPT.Services
 
         // Aquí puedes dejar CrearEquipo sin pedir el código,
         // y usar el que genere este método.
-        public Equipo CrearEquipo(
-            int tipoEquipoId,
-            string? marca,
-            string? modelo,
-            string? numeroSerie,
-            string? direccionIp)
+        public void CrearEquipo(Equipo equipo)
         {
-            if (tipoEquipoId <= 0)
-                throw new ArgumentException("Debe seleccionar un tipo de equipo válido.", nameof(tipoEquipoId));
+            if (equipo.TipoEquipoId <= 0)
+                throw new ArgumentException("Debe seleccionar un tipo de equipo válido.", nameof(equipo));
 
-            var eq = new Equipo
-            {
-                TipoEquipoId = tipoEquipoId,
-                Marca = string.IsNullOrWhiteSpace(marca) ? null : marca.Trim(),
-                Modelo = string.IsNullOrWhiteSpace(modelo) ? null : modelo.Trim(),
-                NumeroSerie = string.IsNullOrWhiteSpace(numeroSerie) ? null : numeroSerie.Trim(),
-                DireccionIp = string.IsNullOrWhiteSpace(direccionIp) ? null : direccionIp.Trim()
-            };
+            // Normalizar textos
+            equipo.Marca = string.IsNullOrWhiteSpace(equipo.Marca) ? null : equipo.Marca.Trim();
+            equipo.Modelo = string.IsNullOrWhiteSpace(equipo.Modelo) ? null : equipo.Modelo.Trim();
+            equipo.NumeroSerie = string.IsNullOrWhiteSpace(equipo.NumeroSerie) ? null : equipo.NumeroSerie.Trim();
+            equipo.DireccionIp = string.IsNullOrWhiteSpace(equipo.DireccionIp) ? null : equipo.DireccionIp.Trim();
 
-            _equipoRepo.Add(eq);
-            return eq;
+            _equipoRepo.Add(equipo);
         }
 
         // ActualizarEquipo y EliminarEquipo pueden quedarse igual,

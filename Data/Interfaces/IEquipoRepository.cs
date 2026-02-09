@@ -11,7 +11,7 @@ namespace AppEscritorioUPT.Data.Interfaces
     {
         IEnumerable<Equipo> GetAll();
         Equipo? GetById(int id);
-        int Add(Equipo equipo);
+        void Add(Equipo equipo);
         void Update(Equipo equipo);
         void Delete(int id);
     }
