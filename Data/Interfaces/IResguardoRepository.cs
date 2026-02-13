@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Domain.Reports;
 
 namespace AppEscritorioUPT.Data.Interfaces
 {
@@ -11,10 +12,13 @@ namespace AppEscritorioUPT.Data.Interfaces
     {
         IEnumerable<Resguardo> GetAll();
         Resguardo? GetById(int id);
-        int Add(Resguardo resguardo);
+        void Add(Resguardo resguardo);
         void Update(Resguardo resguardo);
         void Delete(int id);
 
-        string? ObtenerUltimoCodigoPorAreaYAnio(string nomenclaturaArea, int anio);
+        // Para generación de código de inventario
+        string? GetUltimoCodigoInventarioPorPrefijo(string prefijo);
+
+        //ResguardoReportModel? GetByIdForReport(int id);
     }
 }

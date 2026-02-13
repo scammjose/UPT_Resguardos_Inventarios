@@ -113,8 +113,8 @@ namespace AppEscritorioUPT.Data
             ExecuteNonQuery(connection, @"
                 CREATE TABLE IF NOT EXISTS ResponsablesSistemas (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    NombreCompleto TEXT NOT NULL,
-                    Puesto TEXT
+                    AdministrativoId INTEGER NOT NULL,
+                    FOREIGN KEY (AdministrativoId) REFERENCES Administrativos (Id)
                 );
             ");
 

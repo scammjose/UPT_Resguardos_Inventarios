@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resguardo de Equipo - {{CodigoInventario}}</title>
+    <link rel="stylesheet" href="../Static/Css/resguardo.css">
+</head>
+<body>
+    <header class="encabezado-tabla">
+        <table class="tabla-header">
+            <tr>
+                <td class="col-titulos">
+                    <h1>Resguardo de Equipo</h1>
+                    <!--<h2>Resguardo de Equipo</h2>-->
+                    <p class="codigo">Código de inventario: <strong>{{CodigoInventario}}</strong></p>
+                </td>
+                <td class="col-logo">
+                    <img src="../Static/Images/logo_upt.png" alt="Logo UPT">
+                </td>
+            </tr>
+        </table>
+    </header>
+    <main class="contenido">
+        <section class="bloque bloque-datos-generales">
+            <h3>Datos del Resguardo</h3>
+            <table>
+                <tr>
+                    <th>Fecha de resguardo</th>
+                    <td>{{FechaResguardo}}</td>
+                </tr>
+                <tr>
+                    <th>Área</th>
+                    <td>{{AreaNombre}}</td>
+                </tr>
+                <tr>
+                    <th>Tipo de equipo</th>
+                    <td>{{TipoEquipoNombre}}</td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="bloque bloque-responsable">
+            <h3>Responsable del equipo (Administrativo)</h3>
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <td>{{AdministrativoNombre}}</td>
+                </tr>
+                <tr>
+                    <th>Puesto</th>
+                    <td>{{AdministrativoPuesto}}</td>
+                </tr>
+                <tr>
+                    <th>Área</th>
+                    <td>{{AreaNombre}}</td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="bloque bloque-equipo">
+            <h3>Datos del equipo</h3>
+            <table>
+                <tr>
+                    <th>Descripción</th>
+                    <td>{{EquipoDescripcion}}</td>
+                </tr>
+                <tr>
+                    <th>Marca</th>
+                    <td>{{EquipoMarca}}</td>
+                </tr>
+                <tr>
+                    <th>Modelo</th>
+                    <td>{{EquipoModelo}}</td>
+                </tr>
+                <tr>
+                    <th>Número de serie</th>
+                    <td>{{EquipoNumeroSerie}}</td>
+                </tr>
+                <tr>
+                    <th>Dirección IP</th>
+                    <td>{{EquipoDireccionIp}}</td>
+                </tr>
+            </table>
+
+            <!-- Aquí luego podemos meter bloques condicionales para PC / Teléfono / Impresora -->
+            <!-- BLOQUES DINÁMICOS -->
+            {{BLOQUE_PC}}
+            {{BLOQUE_IMPRESORA}}
+            {{BLOQUE_TELEFONIA}}
+
+        </section>
+
+        <section class="bloque bloque-notas">
+            <h3>Notas / Observaciones</h3>
+            <p>{{Notas}}</p>
+        </section>
+
+        <section class="bloque-firmas">
+            <table class="tabla-firmas">
+                <tr>
+                    <td class="col-firma">
+                        <p>__________________________________</p>
+                        <p><strong>{{AdministrativoNombre}}</strong></p>
+                        <p>Responsable del equipo</p>
+                    </td>
+                    <td class="col-firma">
+                        <p>__________________________________</p>
+                        <p><strong>LIC. AMADOR DELGADILLO LIRA</strong></p>
+                        <p>Responsable de sistemas</p>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+        <footer class="pie-pagina">
+            <p>UPTecámac · {{FechaResguardo}}</p>
+        </footer>
+</body>
+</html>

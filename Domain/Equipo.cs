@@ -55,5 +55,16 @@ namespace AppEscritorioUPT.Domain
         // Flags
         public bool EsPcEscritorio { get; set; }     // true = PC de escritorio completa (CPU + periféricos)
         public bool EsAllInOne { get; set; }         // true = All-in-one (monitor integrado)
+
+        public string DescripcionCorta
+        {
+            get
+            {
+                if (Id == 0)
+                    return "Selecciona una opción";
+
+                return $"{Marca} {Modelo} ({NumeroSerie})";
+            }
+        }
     }
 }

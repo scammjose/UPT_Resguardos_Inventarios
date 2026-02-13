@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Services;
+using AppEscritorioUPT.Helpers;
 
 namespace AppEscritorioUPT.UI
 {
@@ -55,12 +56,19 @@ namespace AppEscritorioUPT.UI
 
         private void CargarAreasCombo()
         {
-            var areas = _areaService.ObtenerAreas().ToList();
+            var areas = _areaService.ObtenerAreas();
 
-            cmbArea.DisplayMember = "Nombre";
-            cmbArea.ValueMember = "Id";
-            cmbArea.DataSource = areas;
-            cmbArea.SelectedIndex = areas.Any() ? 0 : -1;
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbArea,
+                areas,
+                displayMember: "Nombre",
+                valueMember: "Id",
+                itemDefault: new Area
+                {
+                    Id = 0,
+                    Nombre = "Selecciona una opción"
+                }
+            );
         }
 
         private void CargarAdministrativos()
@@ -109,7 +117,7 @@ namespace AppEscritorioUPT.UI
                 return false;
             }
 
-            if (cmbArea.SelectedItem == null)
+            if (cmbArea.SelectedValue is not int areaId || areaId <= 0)
             {
                 MessageBox.Show("Debe seleccionar un área.",
                     "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -128,17 +136,7 @@ namespace AppEscritorioUPT.UI
             {
                 var nombre = txtNombreCompleto.Text;
                 var puesto = txtPuesto.Text;
-                var selectedValue = cmbArea.SelectedValue;
-                if (selectedValue is null)
-                {
-                    MessageBox.Show("Debe seleccionar un área.",
-                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cmbArea.Focus();
-                    return;
-                }
-
-
-                var areaId = (int)selectedValue;
+                var areaId = (int)cmbArea.SelectedValue!;
 
                 _adminService.CrearAdministrativo(nombre, puesto, areaId);
 
@@ -167,15 +165,7 @@ namespace AppEscritorioUPT.UI
             {
                 _adminSeleccionado.NombreCompleto = txtNombreCompleto.Text;
                 _adminSeleccionado.Puesto = txtPuesto.Text;
-                var selectedValue = cmbArea.SelectedValue;
-                if (selectedValue is null)
-                {
-                    MessageBox.Show("Debe seleccionar un área.",
-                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    cmbArea.Focus();
-                    return;
-                }
-                _adminSeleccionado.AreaId = (int)selectedValue;
+                _adminSeleccionado.AreaId = (int)cmbArea.SelectedValue!;
                 _adminService.ActualizarAdministrativo(_adminSeleccionado);
 
                 CargarAdministrativos();

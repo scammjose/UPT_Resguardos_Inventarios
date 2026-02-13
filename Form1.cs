@@ -44,5 +44,23 @@ namespace AppEscritorioUPT
                 frm.ShowDialog(this);
             }
         }
+
+        private void menuResponsablesSistemas_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmResponsablesSistemas())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            };
+        }
+
+        private void menuRegistrarResguardo_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmResguardos
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
+            frm.Show(this);
+        }
     }
 }

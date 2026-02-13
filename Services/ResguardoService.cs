@@ -2,6 +2,7 @@
 using AppEscritorioUPT.Data.Interfaces;
 using AppEscritorioUPT.Data.Repositories;
 using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Domain.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,104 +13,102 @@ namespace AppEscritorioUPT.Services
 {
     public class ResguardoService
     {
-        private readonly IResguardoRepository _resRepo;
+        private readonly IResguardoRepository _resguardoRepo;
         private readonly IAdministrativoRepository _adminRepo;
         private readonly IAreaRepository _areaRepo;
 
         public ResguardoService()
-            : this(new ResguardoRepository(), new AdministrativoRepository(), new AreaRepository())
         {
-        }
-
-        public ResguardoService(
-            IResguardoRepository resRepo,
-            IAdministrativoRepository adminRepo,
-            IAreaRepository areaRepo)
-        {
-            _resRepo = resRepo;
-            _adminRepo = adminRepo;
-            _areaRepo = areaRepo;
+            _resguardoRepo = new ResguardoRepository();
+            _adminRepo = new AdministrativoRepository();
+            _areaRepo = new AreaRepository();
         }
 
         public IEnumerable<Resguardo> ObtenerResguardos()
         {
-            return _resRepo.GetAll();
+            return _resguardoRepo.GetAll();
         }
 
-        private string GenerarCodigoInventario(int administrativoId, int? anioOverride = null)
-        {
-            var admin = _adminRepo.GetById(administrativoId)
-                ?? throw new ArgumentException("El administrativo especificado no existe.", nameof(administrativoId));
+        public Resguardo? ObtenerPorId(int id) => _resguardoRepo.GetById(id);
 
-            var area = _areaRepo.GetById(admin.AreaId)
-                ?? throw new InvalidOperationException("El área asociada al administrativo no existe.");
-
-            if (string.IsNullOrWhiteSpace(area.NomenclaturaInventario))
-                throw new InvalidOperationException("El área no tiene definida una nomenclatura de inventario.");
-
-            var anio = anioOverride ?? DateTime.Now.Year;
-            var nomen = area.NomenclaturaInventario.Trim().ToUpper();
-
-            var ultimo = _resRepo.ObtenerUltimoCodigoPorAreaYAnio(nomen, anio);
-            int consecutivo = 1;
-
-            if (!string.IsNullOrWhiteSpace(ultimo))
-            {
-                var parteNumerica = ultimo.Substring(ultimo.Length - 4);
-                if (int.TryParse(parteNumerica, out int num))
-                {
-                    consecutivo = num + 1;
-                }
-            }
-
-            var consecutivoStr = consecutivo.ToString("D4");
-            return $"UPT-{nomen}-{anio}-{consecutivoStr}";
-        }
-
-        public Resguardo CrearResguardo(
-            int equipoId,
-            int administrativoId,
-            int responsableSistemasId,
-            string? notas)
+        public void CrearResguardo(int equipoId, int administrativoId, int responsableSistemasId,
+                                   DateTime fechaResguardo, string? notas)
         {
             if (equipoId <= 0)
-                throw new ArgumentException("El equipo no es válido.", nameof(equipoId));
+                throw new ArgumentException("Debe seleccionar un equipo válido.", nameof(equipoId));
             if (administrativoId <= 0)
-                throw new ArgumentException("El administrativo no es válido.", nameof(administrativoId));
+                throw new ArgumentException("Debe seleccionar un administrativo válido.", nameof(administrativoId));
             if (responsableSistemasId <= 0)
-                throw new ArgumentException("El responsable de sistemas no es válido.", nameof(responsableSistemasId));
+                throw new ArgumentException("Debe seleccionar un responsable de sistemas válido.", nameof(responsableSistemasId));
 
-            var codigo = GenerarCodigoInventario(administrativoId);
+            var codigo = GenerarCodigoInventario(administrativoId, fechaResguardo);
 
-            var res = new Resguardo
+            var resguardo = new Resguardo
             {
                 EquipoId = equipoId,
                 AdministrativoId = administrativoId,
                 ResponsableSistemasId = responsableSistemasId,
                 CodigoInventario = codigo,
-                FechaResguardo = DateTime.Now.ToString("yyyy-MM-dd"),
-                Notas = string.IsNullOrWhiteSpace(notas) ? null : notas.Trim()
+                FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd"),
+                Notas = notas
             };
 
-            _resRepo.Add(res);
-            return res;
+            _resguardoRepo.Add(resguardo);
         }
 
-        public void ActualizarResguardo(Resguardo r)
+        public void ActualizarResguardo(Resguardo resguardo, DateTime fechaResguardo, string? notas)
         {
-            if (r.Id <= 0)
-                throw new ArgumentException("El Id del resguardo no es válido.", nameof(r));
+            if (resguardo.Id <= 0)
+                throw new ArgumentException("Resguardo inválido.", nameof(resguardo));
 
-            r.Notas = string.IsNullOrWhiteSpace(r.Notas) ? null : r.Notas.Trim();
-            _resRepo.Update(r);
+            resguardo.FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd");
+            resguardo.EquipoId = resguardo.EquipoId;
+            resguardo.Notas = notas;
+
+            _resguardoRepo.Update(resguardo);
         }
 
         public void EliminarResguardo(int id)
         {
             if (id <= 0)
-                throw new ArgumentException("El Id del resguardo no es válido.", nameof(id));
+                throw new ArgumentException("Id inválido.", nameof(id));
 
-            _resRepo.Delete(id);
+            _resguardoRepo.Delete(id);
+        }
+
+        // ===== Generación de código de inventario =====
+        private string GenerarCodigoInventario(int administrativoId, DateTime fecha)
+        {
+            var admin = _adminRepo.GetById(administrativoId)
+                        ?? throw new InvalidOperationException("No se encontró el administrativo.");
+
+            var area = _areaRepo.GetById(admin.AreaId)
+                       ?? throw new InvalidOperationException("No se encontró el área del administrativo.");
+
+            // Ej: UPT-SIS-2026-0007
+            var anio = fecha.Year;
+            var prefijo = $"UPT-{area.NomenclaturaInventario}-{anio}-";
+
+            var ultimoCodigo = _resguardoRepo.GetUltimoCodigoInventarioPorPrefijo(prefijo);
+
+            int consecutivo = 1;
+
+            if (!string.IsNullOrWhiteSpace(ultimoCodigo))
+            {
+                // Partimos por guiones y tomamos el último segmento
+                var partes = ultimoCodigo.Split('-');
+                if (partes.Length >= 4 && int.TryParse(partes[^1], out int num))
+                {
+                    consecutivo = num + 1;
+                }
+            }
+
+            return $"{prefijo}{consecutivo:0000}";
+        }
+        public ResguardoReportModel? ObtenerModeloReporte(int id)
+        {
+            // si tu repo está en interfaz, agrega también el método a la interfaz
+            return ((ResguardoRepository)_resguardoRepo).GetByIdForReport(id);
         }
     }
 }

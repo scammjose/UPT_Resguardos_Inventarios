@@ -1,0 +1,160 @@
+﻿/* --- Base y Estructura Principal --- */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    padding: 20mm; /* Cambiado de margin a padding para mejor manejo de flex */
+    color: #39393a; /* gris institucional */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.contenido {
+    flex: 1; /* Empuja el footer hacia abajo */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Nuevo Encabezado (Logo a la derecha) --- */
+.encabezado-tabla {
+    border-bottom: 2px solid #a02142; /* Línea guinda institucional */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.tabla-header {
+    width: 100%;
+    border: none !important;
+    border-collapse: collapse;
+}
+
+    .tabla-header td {
+        border: none !important;
+        vertical-align: middle; /* Alinea los títulos y el logo al centro verticalmente */
+    }
+
+.col-titulos {
+    text-align: left;
+}
+
+    .col-titulos h1 {
+        font-size: 16pt;
+        margin: 0;
+        color: #a02142;
+    }
+
+    .col-titulos h2 {
+        font-size: 13pt;
+        margin: 3px 0;
+        color: #39393a;
+    }
+
+    .col-titulos .codigo {
+        font-size: 10pt;
+        margin-top: 5px;
+    }
+
+.col-logo {
+    text-align: right; /* Empuja el logo totalmente a la derecha */
+    width: 120px; /* Espacio reservado para el logo */
+}
+
+    .col-logo img {
+        height: 75px; /* Ajusta el tamaño según necesites */
+        display: block;
+        margin-left: auto;
+    }
+
+/* --- Bloques y Tablas Generales --- */
+.bloque {
+    margin-top: 12px;
+}
+
+    .bloque h3 {
+        font-size: 11pt;
+        background-color: #dcc6a2; /* crema */
+        padding: 4px 6px;
+        margin: 0 0 6px 0;
+        border-radius: 3px;
+    }
+
+    .bloque table, .tbl {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 5px;
+        margin-top: 6px;
+    }
+
+        /* Estilos de celdas para tablas de bloque y tablas dinámicas (.tbl) */
+        .bloque table th,
+        .bloque table td,
+        .tbl th,
+        .tbl td {
+            border: 1px solid #ccc;
+            padding: 4px 6px;
+            font-size: 10pt;
+            vertical-align: top;
+        }
+
+        .bloque table th, .tbl th {
+            background-color: #f2f2f2;
+            text-align: left;
+            width: 30%; /* Consistente con el 30% original o los 140px aproximados */
+        }
+
+/* --- Bloques Dinámicos (Cards) --- */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.card-header {
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.section-title {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* --- Notas --- */
+.bloque-notas p {
+    min-height: 40px;
+    border: 1px solid #ccc;
+    padding: 4px 6px;
+}
+
+/* --- Firmas (Compatibilidad con wkhtmltopdf) --- */
+.bloque-firmas {
+    margin-top: 60px;
+    width: 100%;
+}
+
+.tabla-firmas {
+    width: 100%;
+    border: none !important; /* Quitamos bordes para que no parezca tabla de datos */
+    border-collapse: collapse;
+}
+
+    .tabla-firmas td {
+        border: none !important; /* Aseguramos que no herede bordes de .bloque table */
+        width: 50%;
+        text-align: center;
+        font-size: 10pt;
+        vertical-align: bottom;
+    }
+
+/* Evitar que se corten las firmas entre páginas */
+.bloque-firmas {
+    page-break-inside: avoid;
+}

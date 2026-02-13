@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AppEscritorioUPT.Helpers;
 
 namespace AppEscritorioUPT.UI
 {
@@ -79,12 +80,19 @@ namespace AppEscritorioUPT.UI
 
         private void CargarCombos()
         {
-            var tipos = _tipoService.ObtenerTipos().ToList();
+            var tipos = _tipoService.ObtenerTipos();
 
-            cmbTipoEquipo.DisplayMember = "Nombre";
-            cmbTipoEquipo.ValueMember = "Id";
-            cmbTipoEquipo.DataSource = tipos;
-            cmbTipoEquipo.SelectedIndex = tipos.Any() ? 0 : -1;
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbTipoEquipo,
+                tipos,
+                displayMember: "Nombre",
+                valueMember: "Id",
+                itemDefault: new TipoEquipo
+                {
+                    Id = 0,
+                    Nombre = "Selecciona una opción"
+                }
+            );
         }
 
         private void CargarEquipos()
@@ -174,12 +182,104 @@ namespace AppEscritorioUPT.UI
 
         private bool Validar()
         {
-            if (cmbTipoEquipo.SelectedValue is null)
+            // 1. Tipo de equipo obligatorio
+            if (cmbTipoEquipo.SelectedValue is not int tipoId || tipoId <= 0)
             {
                 MessageBox.Show("Debe seleccionar un tipo de equipo.",
                     "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 cmbTipoEquipo.Focus();
                 return false;
+            }
+
+            // 2. Campos comunes
+            if (string.IsNullOrWhiteSpace(txtMarca.Text))
+            {
+                MessageBox.Show("La marca es obligatoria.",
+                    "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtMarca.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtModelo.Text))
+            {
+                MessageBox.Show("El modelo es obligatorio.",
+                    "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtModelo.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtNumeroSerie.Text))
+            {
+                MessageBox.Show("El número de serie es obligatorio.",
+                    "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNumeroSerie.Focus();
+                return false;
+            }
+
+            // 3. Validaciones según panel visible (no amarramos a IDs de catálogo)
+            // ===== PC / All in One =====
+            if (pnlPc.Visible)
+            {
+                if (string.IsNullOrWhiteSpace(txtMemoriaRam.Text))
+                {
+                    MessageBox.Show("La memoria RAM es obligatoria para equipos de cómputo.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtMemoriaRam.Focus();
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtProcesador.Text))
+                {
+                    MessageBox.Show("El procesador es obligatorio para equipos de cómputo.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtProcesador.Focus();
+                    return false;
+                }
+
+                // Si es PC de escritorio y muestras periféricos, puedes exigir algunos:
+                if (rbPcEscritorio.Checked && pnlPerifericos.Visible)
+                {
+                    if (string.IsNullOrWhiteSpace(txtMarcaMonitor.Text) ||
+                        string.IsNullOrWhiteSpace(txtModeloMonitor.Text))
+                    {
+                        MessageBox.Show("Capture al menos la marca y modelo del monitor.",
+                            "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        txtMarcaMonitor.Focus();
+                        return false;
+                    }
+                }
+            }
+
+            // ===== Impresora / Escáner =====
+            if (pnlImpresora.Visible)
+            {
+                if (cmbTipoImpresion.SelectedIndex < 0)
+                {
+                    MessageBox.Show("Debe seleccionar el tipo de impresión.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    cmbTipoImpresion.Focus();
+                    return false;
+                }
+            }
+
+            // ===== Telefonía IP =====
+            if (pnlTelefono.Visible)
+            {
+                if (string.IsNullOrWhiteSpace(txtMacAddress.Text))
+                {
+                    MessageBox.Show("La dirección MAC es obligatoria para teléfonos IP.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtMacAddress.Focus();
+                    return false;
+                }
+
+                if (string.IsNullOrWhiteSpace(txtNumeroExtension.Text))
+                {
+                    MessageBox.Show("El número de extensión es obligatorio para teléfonos IP.",
+                        "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    txtNumeroExtension.Focus();
+                    return false;
+                }
             }
 
             return true;
@@ -193,10 +293,7 @@ namespace AppEscritorioUPT.UI
 
             try
             {
-                var tipoValue = cmbTipoEquipo.SelectedValue;
-                if (tipoValue is null) return;
-
-                int tipoId = (int)tipoValue;
+                int tipoId = (int)cmbTipoEquipo.SelectedValue!;
 
                 var marca = txtMarca.Text;
                 var modelo = txtModelo.Text;
@@ -299,10 +396,8 @@ namespace AppEscritorioUPT.UI
 
             try
             {
-                var tipoValue = cmbTipoEquipo.SelectedValue;
-                if (tipoValue is null) return;
+                _equipoSeleccionado.TipoEquipoId = (int)cmbTipoEquipo.SelectedValue!;
 
-                _equipoSeleccionado.TipoEquipoId = (int)tipoValue;
                 _equipoSeleccionado.Marca = txtMarca.Text;
                 _equipoSeleccionado.Modelo = txtModelo.Text;
                 _equipoSeleccionado.NumeroSerie = txtNumeroSerie.Text;
@@ -548,9 +643,21 @@ namespace AppEscritorioUPT.UI
         // Más adelante aquí decidiremos qué panel mostrar (PC, impresora, teléfono, etc.)
         private void ActualizarSeccionesPorTipo()
         {
-            // Por ahora: si el tipo tiene que ver con PC, mostramos el panel de PC.
-            // Más adelante agregaremos condiciones para impresoras, teléfonos, etc.
+            // 1) Ocultar todos los paneles
+            pnlPc.Visible = false;
+            pnlImpresora.Visible = false;
+            pnlTelefono.Visible = false;
 
+            // 2) Si está en "Selecciona una opción" (Id = 0) o algo inválido,
+            //    NO debemos mostrar ningún panel.
+            if (cmbTipoEquipo.SelectedValue is not int tipoId || tipoId <= 0)
+            {
+                // Además aseguramos que los periféricos no se muestren
+                pnlPerifericos.Visible = false;
+                return;
+            }
+
+            // 3) A partir de aquí, ya sabemos que es un tipo válido
             var tipoTexto = (cmbTipoEquipo.Text ?? string.Empty).ToLower();
 
             // Normalizamos acentos básicos
@@ -558,12 +665,8 @@ namespace AppEscritorioUPT.UI
                                  .Replace("í", "i").Replace("ó", "o")
                                  .Replace("ú", "u");
 
-            // 1) Ocultar todos los paneles
-            pnlPc.Visible = false;
-            pnlImpresora.Visible = false;
-            pnlTelefono.Visible = false;
+            
 
-            // 2) Decidir cuál mostrar
             // ====== COMPUTADORAS ======
             if (tipoTexto.Contains("pc") ||
                 tipoTexto.Contains("escritorio") ||
