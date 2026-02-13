@@ -36,8 +36,9 @@
             menuEquipos = new ToolStripMenuItem();
             menuResponsablesSistemas = new ToolStripMenuItem();
             menuResguardos = new ToolStripMenuItem();
-            tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
             menuRegistrarResguardo = new ToolStripMenuItem();
+            menuPorAdministrativo = new ToolStripMenuItem();
+            tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -96,15 +97,10 @@
             // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
-            // 
-            // tiposDeEquiposToolStripMenuItem
-            // 
-            tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
-            tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
             // menuRegistrarResguardo
             // 
@@ -112,6 +108,18 @@
             menuRegistrarResguardo.Size = new Size(196, 22);
             menuRegistrarResguardo.Text = "Registrar un Resguardo";
             menuRegistrarResguardo.Click += menuRegistrarResguardo_Click;
+            // 
+            // menuPorAdministrativo
+            // 
+            menuPorAdministrativo.Name = "menuPorAdministrativo";
+            menuPorAdministrativo.Size = new Size(196, 22);
+            menuPorAdministrativo.Text = "Por Administrativo";
+            menuPorAdministrativo.Click += menuPorAdministrativo_Click;
+            // 
+            // tiposDeEquiposToolStripMenuItem
+            // 
+            tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
+            tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
             // Form1
             // 
@@ -141,5 +149,6 @@
         private ToolStripMenuItem menuResguardos;
         private ToolStripMenuItem menuResponsablesSistemas;
         private ToolStripMenuItem menuRegistrarResguardo;
+        private ToolStripMenuItem menuPorAdministrativo;
     }
 }

@@ -3,6 +3,7 @@ using AppEscritorioUPT.Data.Interfaces;
 using AppEscritorioUPT.Data.Repositories;
 using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Domain.Reports;
+using AppEscritorioUPT.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,20 @@ namespace AppEscritorioUPT.Services
         public IEnumerable<Resguardo> ObtenerResguardos()
         {
             return _resguardoRepo.GetAll();
+        }
+
+        public List<ResguardoReportModel> ObtenerResguardosPorAdministrativo(int administrativoId)
+        {
+            if (administrativoId <= 0)
+                throw new ArgumentException("Administrativo inválido.", nameof(administrativoId));
+
+            return ((ResguardoRepository)_resguardoRepo)
+                .GetByAdministrativoIdForReport(administrativoId);
+        }
+
+        public List<ResguardoReportModel> ObtenerModelosReportePorAdministrativo(int administrativoId)
+        {
+            return ((ResguardoRepository)_resguardoRepo).GetByAdministrativoIdForReport(administrativoId);
         }
 
         public Resguardo? ObtenerPorId(int id) => _resguardoRepo.GetById(id);

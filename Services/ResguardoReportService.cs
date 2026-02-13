@@ -82,43 +82,6 @@ namespace AppEscritorioUPT.Services
         }
 
         /// <summary>
-        /// Construye el modelo del reporte a partir del ID de resguardo.
-        /// Aquí usamos tu servicio existente para obtener los datos.
-        /// </summary>
-        private ResguardoReportModel ConstruirModelo(int resguardoId)
-        {
-            // OJO: aquí asumo que tienes un método ObtenerPorIdConDetalles
-            // Si no existe, lo armamos con tu ResguardoRepository.
-            var resguardo = _resguardoService.ObtenerPorId(resguardoId);
-
-            if (resguardo == null)
-                throw new Exception($"No se encontró el resguardo con Id {resguardoId}.");
-
-            var modelo = new ResguardoReportModel
-            {
-                CodigoInventario = resguardo.CodigoInventario,
-                FechaResguardo = resguardo.FechaResguardo ?? string.Empty,
-                AreaNombre = resguardo.AreaNombre ?? string.Empty,
-                TipoEquipoNombre = string.Empty,
-
-                AdministrativoNombre = resguardo.AdministrativoNombre ?? string.Empty,
-                AdministrativoPuesto = string.Empty, // si no lo tienes aún, lo dejamos "" o lo agregamos al query
-
-                ResponsableSistemasNombre = resguardo.ResponsableSistemasNombre ?? string.Empty,
-                ResponsableSistemasPuesto = string.Empty, // igual comentario
-
-                EquipoMarca = string.Empty,
-                EquipoModelo = string.Empty,
-                EquipoNumeroSerie = string.Empty,
-                EquipoDireccionIp = string.Empty,
-
-                Notas = resguardo.Notas ?? string.Empty
-            };
-
-            return modelo;
-        }
-
-        /// <summary>
         /// Lee el archivo resguardo.html desde Reports/Templates/Html
         /// </summary>
         private string CargarPlantillaHtml()
@@ -215,7 +178,7 @@ namespace AppEscritorioUPT.Services
                               <table class='tbl'>
                                 <tbody>
                                   <tr><th>RAM</th><td>{m.MemoriaRam}</td><th>Procesador</th><td>{m.Procesador}</td></tr>
-                                  <tr><th>Disco</th><td>{m.DiscoDuro}</td><th>Lector CD</th><td>{(m.TieneLectorCd ? "Sí" : "No")}</td></tr
+                                  <tr><th>Disco</th><td>{m.DiscoDuro}</td><th>Lector CD</th><td>{(m.TieneLectorCd ? "Sí" : "No")}</td></tr>
                                 </tbody>
                               </table>
                               {perif}
@@ -269,5 +232,97 @@ namespace AppEscritorioUPT.Services
 
             return (bloquePc, bloqueImp, bloqueTel);
         }
+
+        public string GenerarPdfResguardosPorAdministrativo(int administrativoId)
+        {
+            var modelos = _resguardoRepo.GetByAdministrativoIdForReport(administrativoId);
+
+            if (modelos == null || modelos.Count == 0)
+                throw new Exception("La persona seleccionada no tiene resguardos.");
+
+            var template = CargarPlantillaHtml();
+
+            // Construimos un HTML “master” con todas las hojas
+            var sb = new StringBuilder();
+
+            // Abrimos un documento completo
+            sb.AppendLine("<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>");
+            sb.AppendLine("<title>Resguardos</title>");
+            sb.AppendLine("<link rel='stylesheet' href='../Static/Css/resguardo.css'>");
+            sb.AppendLine("</head><body>");
+
+            for (int i = 0; i < modelos.Count; i++)
+            {
+                var m = modelos[i];
+
+                var html = template;
+
+                html = ReemplazarPlaceholders(html, m);
+
+                var (bPc, bImp, bTel) = ConstruirBloques(m);
+                html = html.Replace("{{BLOQUE_PC}}", bPc)
+                           .Replace("{{BLOQUE_IMPRESORA}}", bImp)
+                           .Replace("{{BLOQUE_TELEFONIA}}", bTel);
+
+                // IMPORTANTE: quitamos <html>, <head>, <body> del template para insertarlo dentro del master
+                html = ExtraerSoloBody(html);
+
+                sb.AppendLine(html);
+
+                if (i < modelos.Count - 1)
+                    sb.AppendLine("<div class='page-break'></div>");
+            }
+
+            sb.AppendLine("</body></html>");
+
+            // Guardar HTML
+            var templatesRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Templates");
+            var htmlOutputDir = Path.Combine(templatesRoot, "Html");
+            Directory.CreateDirectory(htmlOutputDir);
+
+            var nombreAdminSafe = SafeFileName(modelos[0].AdministrativoNombre);
+            var fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            var htmlFileName = $"resguardos_{nombreAdminSafe}_{fecha}.html";
+            var htmlPath = Path.Combine(htmlOutputDir, htmlFileName);
+
+            File.WriteAllText(htmlPath, sb.ToString(), Encoding.UTF8);
+
+            // PDF destino
+            var pdfOutputDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Output");
+            Directory.CreateDirectory(pdfOutputDir);
+
+            var pdfFileName = $"Resguardos_{administrativoId}_{nombreAdminSafe}_{fecha}.pdf";
+            var pdfPath = Path.Combine(pdfOutputDir, pdfFileName);
+
+            PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+
+            return pdfPath;
+        }
+
+        private static string SafeFileName(string text)
+        {
+            foreach (var c in Path.GetInvalidFileNameChars())
+                text = text.Replace(c, '_');
+            return string.IsNullOrWhiteSpace(text) ? "SIN_NOMBRE" : text.Trim();
+        }
+
+        // Extrae solo el contenido del <body>...</body> para insertarlo en el master
+        private static string ExtraerSoloBody(string html)
+        {
+            var start = html.IndexOf("<body", StringComparison.OrdinalIgnoreCase);
+            if (start >= 0)
+            {
+                start = html.IndexOf(">", start, StringComparison.OrdinalIgnoreCase);
+                if (start >= 0) start++;
+            }
+
+            var end = html.LastIndexOf("</body>", StringComparison.OrdinalIgnoreCase);
+
+            if (start >= 0 && end > start)
+                return html.Substring(start, end - start);
+
+            return html; // fallback
+        }
+
     }
 }
