@@ -281,7 +281,7 @@ namespace AppEscritorioUPT.Services
             Directory.CreateDirectory(htmlOutputDir);
 
             var nombreAdminSafe = SafeFileName(modelos[0].AdministrativoNombre);
-            var fecha = DateTime.Now.ToString("yyyy-MM-dd");
+            var fecha = DateTime.Now.ToString("dd-MM-yyyy");
             var htmlFileName = $"resguardos_{nombreAdminSafe}_{fecha}.html";
             var htmlPath = Path.Combine(htmlOutputDir, htmlFileName);
 
