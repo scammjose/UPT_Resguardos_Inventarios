@@ -23,7 +23,6 @@ namespace AppEscritorioUPT.Services
             _estadisticasRepository = estadisticasRepository;
         }
 
-        #region Métodos de Totales Generales
 
         public int ObtenerTotalAdministrativos()
         {
@@ -40,9 +39,6 @@ namespace AppEscritorioUPT.Services
             return _estadisticasRepository.GetTotalResguardos();
         }
 
-        #endregion
-
-        #region Métodos de Agrupación para Gráficos
 
         public Dictionary<string, int> ObtenerAdministrativosPorArea()
         {
@@ -69,6 +65,5 @@ namespace AppEscritorioUPT.Services
             return _estadisticasRepository.GetImpresorasPorTipoImpresion();
         }
 
-        #endregion
     }
 }

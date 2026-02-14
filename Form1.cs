@@ -51,7 +51,8 @@ namespace AppEscritorioUPT
             {
                 frm.StartPosition = FormStartPosition.CenterParent;
                 frm.ShowDialog(this);
-            };
+            }
+            ;
         }
 
         private void menuRegistrarResguardo_Click(object sender, EventArgs e)
@@ -70,6 +71,16 @@ namespace AppEscritorioUPT
                 frm.StartPosition = FormStartPosition.CenterParent;
                 frm.ShowDialog(this);
             };
+        }
+
+        private void menuEstadisticos_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmEstadisticas())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
         }
     }
 }
