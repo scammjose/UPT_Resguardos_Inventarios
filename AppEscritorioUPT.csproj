@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Reports\Templates\Html\mantenimiento.html" />
     <None Remove="Reports\Templates\Html\resguardo.html" />
+    <None Remove="Reports\Templates\Static\Css\mantenimiento.css" />
     <None Remove="Reports\Templates\Static\Css\resguardo.css" />
     <None Remove="Reports\Templates\Static\Images\logo_colmillos.png" />
     <None Remove="Reports\Templates\Static\Images\logo_upt.png" />
@@ -17,7 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Reports\Templates\Html\mantenimiento.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Reports\Templates\Html\resguardo.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Reports\Templates\Static\Css\mantenimiento.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Reports\Templates\Static\Css\resguardo.css">

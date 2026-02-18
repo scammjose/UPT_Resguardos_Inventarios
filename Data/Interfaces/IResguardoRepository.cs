@@ -20,5 +20,8 @@ namespace AppEscritorioUPT.Data.Interfaces
         string? GetUltimoCodigoInventarioPorPrefijo(string prefijo);
 
         //ResguardoReportModel? GetByIdForReport(int id);
+
+        IEnumerable<Resguardo> GetByTipoEquipoId(int tipoEquipoId);
+        IEnumerable<Resguardo> GetByAreaAndTipoEquipo(int areaId, int tipoEquipoId);
     }
 }

@@ -82,5 +82,55 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void asignarCheckListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmMantenimientos())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void asignarCheckListPor¡reaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmMantenimientosPorArea())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void historialYEdiciÛnDeMantenimientosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmHistorialMantenimientos())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void generarCheckListPorAdministrativoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmImpresionChecklist())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void generarCheckListPor¡reaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmImpresionPorArea())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

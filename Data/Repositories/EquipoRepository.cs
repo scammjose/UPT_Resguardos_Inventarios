@@ -196,7 +196,7 @@ namespace AppEscritorioUPT.Data.Repositories
             using var connection = Database.GetOpenConnection();
             using var cmd = connection.CreateCommand();
             cmd.CommandText = "DELETE FROM Equipos WHERE Id = @id;";
-            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@id", id);
             cmd.ExecuteNonQuery();
         }
 

@@ -133,6 +133,23 @@ namespace AppEscritorioUPT.Data
                     FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
                 );
             ");
+
+            // 7. Mantenimientos (Historial de revisiones)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Mantenimientos_administrativos (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EquipoId INTEGER NOT NULL,
+                    AdministrativoId INTEGER NOT NULL,
+                    ResponsableSistemasId INTEGER NOT NULL, -- El técnico que hace el mantenimiento
+                    Fecha TEXT NOT NULL,
+                    Tipo TEXT NOT NULL, -- 'Programado' o 'Correctivo'
+                    Observaciones TEXT,
+                    CreadoAutomaticamente INTEGER DEFAULT 1, -- Para saber si fue por el botón masivo
+                    FOREIGN KEY (EquipoId) REFERENCES Equipos (Id),
+                    FOREIGN KEY (AdministrativoId) REFERENCES Administrativos (Id),
+                    FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
+                );
+            ");
         }
 
         /// <summary>

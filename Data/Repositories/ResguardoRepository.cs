@@ -448,5 +448,56 @@ namespace AppEscritorioUPT.Data.Repositories
             return lista;
         }
 
+        public IEnumerable<Resguardo> GetByTipoEquipoId(int tipoEquipoId)
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            // Reutilizamos tu BaseSelect que ya hace JOIN con Equipos e
+            cmd.CommandText = BaseSelect + @"
+                WHERE e.TipoEquipoId = @tipoId
+                ORDER BY r.FechaResguardo;
+            ";
+
+            cmd.Parameters.AddWithValue("@tipoId", tipoEquipoId);
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<Resguardo>();
+
+            while (reader.Read())
+            {
+                lista.Add(MapResguardo(reader));
+            }
+
+            return lista;
+        }
+
+        public IEnumerable<Resguardo> GetByAreaAndTipoEquipo(int areaId, int tipoEquipoId)
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            // Reutilizamos BaseSelect que ya tiene todos los JOINS necesarios
+            // Filtramos por el Área del Administrativo (a.AreaId) Y el Tipo de Equipo (e.TipoEquipoId)
+            cmd.CommandText = BaseSelect + @"
+                WHERE a.AreaId = @areaId 
+                  AND e.TipoEquipoId = @tipoId
+                ORDER BY r.FechaResguardo;
+            ";
+
+            cmd.Parameters.AddWithValue("@areaId", areaId);
+            cmd.Parameters.AddWithValue("@tipoId", tipoEquipoId);
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<Resguardo>();
+
+            while (reader.Read())
+            {
+                lista.Add(MapResguardo(reader));
+            }
+
+            return lista;
+        }
+
     }
 }

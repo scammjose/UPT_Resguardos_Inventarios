@@ -1,0 +1,249 @@
+﻿body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.page {
+    width: 21cm; /* Ancho A4 */
+    margin: 0 auto;
+    padding: 10px;
+    background: white;
+}
+
+/* Encabezado */
+.header-table {
+    width: 100%;
+    border-bottom: 2px solid #800000; /* Color vino institucional */
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.logo-left, .logo-right {
+    width: 15%;
+    text-align: center;
+}
+
+    .logo-left img, .logo-right img {
+        max-width: 80px;
+        height: auto;
+    }
+
+.logo-center {
+    width: 70%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14pt;
+    color: #800000;
+}
+
+/* Tablas de Información */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+    .info-table th {
+        text-align: left;
+        background-color: #f2f2f2;
+        padding: 5px;
+        border: 1px solid #ddd;
+        font-size: 10pt;
+        width: 15%;
+    }
+
+    .info-table td {
+        padding: 5px;
+        border: 1px solid #ddd;
+        font-size: 10pt;
+    }
+
+/* Tabla de Checklist (Dinámica) */
+.check-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    background-color: #333;
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 11pt;
+    border: 1px solid #333;
+}
+
+.check-table td {
+    border: 1px solid #999;
+    padding: 4px 8px;
+    font-size: 10pt;
+}
+
+.check-cell {
+    width: 50px;
+    text-align: center;
+}
+
+/* Observaciones */
+.obs-table {
+    width: 100%;
+    margin-bottom: 30px;
+    border-collapse: collapse;
+}
+
+    .obs-table th {
+        text-align: left;
+        background-color: #f2f2f2;
+        padding: 5px;
+        border: 1px solid #999;
+    }
+
+.obs-box {
+    height: 60px;
+    border: 1px solid #999;
+    padding: 5px;
+    vertical-align: top;
+    font-style: italic;
+}
+
+/* Firmas */
+.firmas-container {
+    width: 100%;
+    margin-top: 40px;
+    border-collapse: collapse;
+}
+
+.firma-cell {
+    width: 33%;
+    text-align: center;
+    vertical-align: top;
+    padding: 0 10px;
+}
+
+.firma-line {
+    border-top: 1px solid #333;
+    margin-bottom: 5px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-leyenda {
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+.check-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+    .check-table th, .check-table td {
+        border: 1px solid #000; /* Bordes negros firmes como Excel */
+        padding: 4px;
+        font-size: 10pt;
+    }
+
+/* Título de Sección (Fondo Negro) */
+.section-title {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+    text-transform: uppercase;
+}
+
+/* Encabezados de columnas (Actividad, Realizado...) */
+.column-headers th {
+    background-color: #e0e0e0; /* Gris claro */
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+}
+
+/* Celda de Actividad */
+.item-cell {
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* Celda del Checkbox */
+.check-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* El cuadrito vacío para palomear */
+.checkbox-box {
+    width: 15px;
+    height: 15px;
+    border: 1px solid #000;
+    display: inline-block;
+    margin-top: 2px;
+}
+
+/* Celda de Observaciones */
+.obs-cell {
+    height: 25px; /* Altura mínima para que quepa letra a mano */
+}
+
+
+/* Estilos para la tabla de Checklist de 3 Columnas */
+.check-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+    .check-table th, .check-table td {
+        border: 1px solid #000; /* Borde negro sólido */
+        padding: 5px;
+        font-size: 10pt;
+        vertical-align: middle;
+    }
+
+/* Títulos de sección (Barra negra) */
+.section-title {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Encabezados de columna (Gris) */
+.column-headers th {
+    background-color: #d9d9d9;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Cuadrito de Check */
+.check-cell {
+    text-align: center;
+}
+
+.checkbox-box {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #000;
+    line-height: 16px; /* Para centrar la X si la pones por código */
+    font-weight: bold;
+}
+
+/* Celda de observación vacía */
+.obs-cell {
+    height: 25px;
+}

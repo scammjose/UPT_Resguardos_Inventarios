@@ -118,9 +118,7 @@
         private Button btnEliminar;
         private Button btnActualizar;
         private Button btnAgregar;
-        private TextBox txtDescripcion;
         private TextBox txtNombre;
-        private Label lbDescripcion;
         private Label lbNombre;
         private DataGridView dgvTipos;
     }

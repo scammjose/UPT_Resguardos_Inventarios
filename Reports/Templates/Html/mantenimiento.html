@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CHECK-LIST MANTENIMIENTO</title>
+    <link rel="stylesheet" href="@RUTA_CSS">
+</head>
+<body>
+    <div class="page">
+        <table class="header-table">
+            <tr>
+                <td class="logo-left"><img src="@LOGO_UPT" alt="UPT"></td>
+                <td class="logo-center">
+                    CHECK-LIST DE MANTENIMIENTO @TIPO_MANTENIMIENTO<br>
+                    <span style="font-size: 12pt; color: #333;">EQUIPO: @TIPO_EQUIPO_NOMBRE</span>
+                </td>
+                <td class="logo-right"><img src="@LOGO_COLMILLOS" alt="Sistemas"></td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <th>RESPONSABLE:</th>
+                <td>@RESPONSABLE_EQUIPO</td>
+                <th>FECHA:</th>
+                <td>@FECHA</td>
+            </tr>
+            <tr>
+                <th>ÁREA:</th>
+                <td>@AREA</td>
+                <th>MARCA/MODELO:</th>
+                <td>@MARCA_MODELO</td>
+            </tr>
+            <tr>
+                <th>CÓDIGO INV:</th>
+                <td>@CODIGO_INVENTARIO</td>
+                <th>SERIE:</th>
+                <td>@SERIE</td>
+            </tr>
+        </table>
+
+        <table class="check-table">
+            @FILAS_DINAMICAS
+        </table>
+
+        <table class="obs-table">
+            <tr>
+                <th>OBSERVACIONES GENERALES:</th>
+            </tr>
+            <tr>
+                <td class="obs-box">@OBSERVACIONES</td>
+            </tr>
+        </table>
+
+        <table class="firmas-container">
+            <tr>
+                <td class="firma-cell">
+                    <div style="height: 40px;"></div>
+                    <div class="firma-line"></div>
+                    ELABORÓ<br>
+                    <strong>@TECNICO_NOMBRE</strong>
+                </td>
+                <td class="firma-cell">
+                    <div style="height: 40px;"></div>
+                    <div class="firma-line"></div>
+                    RESPONSABLE DEL EQUIPO<br>
+                    <strong>@RESPONSABLE_EQUIPO</strong>
+                </td>
+                <td class="firma-cell">
+                    <div style="height: 40px;"></div>
+                    <div class="firma-line"></div>
+                    VO. BO. LIC. AMADOR DELGADILLO LIRA<br>
+                    <strong>JEFE DE DEPARTAMENTO</strong>
+                </td>
+            </tr>
+        </table>
+
+        <div class="footer-leyenda">&lt;COMPETENCIAS PROFESIONALES PARA TRIUNFAR EN LA VIDA&gt;</div>
+    </div>
+</body>
+</html>
