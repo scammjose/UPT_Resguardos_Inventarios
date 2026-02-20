@@ -28,6 +28,8 @@ namespace AppEscritorioUPT.UI
         {
             InitializeComponent();
 
+            ThemeHelper.AplicarTema(this);
+
             _mantenimientoService = new MantenimientoAulaService();
             _edificioRepo = new EdificioRepository();
             _reportService = new MantenimientoAulaReportService();

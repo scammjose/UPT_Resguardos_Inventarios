@@ -175,7 +175,7 @@ namespace AppEscritorioUPT.Data
                 );
             ");
 
-            // Catálogo de Tipos de Mantenimiento
+            // 10. Catálogo de Tipos de Mantenimiento
             ExecuteNonQuery(connection, @"
                 CREATE TABLE IF NOT EXISTS TiposMantenimiento (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -183,7 +183,7 @@ namespace AppEscritorioUPT.Data
                 );
             ");
 
-            // Insertamos los valores por defecto si la tabla está vacía
+            // 10.1 Insertamos los valores por defecto si la tabla está vacía
             ExecuteNonQuery(connection, @"
                 INSERT INTO TiposMantenimiento (Nombre)
                 SELECT 'PREDICTIVO'
@@ -192,6 +192,34 @@ namespace AppEscritorioUPT.Data
                 INSERT INTO TiposMantenimiento (Nombre)
                 SELECT 'CORRECTIVO'
                 WHERE NOT EXISTS (SELECT 1 FROM TiposMantenimiento WHERE Nombre = 'CORRECTIVO');
+            ");
+
+            // 11. Tabla de Laboratorios
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Laboratorios (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nombre TEXT NOT NULL,
+                    EdificioId INTEGER NOT NULL,
+                    AreaId INTEGER NOT NULL,
+                    ResponsableSistemasId INTEGER NOT NULL,
+                    CantidadEquipos INTEGER NOT NULL DEFAULT 0,
+                    FOREIGN KEY(EdificioId) REFERENCES Edificios(Id),
+                    FOREIGN KEY(AreaId) REFERENCES Areas(Id),
+                    FOREIGN KEY(ResponsableSistemasId) REFERENCES ResponsablesSistemas(Id)
+                );
+            ");
+
+            //  12. Tabla de Mantenimientos de Laboratorios
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Mantenimientos_Laboratorios (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    LaboratorioId INTEGER NOT NULL,
+                    FechaEjecucion TEXT NOT NULL,
+                    TipoMantenimientoId INTEGER NOT NULL,
+                    Observaciones TEXT,
+                    FOREIGN KEY(LaboratorioId) REFERENCES Laboratorios(Id),
+                    FOREIGN KEY(TipoMantenimientoId) REFERENCES TiposMantenimiento(Id)
+                );
             ");
         }
 

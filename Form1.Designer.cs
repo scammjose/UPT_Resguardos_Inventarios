@@ -36,6 +36,8 @@
             menuEquipos = new ToolStripMenuItem();
             menuResponsablesSistemas = new ToolStripMenuItem();
             menuEdificios = new ToolStripMenuItem();
+            menuTiposMantenimiento = new ToolStripMenuItem();
+            menuLaboratorios = new ToolStripMenuItem();
             menuResguardos = new ToolStripMenuItem();
             menuRegistrarResguardo = new ToolStripMenuItem();
             menuPorAdministrativo = new ToolStripMenuItem();
@@ -49,7 +51,7 @@
             generarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
             menuMantenimientosAulas = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            menuTiposMantenimiento = new ToolStripMenuItem();
+            menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -66,7 +68,7 @@
             // 
             // catálogosToolStripMenuItem
             // 
-            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento });
+            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios });
             catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
             catálogosToolStripMenuItem.Size = new Size(72, 20);
             catálogosToolStripMenuItem.Text = "Catálogos";
@@ -112,6 +114,20 @@
             menuEdificios.Size = new Size(210, 22);
             menuEdificios.Text = "Edificios";
             menuEdificios.Click += menuEdificios_Click;
+            // 
+            // menuTiposMantenimiento
+            // 
+            menuTiposMantenimiento.Name = "menuTiposMantenimiento";
+            menuTiposMantenimiento.Size = new Size(210, 22);
+            menuTiposMantenimiento.Text = "Tipos de Mantenimientos";
+            menuTiposMantenimiento.Click += menuTiposMantenimiento_Click;
+            // 
+            // menuLaboratorios
+            // 
+            menuLaboratorios.Name = "menuLaboratorios";
+            menuLaboratorios.Size = new Size(210, 22);
+            menuLaboratorios.Text = "Laboratorios";
+            menuLaboratorios.Click += menuLaboratorios_Click;
             // 
             // menuResguardos
             // 
@@ -171,7 +187,7 @@
             // 
             // checkLisDeMantenimientosToolStripMenuItem
             // 
-            checkLisDeMantenimientosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCheckListPorAdministrativoToolStripMenuItem, generarCheckListPorÁreaToolStripMenuItem, menuMantenimientosAulas });
+            checkLisDeMantenimientosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { generarCheckListPorAdministrativoToolStripMenuItem, generarCheckListPorÁreaToolStripMenuItem, menuMantenimientosAulas, menuGenerarCheckListLaboratorios });
             checkLisDeMantenimientosToolStripMenuItem.Name = "checkLisDeMantenimientosToolStripMenuItem";
             checkLisDeMantenimientosToolStripMenuItem.Size = new Size(176, 20);
             checkLisDeMantenimientosToolStripMenuItem.Text = "CheckList de Mantenimientos";
@@ -179,21 +195,21 @@
             // generarCheckListPorAdministrativoToolStripMenuItem
             // 
             generarCheckListPorAdministrativoToolStripMenuItem.Name = "generarCheckListPorAdministrativoToolStripMenuItem";
-            generarCheckListPorAdministrativoToolStripMenuItem.Size = new Size(307, 22);
+            generarCheckListPorAdministrativoToolStripMenuItem.Size = new Size(344, 22);
             generarCheckListPorAdministrativoToolStripMenuItem.Text = "Generar CheckList por Administrativo";
             generarCheckListPorAdministrativoToolStripMenuItem.Click += generarCheckListPorAdministrativoToolStripMenuItem_Click;
             // 
             // generarCheckListPorÁreaToolStripMenuItem
             // 
             generarCheckListPorÁreaToolStripMenuItem.Name = "generarCheckListPorÁreaToolStripMenuItem";
-            generarCheckListPorÁreaToolStripMenuItem.Size = new Size(307, 22);
+            generarCheckListPorÁreaToolStripMenuItem.Size = new Size(344, 22);
             generarCheckListPorÁreaToolStripMenuItem.Text = "Generar CheckList por Área";
             generarCheckListPorÁreaToolStripMenuItem.Click += generarCheckListPorÁreaToolStripMenuItem_Click;
             // 
             // menuMantenimientosAulas
             // 
             menuMantenimientosAulas.Name = "menuMantenimientosAulas";
-            menuMantenimientosAulas.Size = new Size(307, 22);
+            menuMantenimientosAulas.Size = new Size(344, 22);
             menuMantenimientosAulas.Text = "Generar CheckList Mantenimientos de Aulas";
             menuMantenimientosAulas.Click += menuMantenimientosAulas_Click;
             // 
@@ -202,12 +218,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // menuTiposMantenimiento
+            // menuGenerarCheckListLaboratorios
             // 
-            menuTiposMantenimiento.Name = "menuTiposMantenimiento";
-            menuTiposMantenimiento.Size = new Size(210, 22);
-            menuTiposMantenimiento.Text = "Tipos de Mantenimientos";
-            menuTiposMantenimiento.Click += menuTiposMantenimiento_Click;
+            menuGenerarCheckListLaboratorios.Name = "menuGenerarCheckListLaboratorios";
+            menuGenerarCheckListLaboratorios.Size = new Size(344, 22);
+            menuGenerarCheckListLaboratorios.Text = "Generar CheckList Mantenimientos de Laboratorios";
+            menuGenerarCheckListLaboratorios.Click += menuGenerarCheckListLaboratorios_Click;
             // 
             // Form1
             // 
@@ -249,5 +265,7 @@
         private ToolStripMenuItem menuEdificios;
         private ToolStripMenuItem menuMantenimientosAulas;
         private ToolStripMenuItem menuTiposMantenimiento;
+        private ToolStripMenuItem menuLaboratorios;
+        private ToolStripMenuItem menuGenerarCheckListLaboratorios;
     }
 }

@@ -162,5 +162,25 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void menuLaboratorios_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmLaboratorios())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void menuGenerarCheckListLaboratorios_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmMantenimientoLaboratorios())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }
