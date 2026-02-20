@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Checklist Aulas</title>
+    <link rel="stylesheet" href="@RUTA_CSS">
+</head>
+<body>
+    <table class="header-table">
+        <tr>
+            <td class="logo-izq"><img src="@LOGO_UPT" alt="Logo UPT"></td>
+            <td class="titulo-central">
+                <h2>CHECK-LIST PARA MANTENIMIENTO @TIPO_MANTENIMIENTO</h2>
+                <h3>DE AULAS DE CLASES</h3>
+            </td>
+            <td class="logo-der"><img src="@LOGO_SITE" alt="Logo Site"></td>
+        </tr>
+    </table>
+
+    <table class="info-table">
+        <tr>
+            <td class="info-label">ENCARGADO:</td>
+            <td class="info-data" colspan="@CANTIDAD_AULAS">@RESPONSABLE_NOMBRE</td>
+        </tr>
+        <tr>
+            <td class="info-label">FECHA DE REALIZACIÓN:</td>
+            <td class="info-data" colspan="@CANTIDAD_AULAS">@FECHA</td>
+        </tr>
+        <tr>
+            <td class="info-label">EDIFICIO DE DOCENCIA:</td>
+            <td class="info-data" colspan="@CANTIDAD_AULAS">@EDIFICIO_NOMBRE</td>
+        </tr>
+        <tr class="aulas-row">
+            <td class="info-label">NO. DE AULAS:</td>
+            @CELDAS_NUMEROS_AULAS
+        </tr>
+    </table>
+
+    <table class="matrix-table">
+        <tr>
+            <th colspan="@COLSPAN_TOTAL" class="matrix-title">LIMPIEZA, AJUSTE Y REVISIÓN</th>
+        </tr>
+        @FILAS_TAREAS
+    </table>
+
+    <table class="obs-table">
+        <tr>
+            <th class="obs-title">OBSERVACIONES</th>
+        </tr>
+        <tr>
+            <td class="obs-content">@OBSERVACIONES</td>
+        </tr>
+    </table>
+
+    <table class="firmas-table">
+        <tr>
+            <td class="espacio-firma">ELABORÓ</td>
+            <td class="espacio-firma">VO. BO.</td>
+        </tr>
+        <tr>
+            <td>
+                <div class="linea-firma">@RESPONSABLE_NOMBRE<br>SISTEMAS</div>
+            </td>
+            <td>
+                <div class="linea-firma">LIC. AMADOR DELGADILLO LIRA<br>SISTEMAS</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer-text">
+        &lt;COMPETENCIAS PROFESIONALES PARA TRIUNFAR EN LA VIDA&gt;
+    </div>
+</body>
+</html>

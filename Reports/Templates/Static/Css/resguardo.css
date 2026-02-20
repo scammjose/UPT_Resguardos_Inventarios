@@ -72,42 +72,51 @@ body {
         margin-left: auto;
     }
 
-/* --- Bloques y Tablas Generales --- */
+/ /* --- Bloques y Tablas Generales --- */
 .bloque {
     margin-top: 12px;
 }
 
-    .bloque h3 {
-        font-size: 11pt;
-        background-color: #dcc6a2; /* crema */
-        padding: 4px 6px;
-        margin: 0 0 6px 0;
-        border-radius: 3px;
+.bloque h3 {
+    font-size: 11pt;
+    background-color: #dcc6a2; /* crema institucional */
+    padding: 4px 6px;
+    margin: 0 0 6px 0;
+    border-radius: 3px;
+    color: #39393a;
+}
+
+.bloque table, .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+    margin-top: 6px;
+    /* MAGIA 1: Fija el ancho total para que nunca se desborde de la hoja */
+    table-layout: fixed;
+}
+
+    /* Estilos de celdas para tablas de bloque y tablas dinámicas (.tbl) */
+    .bloque table th,
+    .bloque table td,
+    .tbl th,
+    .tbl td {
+        border: 1px solid #ccc;
+        padding: 6px; /* Un poco más de padding para que respire el texto */
+        font-size: 10pt;
+        /* Alineamos al medio para que marcas cortas no se vean flotando arriba */
+        vertical-align: middle;
+        /* MAGIA 2: Obliga a cortar números de serie larguísimos para que bajen de línea */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
     }
 
-    .bloque table, .tbl {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 5px;
-        margin-top: 6px;
+    .bloque table th, .tbl th {
+        background-color: #f2f2f2;
+        text-align: left;
+        /* Ajustamos a 25% para darle más espacio al texto del usuario (75%) */
+        width: 25%;
     }
-
-        /* Estilos de celdas para tablas de bloque y tablas dinámicas (.tbl) */
-        .bloque table th,
-        .bloque table td,
-        .tbl th,
-        .tbl td {
-            border: 1px solid #ccc;
-            padding: 4px 6px;
-            font-size: 10pt;
-            vertical-align: top;
-        }
-
-        .bloque table th, .tbl th {
-            background-color: #f2f2f2;
-            text-align: left;
-            width: 30%; /* Consistente con el 30% original o los 140px aproximados */
-        }
 
 /* --- Bloques Dinámicos (Cards) --- */
 .card {

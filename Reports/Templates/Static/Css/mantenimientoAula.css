@@ -1,0 +1,180 @@
+﻿/* Forzar PDF en Horizontal */
+@page {
+    size: landscape;
+    margin: 10mm;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+    color: #39393A; /* Carbón Institucional */
+}
+
+/* === ENCABEZADO Y LOGOS === */
+.header-table {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.logo-izq {
+    width: 20%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.logo-der {
+    width: 20%;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.header-table img {
+    max-height: 85px;
+    object-fit: contain;
+}
+
+.titulo-central {
+    width: 60%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .titulo-central h2 {
+        margin: 0;
+        font-size: 16pt;
+        font-weight: bold;
+        color: #A02142; /* Guinda Institucional */
+    }
+
+    .titulo-central h3 {
+        margin: 5px 0 0 0;
+        font-size: 13pt;
+        color: #A0825A; /* Dorado/Bronce Institucional */
+    }
+
+/* === TABLA DE INFORMACIÓN === */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+    .info-table td {
+        border: 1px solid #39393A;
+        padding: 6px;
+    }
+
+.info-label {
+    width: 25%;
+    text-align: right;
+    background-color: #DCC6A2; /* Beige Institucional */
+    color: #39393A;
+}
+/* CORRECCIÓN: Forzar alineación derecha específicamente en la fila de aulas */
+.aulas-row .info-label {
+    text-align: right;
+}
+
+.info-data {
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* === MATRIZ CHECKLIST === */
+.aulas-row td {
+    text-align: center;
+    min-width: 25px;
+    font-size: 11pt;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A;
+}
+
+.matrix-title {
+    border: 1px solid #39393A;
+    padding: 6px;
+    text-align: center;
+    background-color: #A02142; /* Guinda Institucional */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.matrix-table td {
+    border: 1px solid #39393A;
+    padding: 5px;
+}
+
+.task-name {
+    text-align: right;
+    padding-right: 15px;
+    width: 25%;
+    font-weight: normal;
+}
+
+.empty-cell {
+    text-align: center;
+}
+
+/* === OBSERVACIONES (NUEVA ESTRUCTURA DE TABLA) === */
+.obs-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A; /* Borde exterior grueso */
+    margin-top: 15px;
+}
+
+.obs-title {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #39393A;
+    padding: 6px;
+    background-color: #DCC6A2; /* Beige Institucional */
+    color: #39393A;
+}
+
+.obs-content {
+    padding: 8px;
+    font-size: 10pt;
+    height: 120px; /* CORRECCIÓN: Altura aumentada */
+    vertical-align: top;
+    border: 1px solid #39393A; /* Asegura el cierre del borde */
+}
+
+/* === FIRMAS Y PIE === */
+.firmas-table {
+    width: 100%;
+    margin-top: 50px;
+    text-align: center;
+    font-size: 10pt;
+    border-collapse: collapse;
+}
+
+.espacio-firma {
+    padding-bottom: 60px;
+}
+
+.linea-firma {
+    border-top: 1px solid #39393A;
+    width: 60%;
+    margin: 0 auto;
+    padding-top: 5px;
+    font-weight: bold;
+}
+
+.footer-text {
+    text-align: center;
+    background-color: #A02142; /* Guinda Institucional */
+    color: white; /* CORRECCIÓN: Texto blanco */
+    font-weight: bold;
+    padding: 8px;
+    margin-top: 30px;
+    font-size: 11pt;
+}

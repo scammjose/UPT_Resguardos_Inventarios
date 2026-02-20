@@ -150,6 +150,49 @@ namespace AppEscritorioUPT.Data
                     FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
                 );
             ");
+
+            // 8. Edificios (Catálogo de espacios físicos)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Edificios (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nombre TEXT NOT NULL,
+                    Ubicacion TEXT,
+                    CantidadAulas INTEGER NOT NULL DEFAULT 0,
+                    ResponsableSistemasId INTEGER NOT NULL,
+                    FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
+                );
+            ");
+
+            // 9. Mantenimientos de Aulas (Historial de checklists por edificio)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Mantenimientos_Aulas (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EdificioId INTEGER NOT NULL,
+                    FechaEjecucion TEXT NOT NULL,
+                    TipoMantenimiento TEXT NOT NULL, -- 'Predictivo' o 'Correctivo'
+                    Observaciones TEXT,
+                    FOREIGN KEY (EdificioId) REFERENCES Edificios (Id)
+                );
+            ");
+
+            // Catálogo de Tipos de Mantenimiento
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS TiposMantenimiento (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nombre TEXT NOT NULL UNIQUE
+                );
+            ");
+
+            // Insertamos los valores por defecto si la tabla está vacía
+            ExecuteNonQuery(connection, @"
+                INSERT INTO TiposMantenimiento (Nombre)
+                SELECT 'PREDICTIVO'
+                WHERE NOT EXISTS (SELECT 1 FROM TiposMantenimiento WHERE Nombre = 'PREDICTIVO');
+
+                INSERT INTO TiposMantenimiento (Nombre)
+                SELECT 'CORRECTIVO'
+                WHERE NOT EXISTS (SELECT 1 FROM TiposMantenimiento WHERE Nombre = 'CORRECTIVO');
+            ");
         }
 
         /// <summary>

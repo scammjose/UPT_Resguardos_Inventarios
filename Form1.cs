@@ -132,5 +132,35 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void menuEdificios_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmEdificios())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void menuMantenimientosAulas_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmMantenimientoAulas())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void menuTiposMantenimiento_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmTiposMantenimiento())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

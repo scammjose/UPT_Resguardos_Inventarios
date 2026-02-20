@@ -19,12 +19,14 @@ namespace AppEscritorioUPT.UI
         private readonly MantenimientoService _service;
         private readonly TipoEquipoRepository _tipoEquipoRepo;
         private readonly AreaRepository _areaRepo; // <--- Nuevo repo necesario
+        private readonly TipoMantenimientoService _tipoMantenimientoService;
         public FrmMantenimientosPorArea()
         {
             InitializeComponent();
             _service = new MantenimientoService();
             _tipoEquipoRepo = new TipoEquipoRepository();
             _areaRepo = new AreaRepository();
+            _tipoMantenimientoService = new TipoMantenimientoService();
 
             this.Load += FrmMantenimientosPorArea_Load;
             btnGenerar.Click += BtnGenerar_Click;
@@ -58,10 +60,15 @@ namespace AppEscritorioUPT.UI
             );
 
             // 3. Tipos Mantenimiento
-            cmbTipoMantenimiento.Items.Clear();
-            cmbTipoMantenimiento.Items.Add("Programado");
-            cmbTipoMantenimiento.Items.Add("Correctivo");
-            cmbTipoMantenimiento.SelectedIndex = 0;
+            var tiposMantenimiento = _tipoMantenimientoService.ObtenerTodos();
+
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbTipoMantenimiento,
+                tiposMantenimiento,
+                "Nombre",
+                "Id",
+                new TipoMantenimiento { Id = 0, Nombre = "Selecciona una opción" }
+            );
         }
 
         private void BtnGenerar_Click(object? sender, EventArgs e)

@@ -10,7 +10,7 @@ namespace AppEscritorioUPT.Helpers
 {
     public static class PdfHelper
     {
-        public static void HtmlToPdf(string htmlPath, string pdfPath)
+        public static void HtmlToPdf(string htmlPath, string pdfPath, bool landscape = false)
         {
             // Ruta al wkhtmltopdf.exe dentro de Tools
             var exePath = Path.Combine(
@@ -33,7 +33,9 @@ namespace AppEscritorioUPT.Helpers
             }
 
             // Parámetro --enable-local-file-access para que pueda leer CSS/imagenes locales
-            var args = $"--enable-local-file-access \"{htmlPath}\" \"{pdfPath}\"";
+            string orientacion = landscape ? "-O Landscape" : "-O Portrait";
+
+            var args = $"{orientacion} --enable-local-file-access \"{htmlPath}\" \"{pdfPath}\"";
 
             var psi = new ProcessStartInfo
             {

@@ -18,11 +18,13 @@ namespace AppEscritorioUPT.UI
     {
         private readonly MantenimientoService _service;
         private readonly TipoEquipoRepository _tipoEquipoRepository;
+        private readonly TipoMantenimientoService _tipoMantenimientoService;
         public FrmMantenimientos()
         {
             InitializeComponent();
             _service = new MantenimientoService();
             _tipoEquipoRepository = new TipoEquipoRepository();
+            _tipoMantenimientoService = new TipoMantenimientoService();
 
             ConfigurarFormulario();
         }
@@ -40,11 +42,15 @@ namespace AppEscritorioUPT.UI
 
         private void CargarCombos()
         {
+            var tiposMantenimiento = _tipoMantenimientoService.ObtenerTodos();
             // 1. Cargar Tipos de Mantenimiento
-            cmbTipoMantenimiento.Items.Clear();
-            cmbTipoMantenimiento.Items.Add("Programado");
-            cmbTipoMantenimiento.Items.Add("Correctivo");
-            cmbTipoMantenimiento.SelectedIndex = 0;
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbTipoMantenimiento,
+                tiposMantenimiento,
+                "Nombre",
+                "Id",
+                new TipoMantenimiento { Id = 0, Nombre = "Selecciona una opción" }
+            );
 
             // 2. Cargar Tipos de Equipo
             var tipos = _tipoEquipoRepository.GetAll();
