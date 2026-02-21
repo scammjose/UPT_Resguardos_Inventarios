@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Checklist Laboratorios</title>
+    <link rel="stylesheet" href="@RUTA_CSS">
+</head>
+<body>
+    <table class="header-table">
+        <tr>
+            <td class="logo-izq"><img src="@LOGO_UPT" alt="Logo UPT"></td>
+            <td class="titulo-central">
+                <h2>CHECK-LIST DE MANTENIMIENTO @TIPO_MANTENIMIENTO</h2>
+                <h3>PARA LABORATORIOS DE C&Oacute;MPUTO</h3>
+            </td>
+            <td class="logo-der"><img src="@LOGO_SITE" alt="Logo Site"></td>
+        </tr>
+    </table>
+
+    <table class="info-table">
+        <tr>
+            <td class="info-label">ENCARGADO:</td>
+            <td class="info-data">@RESPONSABLE_NOMBRE</td>
+        </tr>
+        <tr>
+            <td class="info-label">FECHA DE REALIZACI&Oacute;N:</td>
+            <td class="info-data">@FECHA</td>
+        </tr>
+        <tr>
+            <td class="info-label">LABORATORIO:</td>
+            <td class="info-data">@LABORATORIO_NOMBRE</td>
+        </tr>
+    </table>
+
+    <table class="matrix-table mt-10">
+        <thead>
+            <tr>
+                <th class="task-name-header">NO. DE EQUIPOS:</th>
+                @CELDAS_NUMEROS_EQUIPOS
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th colspan="@COLSPAN_TOTAL" class="matrix-section">SEGURIDAD Y LIMPIEZA</th>
+            </tr>
+            @FILAS_SEGURIDAD
+
+            <tr>
+                <th colspan="@COLSPAN_TOTAL" class="matrix-section">CONFIGURACI&Oacute;N DEL EQUIPO</th>
+            </tr>
+            @FILAS_CONFIGURACION
+        </tbody>
+    </table>
+
+    <table class="obs-table">
+        <tr>
+            <th class="obs-title">OBSERVACIONES GENERALES DEL LABORATORIO</th>
+        </tr>
+        <tr>
+            <td class="obs-content">@OBSERVACIONES</td>
+        </tr>
+    </table>
+
+    <table class="firmas-table">
+        <tr>
+            <td class="espacio-firma">ELABOR&Oacute;</td>
+            <td class="espacio-firma">VO. BO.</td>
+        </tr>
+        <tr>
+            <td>
+                <div class="linea-firma">@RESPONSABLE_NOMBRE<br>SISTEMAS</div>
+            </td>
+            <td>
+                <div class="linea-firma">LIC. AMADOR DELGADILLO LIRA<br>ENCARGADO DE SISTEMAS</div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="footer-text">
+        &lt;COMPETENCIAS PROFESIONALES PARA TRIUNFAR EN LA VIDA&gt;
+    </div>
+</body>
+</html>

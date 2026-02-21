@@ -45,8 +45,11 @@ namespace AppEscritorioUPT.UI
             // Configurar DataGridView
             dgvMantenimientos.ReadOnly = true;
             dgvMantenimientos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMantenimientos.MultiSelect = false;
+            dgvMantenimientos.MultiSelect = true;
             dgvMantenimientos.AllowUserToAddRows = false;
+
+            // AGREGAMOS ESTA LÍNEA NUEVA
+            dgvMantenimientos.SelectionChanged += DgvMantenimientos_SelectionChanged;
             dgvMantenimientos.CellClick += DgvMantenimientos_CellClick;
         }
 
@@ -85,27 +88,34 @@ namespace AppEscritorioUPT.UI
                 var lista = _mantenimientoService.ObtenerTodos();
                 dgvMantenimientos.DataSource = lista;
 
-                // Destruimos las columnas automáticas generadas a mano para que tome las de la clase
-                // (Por si acaso se te fue alguna en el diseñador visual)
                 dgvMantenimientos.AutoGenerateColumns = true;
 
-                // Ocultar IDs internos que el usuario no necesita ver
+                // 1. Ocultar IDs internos
                 if (dgvMantenimientos.Columns["Id"] != null) dgvMantenimientos.Columns["Id"].Visible = false;
                 if (dgvLaboratorios_Check("LaboratorioId")) dgvMantenimientos.Columns["LaboratorioId"].Visible = false;
                 if (dgvLaboratorios_Check("TipoMantenimientoId")) dgvMantenimientos.Columns["TipoMantenimientoId"].Visible = false;
 
-                // Ajustar encabezados limpios
+                // 2. Ajustar encabezados limpios
                 if (dgvLaboratorios_Check("LaboratorioNombre")) dgvMantenimientos.Columns["LaboratorioNombre"].HeaderText = "Laboratorio";
                 if (dgvLaboratorios_Check("FechaEjecucion")) dgvMantenimientos.Columns["FechaEjecucion"].HeaderText = "Fecha";
                 if (dgvLaboratorios_Check("TipoMantenimientoNombre")) dgvMantenimientos.Columns["TipoMantenimientoNombre"].HeaderText = "Tipo";
                 if (dgvLaboratorios_Check("ResponsableSistemasNombre")) dgvMantenimientos.Columns["ResponsableSistemasNombre"].HeaderText = "Ing. Responsable";
                 if (dgvLaboratorios_Check("Observaciones")) dgvMantenimientos.Columns["Observaciones"].HeaderText = "Observaciones";
 
-                // Le damos más espacio a las columnas que tienen mucho texto
+                // 3. Tamaños
                 if (dgvLaboratorios_Check("LaboratorioNombre")) dgvMantenimientos.Columns["LaboratorioNombre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                if (dgvLaboratorios_Check("Observaciones")) dgvMantenimientos.Columns["Observaciones"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                //if (dgvLaboratorios_Check("Observaciones")) dgvMantenimientos.Columns["Observaciones"].AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
 
-                LimpiarFormulario(); // Esto formatea los botones y vacía las cajas
+                // =========================================================
+                // 4. ORDENAR LAS COLUMNAS VISIBLES (El índice 0 es el primero a la izquierda)
+                // =========================================================
+                if (dgvLaboratorios_Check("LaboratorioNombre")) dgvMantenimientos.Columns["LaboratorioNombre"].DisplayIndex = 0;
+                if (dgvLaboratorios_Check("FechaEjecucion")) dgvMantenimientos.Columns["FechaEjecucion"].DisplayIndex = 1;
+                if (dgvLaboratorios_Check("TipoMantenimientoNombre")) dgvMantenimientos.Columns["TipoMantenimientoNombre"].DisplayIndex = 2;
+                if (dgvLaboratorios_Check("ResponsableSistemasNombre")) dgvMantenimientos.Columns["ResponsableSistemasNombre"].DisplayIndex = 3;
+                if (dgvLaboratorios_Check("Observaciones")) dgvMantenimientos.Columns["Observaciones"].DisplayIndex = 4;
+
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -149,65 +159,148 @@ namespace AppEscritorioUPT.UI
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            if (_mantenimientoSeleccionado == null) return;
+            int seleccionados = dgvMantenimientos.SelectedRows.Count;
+            if (seleccionados == 0) return;
 
-            var confirm = MessageBox.Show($"¿Seguro que desea eliminar el registro de mantenimiento de '{_mantenimientoSeleccionado.LaboratorioNombre}'?",
-                "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            string mensaje = seleccionados == 1
+                ? $"¿Seguro que desea eliminar el registro de mantenimiento seleccionado?"
+                : $"¿Seguro que desea eliminar los {seleccionados} registros seleccionados?";
+
+            var confirm = MessageBox.Show(mensaje, "Confirmar Eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (confirm == DialogResult.Yes)
             {
                 try
                 {
-                    _mantenimientoService.EliminarMantenimiento(_mantenimientoSeleccionado.Id);
-                    MessageBox.Show("Registro eliminado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    foreach (DataGridViewRow row in dgvMantenimientos.SelectedRows)
+                    {
+                        var mant = row.DataBoundItem as MantenimientoLaboratorio;
+                        if (mant != null)
+                        {
+                            _mantenimientoService.EliminarMantenimiento(mant.Id);
+                        }
+                    }
+
+                    MessageBox.Show($"Se eliminaron {seleccionados} registro(s) exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarGrid();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void BtnImprimir_Click(object? sender, EventArgs e)
         {
-            if (_mantenimientoSeleccionado == null) return;
+            if (dgvMantenimientos.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Seleccione al menos un registro para imprimir.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-            MessageBox.Show("¡Generador de PDF en construcción!\nAquí mandaremos a llamar a la plantilla HTML del checklist del laboratorio.",
-                "Próximamente", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                Cursor = Cursors.WaitCursor;
 
-            // Aquí en el siguiente paso pondremos algo como:
-            // var rutaPdf = _reportService.GenerarPdfMantenimientoLaboratorio(_mantenimientoSeleccionado.Id);
+                // 1. Recolectar todos los IDs seleccionados
+                var idsSeleccionados = new List<int>();
+                foreach (DataGridViewRow row in dgvMantenimientos.SelectedRows)
+                {
+                    var mant = row.DataBoundItem as MantenimientoLaboratorio;
+                    if (mant != null)
+                    {
+                        idsSeleccionados.Add(mant.Id);
+                    }
+                }
+
+                // OPCIONAL: Invertir la lista para que salgan en el orden de arriba hacia abajo
+                idsSeleccionados.Reverse();
+
+                // 2. Enviar la lista completa al servicio
+                var reportService = new MantenimientoLaboratorioReportService();
+                string rutaPdf = reportService.GenerarPdfMasivo(idsSeleccionados);
+
+                // 3. Abrir el PDF resultante
+                var p = new System.Diagnostics.Process();
+                p.StartInfo = new System.Diagnostics.ProcessStartInfo(rutaPdf) { UseShellExecute = true };
+                p.Start();
+
+                MessageBox.Show($"¡Reporte masivo generado con {idsSeleccionados.Count} hojas exitosamente!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al generar el PDF: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
 
         private void DgvMantenimientos_CellClick(object? sender, DataGridViewCellEventArgs e)
         {
-            // Clic en la nada = Modo "Nuevo Registro"
+            // Si hace clic en la parte gris (vacía), quita la selección
             if (e.RowIndex < 0)
             {
-                LimpiarFormulario();
-                return;
+                dgvMantenimientos.ClearSelection();
             }
+        }
 
-            _mantenimientoSeleccionado = dgvMantenimientos.Rows[e.RowIndex].DataBoundItem as MantenimientoLaboratorio;
+        private void DgvMantenimientos_SelectionChanged(object? sender, EventArgs e)
+        {
+            int seleccionados = dgvMantenimientos.SelectedRows.Count;
 
-            if (_mantenimientoSeleccionado != null)
+            if (seleccionados == 0)
             {
-                // Rellenar controles
-                cmbLaboratorio.SelectedValue = _mantenimientoSeleccionado.LaboratorioId;
-                cmbTipoMantenimiento.SelectedValue = _mantenimientoSeleccionado.TipoMantenimientoId;
-                txtObservaciones.Text = _mantenimientoSeleccionado.Observaciones;
+                // MODO: NUEVO REGISTRO (0 seleccionados)
+                _mantenimientoSeleccionado = null;
+                LimpiarControlesVisuales();
 
-                if (DateTime.TryParse(_mantenimientoSeleccionado.FechaEjecucion, out DateTime fechaParsed))
+                btnGuardar.Text = "Guardar";
+                btnGuardar.Enabled = true;
+                btnEliminar.Enabled = false;
+                btnImprimir.Enabled = false;
+            }
+            else if (seleccionados == 1)
+            {
+                // MODO: EDICIÓN (1 seleccionado)
+                _mantenimientoSeleccionado = dgvMantenimientos.SelectedRows[0].DataBoundItem as MantenimientoLaboratorio;
+
+                if (_mantenimientoSeleccionado != null)
                 {
-                    dtpFecha.Value = fechaParsed;
-                }
+                    cmbLaboratorio.SelectedValue = _mantenimientoSeleccionado.LaboratorioId;
+                    cmbTipoMantenimiento.SelectedValue = _mantenimientoSeleccionado.TipoMantenimientoId;
+                    txtObservaciones.Text = _mantenimientoSeleccionado.Observaciones;
 
-                // GESTIÓN DE BOTONES: Modo "Edición"
-                btnGuardar.Text = "Actualizar";
+                    if (DateTime.TryParse(_mantenimientoSeleccionado.FechaEjecucion, out DateTime fechaParsed))
+                        dtpFecha.Value = fechaParsed;
+
+                    btnGuardar.Text = "Actualizar";
+                    btnGuardar.Enabled = true;
+                    btnEliminar.Enabled = true;
+                    btnImprimir.Enabled = true;
+                }
+            }
+            else
+            {
+                // MODO: SELECCIÓN MÚLTIPLE (2 o más seleccionados)
+                _mantenimientoSeleccionado = null;
+                LimpiarControlesVisuales();
+
+                btnGuardar.Text = "Múltiple";
+                btnGuardar.Enabled = false; // MAGIA: Deshabilitamos el botón guardar
                 btnEliminar.Enabled = true;
                 btnImprimir.Enabled = true;
             }
+        }
+
+        private void LimpiarControlesVisuales()
+        {
+            if (cmbLaboratorio.Items.Count > 0) cmbLaboratorio.SelectedIndex = 0;
+            if (cmbTipoMantenimiento.Items.Count > 0) cmbTipoMantenimiento.SelectedIndex = 0;
+            dtpFecha.Value = DateTime.Now;
+            txtObservaciones.Clear();
         }
 
         private bool ValidarCampos()
@@ -227,19 +320,8 @@ namespace AppEscritorioUPT.UI
 
         private void LimpiarFormulario()
         {
-            _mantenimientoSeleccionado = null;
-
-            if (cmbLaboratorio.Items.Count > 0) cmbLaboratorio.SelectedIndex = 0;
-            if (cmbTipoMantenimiento.Items.Count > 0) cmbTipoMantenimiento.SelectedIndex = 0;
-
-            dtpFecha.Value = DateTime.Now;
-            txtObservaciones.Clear();
+            // Quitar la selección dispara automáticamente el MODO NUEVO REGISTRO
             dgvMantenimientos.ClearSelection();
-
-            // GESTIÓN DE BOTONES: Modo "Nuevo Registro"
-            btnGuardar.Text = "Guardar";
-            btnEliminar.Enabled = false;
-            btnImprimir.Enabled = false;
         }
     }
 }

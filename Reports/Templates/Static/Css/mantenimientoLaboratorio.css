@@ -1,0 +1,195 @@
+/* Redujimos el margen inferior (de 8mm a 5mm) para que la cintilla baje sin saltar de hoja */
+@page {
+    size: landscape;
+    margin: 8mm 8mm 5mm 8mm;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 8pt;
+    margin: 0;
+    padding: 0;
+    color: #39393A;
+}
+
+.header-table {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.logo-izq {
+    width: 20%;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.logo-der {
+    width: 20%;
+    text-align: right;
+    vertical-align: middle;
+}
+
+.header-table img {
+    max-height: 70px;
+    object-fit: contain;
+}
+
+.titulo-central {
+    width: 60%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+    .titulo-central h2 {
+        margin: 0;
+        font-size: 13pt;
+        font-weight: bold;
+        color: #A02142;
+    }
+
+    .titulo-central h3 {
+        margin: 3px 0 0 0;
+        font-size: 10pt;
+        color: #A0825A;
+    }
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+    .info-table td {
+        border: 1px solid #39393A;
+        padding: 4px;
+    }
+
+.info-label {
+    width: 25%;
+    text-align: right;
+    background-color: #DCC6A2;
+    color: #39393A;
+}
+
+.info-data {
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* === MATRIZ UNIFICADA === */
+.mt-10 {
+    margin-top: 5px;
+}
+
+.matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A;
+    table-layout: fixed;
+}
+
+    .matrix-table th, .matrix-table td {
+        border: 1px solid #39393A;
+    }
+
+.task-name-header {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    background-color: #DCC6A2;
+    color: #39393A;
+    text-align: right;
+    padding-right: 5px;
+    font-weight: bold;
+}
+
+.matrix-section {
+    background-color: #A02142;
+    color: white;
+    text-align: center;
+    padding: 3px;
+    font-weight: bold;
+    font-size: 9pt;
+}
+
+.task-name {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    text-align: left;
+    padding: 4px 5px; /* <--- AJUSTE 1: Espacio arriba/abajo para que respire el texto */
+    font-weight: normal;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 8pt;
+}
+
+.num-cell {
+    text-align: center;
+    font-size: 7pt;
+    font-weight: bold;
+    background-color: #f2f2f2;
+    padding: 2px;
+}
+
+.empty-cell {
+    text-align: center;
+    padding: 4px; /* <--- Sincronizado con el padding del texto */
+}
+
+/* === OBSERVACIONES === */
+.obs-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #39393A;
+    margin-top: 5px;
+}
+
+.obs-title {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 2px solid #39393A;
+    padding: 3px;
+    background-color: #DCC6A2;
+    color: #39393A;
+}
+
+.obs-content {
+    padding: 5px;
+    height: 55px; /* <--- AJUSTE 2: Cuadro un poco más alto (estaba en 35px) */
+    vertical-align: top;
+    border: 1px solid #39393A;
+}
+
+/* === FIRMAS Y PIE === */
+.firmas-table {
+    width: 100%;
+    margin-top: 25px; /* <--- AJUSTE 3: Despega las firmas de las observaciones */
+    text-align: center;
+    font-size: 9pt;
+    border-collapse: collapse;
+}
+
+.espacio-firma {
+    padding-bottom: 45px; /* <--- AJUSTE 4: Más espacio físico para que firmen con pluma */
+}
+
+.linea-firma {
+    border-top: 1px solid #39393A;
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 5px;
+    font-weight: bold;
+}
+
+.footer-text {
+    text-align: center;
+    background-color: #A02142;
+    color: white;
+    font-weight: bold;
+    padding: 6px;
+    margin-top: 30px; /* <--- AJUSTE 5: Empuja la cintilla guinda bien hacia abajo */
+    font-size: 8pt;
+}
