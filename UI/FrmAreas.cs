@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace AppEscritorioUPT.UI
             btnEliminar.Click += BtnEliminar_Click;
 
             dgvAreas.CellClick += DgvAreas_CellClick;
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         // ========== EVENTO LOAD ==========
@@ -36,16 +39,12 @@ namespace AppEscritorioUPT.UI
         {
             ConfigurarGrid();
             CargarAreas();
+            GestionarBotones();
         }
 
         // ========== CONFIGURACIÓN DEL GRID ==========
         private void ConfigurarGrid()
         {
-            dgvAreas.ReadOnly = true;
-            dgvAreas.MultiSelect = false;
-            dgvAreas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAreas.AllowUserToAddRows = false;
-            dgvAreas.AllowUserToDeleteRows = false;
             dgvAreas.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -68,12 +67,24 @@ namespace AppEscritorioUPT.UI
             }
         }
 
+        // Si 'esNuevo' es true: Enciende Agregar y apaga los demás.
+        // Si 'esNuevo' es false: Apaga Agregar y enciende Actualizar/Eliminar.
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;             // Si es nuevo, es true
+            btnActualizar.Enabled = !esNuevo;         // Lo contrario de esNuevo
+            btnEliminar.Enabled = !esNuevo;           // Lo contrario de esNuevo
+        }
+
         private void LimpiarFormulario()
         {
             txtNombre.Text = string.Empty;
             txtDescripcion.Text = string.Empty;
             txtNomenclatura.Text = string.Empty;
             _areaSeleccionada = null;
+
+            // Apagamos los botones de edición y encendemos el de Agregar
+            GestionarBotones();
         }
 
         private bool ValidarCamposObligatorios()
@@ -203,6 +214,7 @@ namespace AppEscritorioUPT.UI
                 txtNombre.Text = area.Nombre;
                 txtDescripcion.Text = area.Descripcion;
                 txtNomenclatura.Text = area.NomenclaturaInventario;
+                GestionarBotones(false);
             }
         }
     }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 
 namespace AppEscritorioUPT.UI
@@ -27,21 +28,20 @@ namespace AppEscritorioUPT.UI
             btnEliminar.Click += BtnEliminar_Click;
 
             dgvTipos.CellClick += DgvTipos_CellClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmTiposEquipos_Load(object? sender, EventArgs e)
         {
             ConfigurarGrid();
             CargarTipos();
+            LimpiarFormulario();
         }
 
         private void ConfigurarGrid()
         {
-            dgvTipos.ReadOnly = true;
-            dgvTipos.MultiSelect = false;
-            dgvTipos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTipos.AllowUserToAddRows = false;
-            dgvTipos.AllowUserToDeleteRows = false;
             dgvTipos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -56,10 +56,18 @@ namespace AppEscritorioUPT.UI
             }
         }
 
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;             // Si es nuevo, enciende Agregar
+            btnActualizar.Enabled = !esNuevo;         // Lo contrario
+            btnEliminar.Enabled = !esNuevo;           // Lo contrario
+        }
+
         private void LimpiarFormulario()
         {
             txtNombre.Text = string.Empty;
             _tipoSeleccionado = null;
+            GestionarBotones();
         }
 
         private bool Validar()
@@ -164,6 +172,7 @@ namespace AppEscritorioUPT.UI
             {
                 _tipoSeleccionado = tipo;
                 txtNombre.Text = tipo.Nombre;
+                GestionarBotones(false);
             }
         }
 

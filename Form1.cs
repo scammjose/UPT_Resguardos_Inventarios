@@ -1,3 +1,4 @@
+using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.UI;
 
 namespace AppEscritorioUPT
@@ -7,6 +8,20 @@ namespace AppEscritorioUPT
         public Form1()
         {
             InitializeComponent();
+            
+            // 1.Aplicamos el color de fondo a la barra para asegurarnos de que toda sea Guinda
+            menuStrip1.BackColor = ColorTranslator.FromHtml("#A02142");
+
+            // 2. Le asignamos nuestro renderizador mágico para los hovers y clics
+            menuStrip1.Renderer = new MenuRendererHelper();
+
+            // 3. Le damos una tipografía más grande y limpia
+            menuStrip1.Font = new Font("Arial", 10F, FontStyle.Bold);
+
+            // 4. Agregamos un poco de margen interior para que no se vea apretada la barra
+            menuStrip1.Padding = new Padding(5, 5, 5, 5);
+
+            ThemeHelper.AplicarTema(this);
         }
 
         private void menuAreas_Click(object sender, EventArgs e)

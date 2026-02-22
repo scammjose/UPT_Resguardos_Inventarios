@@ -23,12 +23,15 @@ namespace AppEscritorioUPT.UI
         {
             InitializeComponent();
             this.Load += FrmAdministrativos_Load;
+            this.Shown += FrmAdministrativos_Shown;
 
             btnAgregar.Click += BtnAgregar_Click;
             btnActualizar.Click += BtnActualizar_Click;
             btnEliminar.Click += BtnEliminar_Click;
 
             dgvAdministrativos.CellClick += DgvAdministrativos_CellClick;
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmAdministrativos_Load(object? sender, EventArgs e)
@@ -37,20 +40,17 @@ namespace AppEscritorioUPT.UI
             CargarAreasCombo();
             CargarAdministrativos();
 
-            // 🔹 Que solo puedan seleccionar (no escribir texto libre)
-            cmbArea.DropDownStyle = ComboBoxStyle.DropDownList;
-
-            // 🔹 Ancho del desplegable (ajusta el número a tu gusto)
             cmbArea.DropDownWidth = 400;
+        }
+
+        private void FrmAdministrativos_Shown(object? sender, EventArgs e)
+        {
+            // Windows ya pintó todo, ahora sí ordenamos limpiar
+            LimpiarFormulario();
         }
 
         private void ConfigurarGrid()
         {
-            dgvAdministrativos.ReadOnly = true;
-            dgvAdministrativos.MultiSelect = false;
-            dgvAdministrativos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAdministrativos.AllowUserToAddRows = false;
-            dgvAdministrativos.AllowUserToDeleteRows = false;
             dgvAdministrativos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -97,6 +97,13 @@ namespace AppEscritorioUPT.UI
                 dgvAdministrativos.Columns["AreaNombre"].HeaderText = "Área";
         }
 
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;
+            btnActualizar.Enabled = !esNuevo;
+            btnEliminar.Enabled = !esNuevo;
+        }
+
         private void LimpiarFormulario()
         {
             txtNombreCompleto.Text = string.Empty;
@@ -105,6 +112,8 @@ namespace AppEscritorioUPT.UI
 
             if (cmbArea.Items.Count > 0)
                 cmbArea.SelectedIndex = 0;
+
+            GestionarBotones();
         }
 
         private bool Validar()
@@ -229,12 +238,8 @@ namespace AppEscritorioUPT.UI
 
                 // Sincronizar área seleccionada en el combo
                 cmbArea.SelectedValue = admin.AreaId;
+                GestionarBotones(false);
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

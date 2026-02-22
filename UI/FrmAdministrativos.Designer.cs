@@ -46,7 +46,7 @@
             btnEliminar.Location = new Point(1059, 105);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(109, 40);
-            btnEliminar.TabIndex = 15;
+            btnEliminar.TabIndex = 6;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
@@ -55,7 +55,7 @@
             btnActualizar.Location = new Point(933, 105);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(109, 40);
-            btnActualizar.TabIndex = 14;
+            btnActualizar.TabIndex = 5;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
@@ -64,7 +64,7 @@
             btnAgregar.Location = new Point(530, 105);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(109, 40);
-            btnAgregar.TabIndex = 13;
+            btnAgregar.TabIndex = 3;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             // 
@@ -73,14 +73,14 @@
             txtPuesto.Location = new Point(12, 112);
             txtPuesto.Name = "txtPuesto";
             txtPuesto.Size = new Size(469, 27);
-            txtPuesto.TabIndex = 12;
+            txtPuesto.TabIndex = 2;
             // 
             // txtNombreCompleto
             // 
             txtNombreCompleto.Location = new Point(12, 51);
             txtNombreCompleto.Name = "txtNombreCompleto";
             txtNombreCompleto.Size = new Size(469, 27);
-            txtNombreCompleto.TabIndex = 11;
+            txtNombreCompleto.TabIndex = 0;
             // 
             // lbPuesto
             // 
@@ -88,7 +88,7 @@
             lbPuesto.Location = new Point(12, 89);
             lbPuesto.Name = "lbPuesto";
             lbPuesto.Size = new Size(53, 20);
-            lbPuesto.TabIndex = 10;
+            lbPuesto.TabIndex = 9;
             lbPuesto.Text = "Puesto";
             // 
             // lbNombreCompleto
@@ -97,7 +97,7 @@
             lbNombreCompleto.Location = new Point(12, 28);
             lbNombreCompleto.Name = "lbNombreCompleto";
             lbNombreCompleto.Size = new Size(134, 20);
-            lbNombreCompleto.TabIndex = 9;
+            lbNombreCompleto.TabIndex = 7;
             lbNombreCompleto.Text = "Nombre Completo";
             // 
             // dgvAdministrativos
@@ -112,7 +112,7 @@
             dgvAdministrativos.RowHeadersWidth = 51;
             dgvAdministrativos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAdministrativos.Size = new Size(1156, 283);
-            dgvAdministrativos.TabIndex = 8;
+            dgvAdministrativos.TabIndex = 4;
             // 
             // label1
             // 
@@ -120,9 +120,8 @@
             label1.Location = new Point(530, 27);
             label1.Name = "label1";
             label1.Size = new Size(40, 20);
-            label1.TabIndex = 16;
+            label1.TabIndex = 8;
             label1.Text = "Área";
-            label1.Click += label1_Click;
             // 
             // cmbArea
             // 
@@ -130,7 +129,7 @@
             cmbArea.Location = new Point(530, 50);
             cmbArea.Name = "cmbArea";
             cmbArea.Size = new Size(341, 28);
-            cmbArea.TabIndex = 17;
+            cmbArea.TabIndex = 1;
             // 
             // FrmAdministrativos
             // 

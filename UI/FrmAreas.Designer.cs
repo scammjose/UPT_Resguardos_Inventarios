@@ -53,7 +53,7 @@
             dgvAreas.RowHeadersWidth = 51;
             dgvAreas.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAreas.Size = new Size(776, 267);
-            dgvAreas.TabIndex = 0;
+            dgvAreas.TabIndex = 4;
             // 
             // lbNombre
             // 
@@ -61,7 +61,7 @@
             lbNombre.Location = new Point(12, 44);
             lbNombre.Name = "lbNombre";
             lbNombre.Size = new Size(64, 20);
-            lbNombre.TabIndex = 1;
+            lbNombre.TabIndex = 7;
             lbNombre.Text = "Nombre";
             // 
             // lbDescripcion
@@ -70,7 +70,7 @@
             lbDescripcion.Location = new Point(398, 44);
             lbDescripcion.Name = "lbDescripcion";
             lbDescripcion.Size = new Size(87, 20);
-            lbDescripcion.TabIndex = 2;
+            lbDescripcion.TabIndex = 8;
             lbDescripcion.Text = "Descripción";
             // 
             // txtNombre
@@ -78,21 +78,21 @@
             txtNombre.Location = new Point(12, 67);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(339, 27);
-            txtNombre.TabIndex = 3;
+            txtNombre.TabIndex = 0;
             // 
             // txtDescripcion
             // 
             txtDescripcion.Location = new Point(398, 67);
             txtDescripcion.Name = "txtDescripcion";
             txtDescripcion.Size = new Size(339, 27);
-            txtDescripcion.TabIndex = 4;
+            txtDescripcion.TabIndex = 1;
             // 
             // btnAgregar
             // 
             btnAgregar.Location = new Point(242, 121);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(109, 40);
-            btnAgregar.TabIndex = 5;
+            btnAgregar.TabIndex = 3;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             // 
@@ -101,7 +101,7 @@
             btnActualizar.Location = new Point(553, 115);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(109, 40);
-            btnActualizar.TabIndex = 6;
+            btnActualizar.TabIndex = 5;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
@@ -110,7 +110,7 @@
             btnEliminar.Location = new Point(679, 115);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(109, 40);
-            btnEliminar.TabIndex = 7;
+            btnEliminar.TabIndex = 6;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
@@ -120,7 +120,7 @@
             label1.Location = new Point(12, 105);
             label1.Name = "label1";
             label1.Size = new Size(173, 20);
-            label1.TabIndex = 8;
+            label1.TabIndex = 9;
             label1.Text = "Nomenclatura Inventario";
             // 
             // txtNomenclatura
@@ -128,7 +128,7 @@
             txtNomenclatura.Location = new Point(12, 128);
             txtNomenclatura.Name = "txtNomenclatura";
             txtNomenclatura.Size = new Size(186, 27);
-            txtNomenclatura.TabIndex = 9;
+            txtNomenclatura.TabIndex = 2;
             // 
             // FrmAreas
             // 
@@ -147,7 +147,7 @@
             Controls.Add(dgvAreas);
             Name = "FrmAreas";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "FrmAreas";
+            Text = "Administración de Areas";
             ((System.ComponentModel.ISupportInitialize)dgvAreas).EndInit();
             ResumeLayout(false);
             PerformLayout();

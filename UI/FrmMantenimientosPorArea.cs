@@ -30,6 +30,8 @@ namespace AppEscritorioUPT.UI
 
             this.Load += FrmMantenimientosPorArea_Load;
             btnGenerar.Click += BtnGenerar_Click;
+
+            UIConfigHelper.ConfigurarControles(this);
         }
 
         private void FrmMantenimientosPorArea_Load(object? sender, EventArgs e)

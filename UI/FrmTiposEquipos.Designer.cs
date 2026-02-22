@@ -42,7 +42,7 @@
             btnEliminar.Location = new Point(679, 99);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(109, 40);
-            btnEliminar.TabIndex = 15;
+            btnEliminar.TabIndex = 4;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
@@ -51,7 +51,7 @@
             btnActualizar.Location = new Point(553, 99);
             btnActualizar.Name = "btnActualizar";
             btnActualizar.Size = new Size(109, 40);
-            btnActualizar.TabIndex = 14;
+            btnActualizar.TabIndex = 3;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
@@ -60,7 +60,7 @@
             btnAgregar.Location = new Point(12, 99);
             btnAgregar.Name = "btnAgregar";
             btnAgregar.Size = new Size(109, 40);
-            btnAgregar.TabIndex = 13;
+            btnAgregar.TabIndex = 1;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             // 
@@ -69,7 +69,7 @@
             txtNombre.Location = new Point(12, 51);
             txtNombre.Name = "txtNombre";
             txtNombre.Size = new Size(339, 27);
-            txtNombre.TabIndex = 11;
+            txtNombre.TabIndex = 0;
             // 
             // lbNombre
             // 
@@ -77,7 +77,7 @@
             lbNombre.Location = new Point(12, 28);
             lbNombre.Name = "lbNombre";
             lbNombre.Size = new Size(64, 20);
-            lbNombre.TabIndex = 9;
+            lbNombre.TabIndex = 5;
             lbNombre.Text = "Nombre";
             // 
             // dgvTipos
@@ -92,7 +92,7 @@
             dgvTipos.RowHeadersWidth = 51;
             dgvTipos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvTipos.Size = new Size(776, 267);
-            dgvTipos.TabIndex = 8;
+            dgvTipos.TabIndex = 2;
             // 
             // FrmTiposEquipos
             // 
