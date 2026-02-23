@@ -26,6 +26,7 @@ namespace AppEscritorioUPT.UI
             InitializeComponent();
 
             this.Load += FrmEquipos_Load;
+            this.Shown += FrmEquipos_Shown;
 
             btnAgregar.Click += BtnAgregar_Click;
             btnActualizar.Click += BtnActualizar_Click;
@@ -37,6 +38,10 @@ namespace AppEscritorioUPT.UI
             // NUEVO: cuando cambie el tipo de PC
             rbPcEscritorio.CheckedChanged += RbTipoPc_CheckedChanged;
             rbAllInOne.CheckedChanged += RbTipoPc_CheckedChanged;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
+
         }
 
         // ========== LOAD ==========
@@ -46,12 +51,6 @@ namespace AppEscritorioUPT.UI
             ConfigurarGrid();
             CargarCombos();
             CargarEquipos();
-
-            cmbTipoEquipo.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbTipoEquipo.DropDownWidth = 220;
-
-            ActualizarSeccionesPorTipo(); // si ya la tienes
-            ActualizarUiTipoPc();         // asegura que el panel arranque bien
 
             cmbTipoImpresion.Items.AddRange(new object[]
             {
@@ -63,15 +62,16 @@ namespace AppEscritorioUPT.UI
             });
         }
 
+        private void FrmEquipos_Shown(object? sender, EventArgs e)
+        {
+            // Windows ya pintó todo, ahora sí ordenamos limpiar y ajustar paneles
+            LimpiarFormulario();
+        }
+
         // ========== CONFIGURACIÓN GRID ==========
 
         private void ConfigurarGrid()
         {
-            dgvEquipos.ReadOnly = true;
-            dgvEquipos.MultiSelect = false;
-            dgvEquipos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEquipos.AllowUserToAddRows = false;
-            dgvEquipos.AllowUserToDeleteRows = false;
             dgvEquipos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
             dgvEquipos.ScrollBars = ScrollBars.Both;
         }
@@ -126,6 +126,13 @@ namespace AppEscritorioUPT.UI
 
         // ========== UTILIDADES ==========
 
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;
+            btnActualizar.Enabled = !esNuevo;
+            btnEliminar.Enabled = !esNuevo;
+        }
+
         private void LimpiarFormulario()
         {
             // ===== Campos comunes =====
@@ -139,7 +146,6 @@ namespace AppEscritorioUPT.UI
             txtProcesador.Clear();
             txtDiscoDuro.Clear();
             chkTieneLectorCd.Checked = false;
-
             rbPcEscritorio.Checked = false;
             rbAllInOne.Checked = false;
 
@@ -147,15 +153,12 @@ namespace AppEscritorioUPT.UI
             txtMarcaMonitor.Clear();
             txtModeloMonitor.Clear();
             txtSerieMonitor.Clear();
-
             txtMarcaTeclado.Clear();
             txtModeloTeclado.Clear();
             txtSerieTeclado.Clear();
-
             txtMarcaMouse.Clear();
             txtModeloMouse.Clear();
             txtSerieMouse.Clear();
-
             txtMarcaWebcam.Clear();
             txtModeloWebcam.Clear();
             txtSerieWebcam.Clear();
@@ -170,14 +173,12 @@ namespace AppEscritorioUPT.UI
             // ===== Estado del formulario =====
             _equipoSeleccionado = null;
 
-            // Restablecer tipo de equipo (opcional)
+            // Al cambiar el índice a 0, se dispara cmbTipoEquipo_SelectedIndexChanged y oculta los paneles
             if (cmbTipoEquipo.Items.Count > 0)
                 cmbTipoEquipo.SelectedIndex = 0;
 
-            // Ocultar secciones dinámicas
-            pnlPc.Visible = false;
-            pnlImpresora.Visible = false;
-            pnlTelefono.Visible = false;
+            dgvEquipos.ClearSelection(); // Soltamos la tabla
+            GestionarBotones();          // Reiniciamos los botones
         }
 
         private bool Validar()
@@ -251,7 +252,7 @@ namespace AppEscritorioUPT.UI
             }
 
             // ===== Impresora / Escáner =====
-            if (pnlImpresora.Visible)
+            if (pnlImpresora.Visible && cmbTipoImpresion.SelectedIndex < 0)
             {
                 if (cmbTipoImpresion.SelectedIndex < 0)
                 {
@@ -293,78 +294,36 @@ namespace AppEscritorioUPT.UI
 
             try
             {
-                int tipoId = (int)cmbTipoEquipo.SelectedValue!;
-
-                var marca = txtMarca.Text;
-                var modelo = txtModelo.Text;
-                var serie = txtNumeroSerie.Text;
-                var ip = txtDireccionIp.Text;
-
-                // Datos de PC
-                var memoriaRam = txtMemoriaRam.Text;
-                var procesador = txtProcesador.Text;
-                var discoDuro = txtDiscoDuro.Text;
-                bool tieneLectorCd = chkTieneLectorCd.Checked;
-
-                // Tipo de PC
-                bool esPcEscritorio = rbPcEscritorio.Checked;
-                bool esAllInOne = rbAllInOne.Checked;
-
-                // Periféricos (solo si el panel está visible)
-                string? marcaMonitor = pnlPerifericos.Visible ? txtMarcaMonitor.Text : null;
-                string? modeloMonitor = pnlPerifericos.Visible ? txtModeloMonitor.Text : null;
-                string? serieMonitor = pnlPerifericos.Visible ? txtSerieMonitor.Text : null;
-
-                string? marcaTeclado = pnlPerifericos.Visible ? txtMarcaTeclado.Text : null;
-                string? modeloTeclado = pnlPerifericos.Visible ? txtModeloTeclado.Text : null;
-                string? serieTeclado = pnlPerifericos.Visible ? txtSerieTeclado.Text : null;
-
-                string? marcaMouse = pnlPerifericos.Visible ? txtMarcaMouse.Text : null;
-                string? modeloMouse = pnlPerifericos.Visible ? txtModeloMouse.Text : null;
-                string? serieMouse = pnlPerifericos.Visible ? txtSerieMouse.Text : null;
-
-                string? marcaWebcam = pnlPerifericos.Visible ? txtMarcaWebcam.Text : null;
-                string? modeloWebcam = pnlPerifericos.Visible ? txtModeloWebcam.Text : null;
-                string? serieWebcam = pnlPerifericos.Visible ? txtSerieWebcam.Text : null;
-
                 var nuevo = new Equipo
                 {
-                    TipoEquipoId = tipoId,
-                    Marca = marca,
-                    Modelo = modelo,
-                    NumeroSerie = serie,
-                    DireccionIp = ip,
+                    TipoEquipoId = (int)cmbTipoEquipo.SelectedValue!,
+                    Marca = txtMarca.Text,
+                    Modelo = txtModelo.Text,
+                    NumeroSerie = txtNumeroSerie.Text,
+                    DireccionIp = txtDireccionIp.Text,
 
-                    MemoriaRam = memoriaRam,
-                    Procesador = procesador,
-                    DiscoDuro = discoDuro,
-                    TieneLectorCd = tieneLectorCd,
+                    MemoriaRam = txtMemoriaRam.Text,
+                    Procesador = txtProcesador.Text,
+                    DiscoDuro = txtDiscoDuro.Text,
+                    TieneLectorCd = chkTieneLectorCd.Checked,
 
-                    EsPcEscritorio = esPcEscritorio,
-                    EsAllInOne = esAllInOne,
+                    EsPcEscritorio = rbPcEscritorio.Checked,
+                    EsAllInOne = rbAllInOne.Checked,
 
-                    MarcaMonitor = marcaMonitor,
-                    ModeloMonitor = modeloMonitor,
-                    SerieMonitor = serieMonitor,
+                    MarcaMonitor = pnlPerifericos.Visible ? txtMarcaMonitor.Text : null,
+                    ModeloMonitor = pnlPerifericos.Visible ? txtModeloMonitor.Text : null,
+                    SerieMonitor = pnlPerifericos.Visible ? txtSerieMonitor.Text : null,
+                    MarcaTeclado = pnlPerifericos.Visible ? txtMarcaTeclado.Text : null,
+                    ModeloTeclado = pnlPerifericos.Visible ? txtModeloTeclado.Text : null,
+                    SerieTeclado = pnlPerifericos.Visible ? txtSerieTeclado.Text : null,
+                    MarcaMouse = pnlPerifericos.Visible ? txtMarcaMouse.Text : null,
+                    ModeloMouse = pnlPerifericos.Visible ? txtModeloMouse.Text : null,
+                    SerieMouse = pnlPerifericos.Visible ? txtSerieMouse.Text : null,
+                    MarcaWebcam = pnlPerifericos.Visible ? txtMarcaWebcam.Text : null,
+                    ModeloWebcam = pnlPerifericos.Visible ? txtModeloWebcam.Text : null,
+                    SerieWebcam = pnlPerifericos.Visible ? txtSerieWebcam.Text : null,
 
-                    MarcaTeclado = marcaTeclado,
-                    ModeloTeclado = modeloTeclado,
-                    SerieTeclado = serieTeclado,
-
-                    MarcaMouse = marcaMouse,
-                    ModeloMouse = modeloMouse,
-                    SerieMouse = serieMouse,
-
-                    MarcaWebcam = marcaWebcam,
-                    ModeloWebcam = modeloWebcam,
-                    SerieWebcam = serieWebcam,
-
-                    // Impresora / Escáner
-                    TipoImpresion = pnlImpresora.Visible
-                        ? cmbTipoImpresion.SelectedItem?.ToString()
-                        : null,
-
-                    // Telefonía IP
+                    TipoImpresion = pnlImpresora.Visible ? cmbTipoImpresion.SelectedItem?.ToString() : null,
                     MacAddress = pnlTelefono.Visible ? txtMacAddress.Text : null,
                     NumeroExtension = pnlTelefono.Visible ? txtNumeroExtension.Text : null,
                     PrivilegiosLlamadas = pnlTelefono.Visible ? txtPrivilegiosLlamadas.Text : null
@@ -374,7 +333,6 @@ namespace AppEscritorioUPT.UI
 
                 CargarEquipos();
                 LimpiarFormulario();
-                dgvEquipos.ClearSelection();
             }
             catch (Exception ex)
             {
@@ -385,30 +343,21 @@ namespace AppEscritorioUPT.UI
 
         private void BtnActualizar_Click(object? sender, EventArgs e)
         {
-            if (_equipoSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un equipo de la tabla para actualizar.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
+            if (_equipoSeleccionado == null) return;
             if (!Validar()) return;
 
             try
             {
                 _equipoSeleccionado.TipoEquipoId = (int)cmbTipoEquipo.SelectedValue!;
-
                 _equipoSeleccionado.Marca = txtMarca.Text;
                 _equipoSeleccionado.Modelo = txtModelo.Text;
                 _equipoSeleccionado.NumeroSerie = txtNumeroSerie.Text;
                 _equipoSeleccionado.DireccionIp = txtDireccionIp.Text;
 
-                // Panel PC
                 _equipoSeleccionado.MemoriaRam = txtMemoriaRam.Text;
                 _equipoSeleccionado.Procesador = txtProcesador.Text;
                 _equipoSeleccionado.DiscoDuro = txtDiscoDuro.Text;
                 _equipoSeleccionado.TieneLectorCd = chkTieneLectorCd.Checked;
-
                 _equipoSeleccionado.EsPcEscritorio = rbPcEscritorio.Checked;
                 _equipoSeleccionado.EsAllInOne = rbAllInOne.Checked;
 
@@ -417,22 +366,18 @@ namespace AppEscritorioUPT.UI
                     _equipoSeleccionado.MarcaMonitor = txtMarcaMonitor.Text;
                     _equipoSeleccionado.ModeloMonitor = txtModeloMonitor.Text;
                     _equipoSeleccionado.SerieMonitor = txtSerieMonitor.Text;
-
                     _equipoSeleccionado.MarcaTeclado = txtMarcaTeclado.Text;
                     _equipoSeleccionado.ModeloTeclado = txtModeloTeclado.Text;
                     _equipoSeleccionado.SerieTeclado = txtSerieTeclado.Text;
-
                     _equipoSeleccionado.MarcaMouse = txtMarcaMouse.Text;
                     _equipoSeleccionado.ModeloMouse = txtModeloMouse.Text;
                     _equipoSeleccionado.SerieMouse = txtSerieMouse.Text;
-
                     _equipoSeleccionado.MarcaWebcam = txtMarcaWebcam.Text;
                     _equipoSeleccionado.ModeloWebcam = txtModeloWebcam.Text;
                     _equipoSeleccionado.SerieWebcam = txtSerieWebcam.Text;
                 }
                 else
                 {
-                    // Si es All in One, limpiamos periféricos
                     _equipoSeleccionado.MarcaMonitor = null;
                     _equipoSeleccionado.ModeloMonitor = null;
                     _equipoSeleccionado.SerieMonitor = null;
@@ -446,43 +391,26 @@ namespace AppEscritorioUPT.UI
                     _equipoSeleccionado.ModeloWebcam = null;
                     _equipoSeleccionado.SerieWebcam = null;
                 }
-                _equipoSeleccionado.TipoImpresion = pnlImpresora.Visible
-                ? cmbTipoImpresion.SelectedItem?.ToString()
-                : null;
 
-                _equipoSeleccionado.MacAddress = pnlTelefono.Visible
-                    ? txtMacAddress.Text
-                    : null;
-
-                _equipoSeleccionado.NumeroExtension = pnlTelefono.Visible
-                    ? txtNumeroExtension.Text
-                    : null;
-
-                _equipoSeleccionado.PrivilegiosLlamadas = pnlTelefono.Visible
-                    ? txtPrivilegiosLlamadas.Text
-                    : null;
+                _equipoSeleccionado.TipoImpresion = pnlImpresora.Visible ? cmbTipoImpresion.SelectedItem?.ToString() : null;
+                _equipoSeleccionado.MacAddress = pnlTelefono.Visible ? txtMacAddress.Text : null;
+                _equipoSeleccionado.NumeroExtension = pnlTelefono.Visible ? txtNumeroExtension.Text : null;
+                _equipoSeleccionado.PrivilegiosLlamadas = pnlTelefono.Visible ? txtPrivilegiosLlamadas.Text : null;
 
                 _equipoService.ActualizarEquipo(_equipoSeleccionado);
 
                 CargarEquipos();
                 LimpiarFormulario();
-                dgvEquipos.ClearSelection();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            if (_equipoSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un equipo para eliminar.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            if (_equipoSeleccionado == null) return;
 
             var confirm = MessageBox.Show(
                 "¿Seguro que desea eliminar el equipo seleccionado?",
@@ -498,7 +426,6 @@ namespace AppEscritorioUPT.UI
 
                     CargarEquipos();
                     LimpiarFormulario();
-                    dgvEquipos.ClearSelection();
                 }
                 catch (Exception ex)
                 {
@@ -593,6 +520,7 @@ namespace AppEscritorioUPT.UI
                     txtNumeroExtension.Clear();
                     txtPrivilegiosLlamadas.Clear();
                 }
+                GestionarBotones(false);
             }
         }
 

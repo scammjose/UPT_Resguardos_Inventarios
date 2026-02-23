@@ -25,10 +25,15 @@ namespace AppEscritorioUPT.UI
             InitializeComponent();
 
             this.Load += FrmResponsablesSistemas_Load;
+            this.Shown += FrmResponsablesSistemas_Shown;
+
             btnAgregar.Click += BtnAgregar_Click;
             btnEliminar.Click += BtnEliminar_Click;
 
             dgvResponsables.CellClick += DgvResponsables_CellClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         // ===== EVENTO LOAD =====
@@ -39,14 +44,14 @@ namespace AppEscritorioUPT.UI
             CargarResponsables();
         }
 
+        private void FrmResponsablesSistemas_Shown(object? sender, EventArgs e)
+        {
+            LimpiarFormulario(); // Windows ya terminó, nosotros limpiamos
+        }
+
         // ===== CONFIGURACIÓN GRID =====
         private void ConfigurarGrid()
         {
-            dgvResponsables.ReadOnly = true;
-            dgvResponsables.MultiSelect = false;
-            dgvResponsables.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResponsables.AllowUserToAddRows = false;
-            dgvResponsables.AllowUserToDeleteRows = false;
             dgvResponsables.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
@@ -90,12 +95,24 @@ namespace AppEscritorioUPT.UI
         }
 
         // ===== UTILIDADES =====
-        private void LimpiarSeleccion()
+        // ===== GESTIÓN DE INTERFAZ =====
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;
+            // En este formulario no hay Actualizar, solo apagamos/encendemos Eliminar
+            if (btnEliminar != null)
+                btnEliminar.Enabled = !esNuevo;
+        }
+
+        private void LimpiarFormulario()
         {
             _responsableSeleccionado = null;
-            dgvResponsables.ClearSelection();
+
             if (cmbAdministrativo.Items.Count > 0)
                 cmbAdministrativo.SelectedIndex = 0;
+
+            dgvResponsables.ClearSelection();
+            GestionarBotones();
         }
 
         private bool Validar()
@@ -121,7 +138,7 @@ namespace AppEscritorioUPT.UI
                 var adminId = (int)cmbAdministrativo.SelectedValue!;  // ya validado
                 _responsableService.AgregarResponsable(adminId);
                 CargarResponsables();
-                LimpiarSeleccion();
+                LimpiarFormulario();
 
                 MessageBox.Show("Responsable de sistemas agregado correctamente.",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -135,12 +152,7 @@ namespace AppEscritorioUPT.UI
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            if (_responsableSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un responsable en la tabla para eliminar.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            if (_responsableSeleccionado == null) return;
 
             var confirm = MessageBox.Show(
                 $"¿Seguro que desea eliminar a '{_responsableSeleccionado.AdministrativoNombre}' como responsable de sistemas?",
@@ -154,7 +166,7 @@ namespace AppEscritorioUPT.UI
                 {
                     _responsableService.EliminarResponsable(_responsableSeleccionado.Id);
                     CargarResponsables();
-                    LimpiarSeleccion();
+                    LimpiarFormulario();
                 }
                 catch (Exception ex)
                 {
@@ -169,7 +181,7 @@ namespace AppEscritorioUPT.UI
         {
             if (e.RowIndex < 0)
             {
-                LimpiarSeleccion();
+                LimpiarFormulario();
                 return;
             }
 
@@ -181,6 +193,7 @@ namespace AppEscritorioUPT.UI
 
                 // Sincronizar combo con el administrativo de ese responsable
                 cmbAdministrativo.SelectedValue = resp.AdministrativoId;
+                GestionarBotones(false);
             }
         }
 

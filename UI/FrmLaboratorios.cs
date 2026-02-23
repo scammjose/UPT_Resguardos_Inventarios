@@ -27,36 +27,40 @@ namespace AppEscritorioUPT.UI
         {
             InitializeComponent();
 
-            // Aplicamos el diseño institucional
-            //ThemeHelper.AplicarTema(this);
-
             _laboratorioService = new LaboratorioService();
             _edificioRepo = new EdificioRepository();
             _areaRepo = new AreaRepository();
             _responsableRepo = new ResponsableSistemasRepository();
 
-            ConfigurarEventos();
-        }
-
-        private void ConfigurarEventos()
-        {
             this.Load += FrmLaboratorios_Load;
+            this.Shown += FrmLaboratorios_Shown;
+
             btnGuardar.Click += BtnGuardar_Click;
             btnEliminar.Click += BtnEliminar_Click;
 
-            // Configurar DataGridView
-            dgvLaboratorios.ReadOnly = true;
-            dgvLaboratorios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvLaboratorios.MultiSelect = false;
-            dgvLaboratorios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells; // Scroll horizontal
-            dgvLaboratorios.AllowUserToAddRows = false;
             dgvLaboratorios.CellClick += DgvLaboratorios_CellClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmLaboratorios_Load(object? sender, EventArgs e)
         {
+            ConfigurarGrid();
             CargarCombos();
             CargarGrid();
+        }
+
+        private void FrmLaboratorios_Shown(object? sender, EventArgs e)
+        {
+            // Windows ya pintó todo, ordenamos soltar selecciones
+            LimpiarFormulario();
+        }
+
+        private void ConfigurarGrid()
+        {
+            // Las reglas repetitivas las aplica UIConfigHelper
+            dgvLaboratorios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells; // Scroll horizontal
         }
 
         private void CargarCombos()
@@ -108,8 +112,6 @@ namespace AppEscritorioUPT.UI
 
                 // Le damos más espacio al Nombre del Laboratorio
                 if (dgvLaboratorios.Columns["Nombre"] != null) dgvLaboratorios.Columns["Nombre"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-
-                LimpiarFormulario(); // Resetea el modo de los botones
             }
             catch (Exception ex)
             {
@@ -117,9 +119,58 @@ namespace AppEscritorioUPT.UI
             }
         }
 
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnGuardar.Text = esNuevo ? "Guardar" : "Actualizar";
+            btnEliminar.Enabled = !esNuevo;
+        }
+
+        private void LimpiarFormulario()
+        {
+            _laboratorioSeleccionado = null;
+
+            txtNombre.Clear();
+            if (cmbUbicacion.Items.Count > 0) cmbUbicacion.SelectedIndex = 0;
+            if (cmbResponsableSistemas.Items.Count > 0) cmbResponsableSistemas.SelectedIndex = 0;
+            if (cmbAreaResponsable.Items.Count > 0) cmbAreaResponsable.SelectedIndex = 0;
+            nudCantidadEquipos.Value = 0;
+
+            dgvLaboratorios.ClearSelection();
+            GestionarBotones();
+        }
+
+        private bool Validar()
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
+                MessageBox.Show("Debe ingresar el nombre del laboratorio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
+            }
+            if (cmbUbicacion.SelectedValue == null || (int)cmbUbicacion.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar una ubicación (Edificio).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbUbicacion.Focus();
+                return false;
+            }
+            if (cmbResponsableSistemas.SelectedValue == null || (int)cmbResponsableSistemas.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un responsable de sistemas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbResponsableSistemas.Focus();
+                return false;
+            }
+            if (cmbAreaResponsable.SelectedValue == null || (int)cmbAreaResponsable.SelectedValue == 0)
+            {
+                MessageBox.Show("Debe seleccionar un área responsable.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbAreaResponsable.Focus();
+                return false;
+            }
+            return true;
+        }
+
         private void BtnGuardar_Click(object? sender, EventArgs e)
         {
-            if (!ValidarCampos()) return;
+            if (!Validar()) return;
 
             try
             {
@@ -140,6 +191,7 @@ namespace AppEscritorioUPT.UI
                 MessageBox.Show($"Laboratorio {accion} correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarGrid();
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -161,6 +213,7 @@ namespace AppEscritorioUPT.UI
                     _laboratorioService.EliminarLaboratorio(_laboratorioSeleccionado.Id);
                     MessageBox.Show("Registro eliminado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarGrid();
+                    LimpiarFormulario();
                 }
                 catch (Microsoft.Data.Sqlite.SqliteException)
                 {
@@ -192,52 +245,8 @@ namespace AppEscritorioUPT.UI
                 cmbAreaResponsable.SelectedValue = _laboratorioSeleccionado.AreaId;
                 nudCantidadEquipos.Value = _laboratorioSeleccionado.CantidadEquipos;
 
-                // CAMBIO VISUAL A MODO "EDICIÓN"
-                btnGuardar.Text = "Actualizar";
-                btnEliminar.Enabled = true;
+                GestionarBotones(false);
             }
-        }
-
-        private bool ValidarCampos()
-        {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text))
-            {
-                MessageBox.Show("Debe ingresar el nombre del laboratorio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (cmbUbicacion.SelectedValue == null || (int)cmbUbicacion.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar una ubicación (Edificio).", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (cmbResponsableSistemas.SelectedValue == null || (int)cmbResponsableSistemas.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar un responsable de sistemas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (cmbAreaResponsable.SelectedValue == null || (int)cmbAreaResponsable.SelectedValue == 0)
-            {
-                MessageBox.Show("Debe seleccionar un área responsable.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        private void LimpiarFormulario()
-        {
-            _laboratorioSeleccionado = null;
-
-            txtNombre.Clear();
-            if (cmbUbicacion.Items.Count > 0) cmbUbicacion.SelectedIndex = 0;
-            if (cmbResponsableSistemas.Items.Count > 0) cmbResponsableSistemas.SelectedIndex = 0;
-            if (cmbAreaResponsable.Items.Count > 0) cmbAreaResponsable.SelectedIndex = 0;
-            nudCantidadEquipos.Value = 0;
-
-            dgvLaboratorios.ClearSelection();
-
-            // CAMBIO VISUAL A MODO "NUEVO REGISTRO"
-            btnGuardar.Text = "Guardar";
-            btnEliminar.Enabled = false;
         }
     }
 }

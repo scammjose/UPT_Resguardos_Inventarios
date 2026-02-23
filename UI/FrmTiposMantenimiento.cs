@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 using System;
 using System.Collections.Generic;
@@ -21,31 +22,37 @@ namespace AppEscritorioUPT.UI
         {
             InitializeComponent();
             _tipoService = new TipoMantenimientoService();
-            ConfigurarEventos();
-        }
 
-        private void ConfigurarEventos()
-        {
             this.Load += FrmTiposMantenimiento_Load;
+            this.Shown += FrmTiposMantenimiento_Shown;
+
             btnGuardar.Click += BtnGuardar_Click;
             btnEliminar.Click += BtnEliminar_Click;
 
-            // Configuración del DataGridView
-            dgvTiposMantenimiento.ReadOnly = true;
-            dgvTiposMantenimiento.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTiposMantenimiento.MultiSelect = false;
-            dgvTiposMantenimiento.AllowUserToAddRows = false;
-
-            // MAGIA PARA EL SCROLL: AllCells obliga a la columna a medir lo que mida el texto.
-            // Si el texto es más ancho que la tabla, aparece el scroll horizontal automáticamente.
-            dgvTiposMantenimiento.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-
             dgvTiposMantenimiento.CellClick += DgvTiposMantenimiento_CellClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmTiposMantenimiento_Load(object? sender, EventArgs e)
         {
+            ConfigurarGrid();
             CargarGrid();
+        }
+
+        private void FrmTiposMantenimiento_Shown(object? sender, EventArgs e)
+        {
+            // Windows ya pintó todo, limpiamos la selección
+            LimpiarFormulario();
+        }
+
+        // ===== CONFIGURACIÓN GRID =====
+        private void ConfigurarGrid()
+        {
+            // Las demás reglas las aplica el UIConfigHelper
+            // MAGIA PARA EL SCROLL: AllCells obliga a la columna a medir lo que mida el texto.
+            dgvTiposMantenimiento.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         private void CargarGrid()
@@ -62,22 +69,42 @@ namespace AppEscritorioUPT.UI
                 // Ajustamos el título de la columna principal
                 if (dgvTiposMantenimiento.Columns["Nombre"] != null)
                     dgvTiposMantenimiento.Columns["Nombre"].HeaderText = "Tipo de Mantenimiento";
-
-                LimpiarFormulario(); // Reseteamos el estado visual
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error al cargar los datos: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            // Adaptamos la lógica para tu botón dinámico
+            btnGuardar.Text = esNuevo ? "Guardar" : "Actualizar";
+            btnEliminar.Enabled = !esNuevo;
+        }
 
-        private void BtnGuardar_Click(object? sender, EventArgs e)
+        private void LimpiarFormulario()
+        {
+            _tipoSeleccionado = null;
+            txtNombre.Clear();
+
+            dgvTiposMantenimiento.ClearSelection();
+            GestionarBotones();
+        }
+
+        private bool Validar()
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("El nombre no puede estar vacío.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                MessageBox.Show("El nombre no puede estar vacío.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
             }
+            return true;
+        }
+
+        private void BtnGuardar_Click(object? sender, EventArgs e)
+        {
+            if (!Validar()) return;
 
             try
             {
@@ -95,6 +122,7 @@ namespace AppEscritorioUPT.UI
                 MessageBox.Show($"Tipo de mantenimiento {accion} correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 CargarGrid(); // Al cargar el grid, se limpia el formulario automáticamente
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -117,6 +145,7 @@ namespace AppEscritorioUPT.UI
                     _tipoService.EliminarTipoMantenimiento(_tipoSeleccionado.Id);
                     MessageBox.Show("Registro eliminado.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarGrid();
+                    LimpiarFormulario();
                 }
                 catch (Microsoft.Data.Sqlite.SqliteException)
                 {
@@ -148,21 +177,8 @@ namespace AppEscritorioUPT.UI
                 txtNombre.Text = _tipoSeleccionado.Nombre;
 
                 // Cambiamos el comportamiento visual
-                btnGuardar.Text = "Actualizar";
-                btnEliminar.Enabled = true; // Habilitamos el botón
+                GestionarBotones(false); // Habilitamos el botón
             }
-        }
-
-        private void LimpiarFormulario()
-        {
-            _tipoSeleccionado = null;
-            txtNombre.Clear();
-
-            // Reseteamos el comportamiento visual
-            btnGuardar.Text = "Guardar";
-            btnEliminar.Enabled = false; // Bloqueamos el botón
-
-            dgvTiposMantenimiento.ClearSelection();
         }
     }
 }

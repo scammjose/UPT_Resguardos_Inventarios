@@ -25,33 +25,38 @@ namespace AppEscritorioUPT.UI
         {
             InitializeComponent();
             _edificioService = new EdificioService();
-            _responsableRepo = new ResponsableSistemasRepository();
+            _responsableRepo = new ResponsableSistemasRepository(); 
 
-            ConfigurarEventos();
-        }
-
-        private void ConfigurarEventos()
-        {
             this.Load += FrmEdificios_Load;
+            this.Shown += FrmEdificios_Shown;
+
             btnGuardar.Click += BtnGuardar_Click;
-            btnActualizar.Click += BtnActualizar_Click; // Tu nuevo botón
+            btnActualizar.Click += BtnActualizar_Click;
             btnEliminar.Click += BtnEliminar_Click;
 
-            // Configurar DataGridView
-            dgvEdificios.ReadOnly = true;
-            dgvEdificios.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvEdificios.MultiSelect = false;
-            dgvEdificios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            dgvEdificios.AllowUserToAddRows = false;
-
-            // Evento para cuando se hace clic en una fila o en el fondo
             dgvEdificios.CellClick += DgvEdificios_CellClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmEdificios_Load(object? sender, EventArgs e)
         {
+            ConfigurarGrid();
             CargarCombos();
             CargarGrid();
+        }
+
+        private void FrmEdificios_Shown(object? sender, EventArgs e)
+        {
+            // Windows ya dibujó la pantalla, ahora sí limpiamos
+            LimpiarFormulario();
+        }
+
+        private void ConfigurarGrid()
+        {
+            // Las reglas repetitivas las hace UIConfigHelper
+            dgvEdificios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.DisplayedCells;
         }
 
         private void CargarCombos()
@@ -102,9 +107,6 @@ namespace AppEscritorioUPT.UI
 
                 if (dgvEdificios.Columns["ResponsableNombre"] != null)
                     dgvEdificios.Columns["ResponsableNombre"].HeaderText = "Responsable Asignado";
-
-                // Limpiamos los campos visualmente después de recargar
-                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -112,10 +114,48 @@ namespace AppEscritorioUPT.UI
             }
         }
 
+        // ===== GESTIÓN DE INTERFAZ =====
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnGuardar.Enabled = esNuevo;             // Usamos btnGuardar aquí
+            btnActualizar.Enabled = !esNuevo;
+            btnEliminar.Enabled = !esNuevo;
+        }
+
+        private void LimpiarFormulario()
+        {
+            _edificioSeleccionado = null;
+            txtNombre.Clear();
+            txtUbicacion.Clear();
+            nudCantidadAulas.Value = 1;
+
+            if (cmbResponsable.Items.Count > 0)
+                cmbResponsable.SelectedIndex = 0;
+
+            dgvEdificios.ClearSelection();
+            GestionarBotones();
+        }
+        private bool Validar()
+        {
+            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            {
+                MessageBox.Show("El nombre del edificio es obligatorio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNombre.Focus();
+                return false;
+            }
+            if (cmbResponsable.SelectedValue == null || Convert.ToInt32(cmbResponsable.SelectedValue) == 0)
+            {
+                MessageBox.Show("Debe seleccionar un Responsable de Sistemas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbResponsable.Focus();
+                return false;
+            }
+            return true;
+        }
+
         // --- BOTÓN GUARDAR (NUEVO REGISTRO) ---
         private void BtnGuardar_Click(object? sender, EventArgs e)
         {
-            if (!ValidarCampos()) return;
+            if (!Validar()) return;
 
             try
             {
@@ -131,7 +171,8 @@ namespace AppEscritorioUPT.UI
                 _edificioService.GuardarEdificio(edificio);
 
                 MessageBox.Show("Edificio guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                CargarGrid(); // Esto también llama a LimpiarFormulario() internamente
+                CargarGrid();
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -142,13 +183,8 @@ namespace AppEscritorioUPT.UI
         // --- BOTÓN ACTUALIZAR (MODIFICAR REGISTRO EXISTENTE) ---
         private void BtnActualizar_Click(object? sender, EventArgs e)
         {
-            if (_edificioSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un edificio de la tabla para actualizar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            if (!ValidarCampos()) return;
+            if (_edificioSeleccionado == null) return;
+            if (!Validar()) return;
 
             try
             {
@@ -165,6 +201,7 @@ namespace AppEscritorioUPT.UI
 
                 MessageBox.Show("Edificio actualizado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarGrid();
+                LimpiarFormulario();
             }
             catch (Exception ex)
             {
@@ -175,11 +212,7 @@ namespace AppEscritorioUPT.UI
         // --- BOTÓN ELIMINAR ---
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            if (_edificioSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un edificio para eliminar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            if (_edificioSeleccionado == null) return;
 
             var confirm = MessageBox.Show($"¿Seguro que desea eliminar el edificio '{_edificioSeleccionado.Nombre}'?",
                 "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
@@ -192,6 +225,7 @@ namespace AppEscritorioUPT.UI
 
                     MessageBox.Show("Edificio eliminado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarGrid();
+                    LimpiarFormulario();
                 }
                 catch (Exception ex)
                 {
@@ -217,35 +251,8 @@ namespace AppEscritorioUPT.UI
                 txtUbicacion.Text = _edificioSeleccionado.Ubicacion;
                 nudCantidadAulas.Value = _edificioSeleccionado.CantidadAulas > 0 ? _edificioSeleccionado.CantidadAulas : 1;
                 cmbResponsable.SelectedValue = _edificioSeleccionado.ResponsableSistemasId;
+                GestionarBotones(false);
             }
-        }
-
-        private bool ValidarCampos()
-        {
-            if (string.IsNullOrWhiteSpace(txtNombre.Text))
-            {
-                MessageBox.Show("El nombre del edificio es obligatorio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (cmbResponsable.SelectedValue == null || Convert.ToInt32(cmbResponsable.SelectedValue) == 0)
-            {
-                MessageBox.Show("Debe seleccionar un Responsable de Sistemas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
-        }
-
-        private void LimpiarFormulario()
-        {
-            _edificioSeleccionado = null;
-            txtNombre.Clear();
-            txtUbicacion.Clear();
-            nudCantidadAulas.Value = 1;
-
-            if (cmbResponsable.Items.Count > 0)
-                cmbResponsable.SelectedIndex = 0;
-
-            dgvEdificios.ClearSelection();
         }
     }
 }

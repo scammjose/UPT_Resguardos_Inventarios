@@ -47,111 +47,120 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 35);
+            label1.Location = new Point(14, 47);
             label1.Name = "label1";
-            label1.Size = new Size(51, 15);
-            label1.TabIndex = 0;
+            label1.Size = new Size(64, 20);
+            label1.TabIndex = 8;
             label1.Text = "Nombre";
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(12, 53);
+            txtNombre.Location = new Point(14, 71);
+            txtNombre.Margin = new Padding(3, 4, 3, 4);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(203, 23);
-            txtNombre.TabIndex = 1;
+            txtNombre.Size = new Size(231, 27);
+            txtNombre.TabIndex = 0;
             // 
             // txtUbicacion
             // 
-            txtUbicacion.Location = new Point(12, 117);
+            txtUbicacion.Location = new Point(14, 156);
+            txtUbicacion.Margin = new Padding(3, 4, 3, 4);
             txtUbicacion.Name = "txtUbicacion";
-            txtUbicacion.Size = new Size(203, 23);
-            txtUbicacion.TabIndex = 3;
+            txtUbicacion.Size = new Size(231, 27);
+            txtUbicacion.TabIndex = 1;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 99);
+            label2.Location = new Point(14, 132);
             label2.Name = "label2";
-            label2.Size = new Size(60, 15);
-            label2.TabIndex = 2;
+            label2.Size = new Size(75, 20);
+            label2.TabIndex = 9;
             label2.Text = "Ubicación";
             // 
             // nudCantidadAulas
             // 
-            nudCantidadAulas.Location = new Point(12, 181);
+            nudCantidadAulas.Location = new Point(14, 241);
+            nudCantidadAulas.Margin = new Padding(3, 4, 3, 4);
             nudCantidadAulas.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             nudCantidadAulas.Name = "nudCantidadAulas";
-            nudCantidadAulas.Size = new Size(120, 23);
-            nudCantidadAulas.TabIndex = 4;
+            nudCantidadAulas.Size = new Size(137, 27);
+            nudCantidadAulas.TabIndex = 2;
             nudCantidadAulas.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 163);
+            label3.Location = new Point(14, 217);
             label3.Name = "label3";
-            label3.Size = new Size(103, 15);
-            label3.TabIndex = 5;
+            label3.Size = new Size(130, 20);
+            label3.TabIndex = 10;
             label3.Text = "Cantidad de Aulas";
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 224);
+            label4.Location = new Point(14, 299);
             label4.Name = "label4";
-            label4.Size = new Size(138, 15);
-            label4.TabIndex = 6;
+            label4.Size = new Size(176, 20);
+            label4.TabIndex = 11;
             label4.Text = "Responsable de Sistemas";
             // 
             // cmbResponsable
             // 
             cmbResponsable.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbResponsable.FormattingEnabled = true;
-            cmbResponsable.Location = new Point(12, 242);
+            cmbResponsable.Location = new Point(14, 323);
+            cmbResponsable.Margin = new Padding(3, 4, 3, 4);
             cmbResponsable.Name = "cmbResponsable";
-            cmbResponsable.Size = new Size(203, 23);
-            cmbResponsable.TabIndex = 7;
+            cmbResponsable.Size = new Size(231, 28);
+            cmbResponsable.TabIndex = 3;
             // 
             // dgvEdificios
             // 
             dgvEdificios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEdificios.Location = new Point(304, 35);
+            dgvEdificios.Location = new Point(347, 47);
+            dgvEdificios.Margin = new Padding(3, 4, 3, 4);
             dgvEdificios.Name = "dgvEdificios";
-            dgvEdificios.Size = new Size(484, 230);
-            dgvEdificios.TabIndex = 8;
+            dgvEdificios.RowHeadersWidth = 51;
+            dgvEdificios.Size = new Size(553, 307);
+            dgvEdificios.TabIndex = 5;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(12, 312);
+            btnGuardar.Location = new Point(14, 416);
+            btnGuardar.Margin = new Padding(3, 4, 3, 4);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(87, 32);
-            btnGuardar.TabIndex = 9;
+            btnGuardar.Size = new Size(99, 43);
+            btnGuardar.TabIndex = 4;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(304, 312);
+            btnActualizar.Location = new Point(347, 416);
+            btnActualizar.Margin = new Padding(3, 4, 3, 4);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(87, 32);
-            btnActualizar.TabIndex = 10;
+            btnActualizar.Size = new Size(99, 43);
+            btnActualizar.TabIndex = 6;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(413, 312);
+            btnEliminar.Location = new Point(472, 416);
+            btnEliminar.Margin = new Padding(3, 4, 3, 4);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(87, 32);
-            btnEliminar.TabIndex = 11;
+            btnEliminar.Size = new Size(99, 43);
+            btnEliminar.TabIndex = 7;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
             // FrmEdificios
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(914, 600);
             Controls.Add(btnEliminar);
             Controls.Add(btnActualizar);
             Controls.Add(btnGuardar);
@@ -164,6 +173,7 @@
             Controls.Add(label2);
             Controls.Add(txtNombre);
             Controls.Add(label1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "FrmEdificios";
             Text = "FrmEdificios";
             ((System.ComponentModel.ISupportInitialize)nudCantidadAulas).EndInit();

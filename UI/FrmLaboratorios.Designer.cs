@@ -48,60 +48,63 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(12, 28);
+            label1.Location = new Point(14, 37);
             label1.Name = "label1";
-            label1.Size = new Size(51, 15);
-            label1.TabIndex = 0;
+            label1.Size = new Size(64, 20);
+            label1.TabIndex = 8;
             label1.Text = "Nombre";
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(12, 46);
+            txtNombre.Location = new Point(14, 61);
+            txtNombre.Margin = new Padding(3, 4, 3, 4);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(280, 23);
-            txtNombre.TabIndex = 1;
+            txtNombre.Size = new Size(319, 27);
+            txtNombre.TabIndex = 0;
             // 
             // lblUbicacion
             // 
             lblUbicacion.AutoSize = true;
-            lblUbicacion.Location = new Point(12, 91);
+            lblUbicacion.Location = new Point(14, 121);
             lblUbicacion.Name = "lblUbicacion";
-            lblUbicacion.Size = new Size(60, 15);
-            lblUbicacion.TabIndex = 2;
+            lblUbicacion.Size = new Size(75, 20);
+            lblUbicacion.TabIndex = 9;
             lblUbicacion.Text = "Ubicación";
             // 
             // cmbUbicacion
             // 
             cmbUbicacion.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbUbicacion.FormattingEnabled = true;
-            cmbUbicacion.Location = new Point(12, 109);
+            cmbUbicacion.Location = new Point(14, 145);
+            cmbUbicacion.Margin = new Padding(3, 4, 3, 4);
             cmbUbicacion.Name = "cmbUbicacion";
-            cmbUbicacion.Size = new Size(280, 23);
-            cmbUbicacion.TabIndex = 3;
+            cmbUbicacion.Size = new Size(319, 28);
+            cmbUbicacion.TabIndex = 1;
             // 
             // nudCantidadEquipos
             // 
-            nudCantidadEquipos.Location = new Point(12, 173);
+            nudCantidadEquipos.Location = new Point(14, 231);
+            nudCantidadEquipos.Margin = new Padding(3, 4, 3, 4);
             nudCantidadEquipos.Name = "nudCantidadEquipos";
-            nudCantidadEquipos.Size = new Size(280, 23);
-            nudCantidadEquipos.TabIndex = 4;
+            nudCantidadEquipos.Size = new Size(320, 27);
+            nudCantidadEquipos.TabIndex = 2;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 155);
+            label2.Location = new Point(14, 207);
             label2.Name = "label2";
-            label2.Size = new Size(116, 15);
-            label2.TabIndex = 5;
+            label2.Size = new Size(147, 20);
+            label2.TabIndex = 10;
             label2.Text = "Cantidad de Equipos";
             // 
             // lblResponsableSistemas
             // 
             lblResponsableSistemas.AutoSize = true;
-            lblResponsableSistemas.Location = new Point(12, 220);
+            lblResponsableSistemas.Location = new Point(14, 293);
             lblResponsableSistemas.Name = "lblResponsableSistemas";
-            lblResponsableSistemas.Size = new Size(138, 15);
-            lblResponsableSistemas.TabIndex = 6;
+            lblResponsableSistemas.Size = new Size(176, 20);
+            lblResponsableSistemas.TabIndex = 11;
             lblResponsableSistemas.Text = "Responsable de Sistemas";
             // 
             // cmbResponsableSistemas
@@ -109,59 +112,65 @@
             cmbResponsableSistemas.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cmbResponsableSistemas.AutoCompleteSource = AutoCompleteSource.ListItems;
             cmbResponsableSistemas.FormattingEnabled = true;
-            cmbResponsableSistemas.Location = new Point(12, 238);
+            cmbResponsableSistemas.Location = new Point(14, 317);
+            cmbResponsableSistemas.Margin = new Padding(3, 4, 3, 4);
             cmbResponsableSistemas.Name = "cmbResponsableSistemas";
-            cmbResponsableSistemas.Size = new Size(280, 23);
-            cmbResponsableSistemas.TabIndex = 7;
+            cmbResponsableSistemas.Size = new Size(319, 28);
+            cmbResponsableSistemas.TabIndex = 3;
             // 
             // cmbAreaResponsable
             // 
             cmbAreaResponsable.FormattingEnabled = true;
-            cmbAreaResponsable.Location = new Point(12, 302);
+            cmbAreaResponsable.Location = new Point(14, 403);
+            cmbAreaResponsable.Margin = new Padding(3, 4, 3, 4);
             cmbAreaResponsable.Name = "cmbAreaResponsable";
-            cmbAreaResponsable.Size = new Size(280, 23);
-            cmbAreaResponsable.TabIndex = 9;
+            cmbAreaResponsable.Size = new Size(319, 28);
+            cmbAreaResponsable.TabIndex = 4;
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(12, 284);
+            label3.Location = new Point(14, 379);
             label3.Name = "label3";
-            label3.Size = new Size(100, 15);
-            label3.TabIndex = 8;
+            label3.Size = new Size(128, 20);
+            label3.TabIndex = 12;
             label3.Text = "Área Responsable";
             // 
             // dgvLaboratorios
             // 
             dgvLaboratorios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvLaboratorios.Location = new Point(329, 46);
+            dgvLaboratorios.Location = new Point(376, 61);
+            dgvLaboratorios.Margin = new Padding(3, 4, 3, 4);
             dgvLaboratorios.Name = "dgvLaboratorios";
-            dgvLaboratorios.Size = new Size(584, 279);
-            dgvLaboratorios.TabIndex = 10;
+            dgvLaboratorios.RowHeadersWidth = 51;
+            dgvLaboratorios.Size = new Size(667, 372);
+            dgvLaboratorios.TabIndex = 6;
             // 
             // btnGuardar
             // 
-            btnGuardar.Location = new Point(12, 347);
+            btnGuardar.Location = new Point(14, 463);
+            btnGuardar.Margin = new Padding(3, 4, 3, 4);
             btnGuardar.Name = "btnGuardar";
-            btnGuardar.Size = new Size(280, 49);
-            btnGuardar.TabIndex = 11;
+            btnGuardar.Size = new Size(320, 65);
+            btnGuardar.TabIndex = 5;
             btnGuardar.Text = "Guardar";
             btnGuardar.UseVisualStyleBackColor = true;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(838, 347);
+            btnEliminar.Location = new Point(958, 463);
+            btnEliminar.Margin = new Padding(3, 4, 3, 4);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(75, 23);
-            btnEliminar.TabIndex = 12;
+            btnEliminar.Size = new Size(86, 31);
+            btnEliminar.TabIndex = 7;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
             // FrmLaboratorios
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(925, 408);
+            ClientSize = new Size(1057, 544);
             Controls.Add(btnEliminar);
             Controls.Add(btnGuardar);
             Controls.Add(dgvLaboratorios);
@@ -175,6 +184,7 @@
             Controls.Add(lblUbicacion);
             Controls.Add(txtNombre);
             Controls.Add(label1);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "FrmLaboratorios";
             Text = "FrmLaboratorios";
             ((System.ComponentModel.ISupportInitialize)nudCantidadEquipos).EndInit();
