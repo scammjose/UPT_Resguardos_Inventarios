@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>logo_upt.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="logo_upt.ico" />
     <Content Include="Reports\Templates\Html\mantenimiento.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -60,6 +62,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

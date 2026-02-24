@@ -64,18 +64,19 @@ namespace AppEscritorioUPT.Services
             File.WriteAllText(htmlPath, html);
 
             // 5. Definir ruta destino del PDF
-            var pdfOutputDir = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "Reports", "Output");
-
-            if (!Directory.Exists(pdfOutputDir))
-                Directory.CreateDirectory(pdfOutputDir);
-
+            var pdfOutputDir = DocumentPathHelper.ObtenerRutaResguardos();
             var pdfFileName = $"Resguardo_{modelo.CodigoInventario}.pdf";
             var pdfPath = Path.Combine(pdfOutputDir, pdfFileName);
 
-            // 6. Convertir HTML -> PDF
-            PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+            // 6. Convertir HTML -> PDF y limpiar basura
+            try
+            {
+                PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+            }
+            finally
+            {
+                if (File.Exists(htmlPath)) File.Delete(htmlPath);
+            }
 
             // 7. Devolver ruta del PDF
             return pdfPath;
@@ -287,14 +288,20 @@ namespace AppEscritorioUPT.Services
 
             File.WriteAllText(htmlPath, sb.ToString(), Encoding.UTF8);
 
-            // PDF destino
-            var pdfOutputDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Output");
-            Directory.CreateDirectory(pdfOutputDir);
-
+            // PDF destino (USANDO EL NUEVO HELPER)
+            var pdfOutputDir = DocumentPathHelper.ObtenerRutaResguardos();
             var pdfFileName = $"Resguardos_{administrativoId}_{nombreAdminSafe}_{fecha}.pdf";
             var pdfPath = Path.Combine(pdfOutputDir, pdfFileName);
 
-            PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+            // Convertir y limpiar basura
+            try
+            {
+                PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+            }
+            finally
+            {
+                if (File.Exists(htmlPath)) File.Delete(htmlPath);
+            }
 
             return pdfPath;
         }

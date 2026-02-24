@@ -13,7 +13,6 @@ namespace AppEscritorioUPT.Services
     {
         private readonly string _templatesPath;
         private readonly string _htmlTempPath; // Nueva ruta para temporales
-        private readonly string _outputPath;
 
         public MantenimientoReportService()
         {
@@ -23,9 +22,6 @@ namespace AppEscritorioUPT.Services
             // GUARDAR TEMPORALES JUNTO A LA PLANTILLA ORIGINAL
             _htmlTempPath = Path.Combine(_templatesPath, "Html");
 
-            _outputPath = Path.Combine(baseDir, "Reports", "Output");
-
-            if (!Directory.Exists(_outputPath)) Directory.CreateDirectory(_outputPath);
             if (!Directory.Exists(_htmlTempPath)) Directory.CreateDirectory(_htmlTempPath);
         }
 
@@ -97,8 +93,12 @@ namespace AppEscritorioUPT.Services
             File.WriteAllText(rutaHtmlTemp, sb.ToString());
 
             // 6. Generar PDF
-            string nombrePdf = $"Checklist_{listaMantenimientos.First().AdminNombre}_{fecha}.pdf";
-            string rutaPdfFinal = Path.Combine(_outputPath, nombrePdf);
+            string adminSafe = listaMantenimientos.First().AdminNombre.Replace(" ", "_");
+            string fechaSafe = fecha.Replace("/", "-");
+            string nombrePdf = $"Checklist_{adminSafe}_{fechaSafe}.pdf";
+
+            string carpetaDestino = DocumentPathHelper.ObtenerRutaMantenimientoAdministrativos();
+            string rutaPdfFinal = Path.Combine(carpetaDestino, nombrePdf);
 
             try
             {
@@ -292,8 +292,11 @@ namespace AppEscritorioUPT.Services
             // 5. Generar PDF
             // El nombre del archivo ahora lleva el nombre del ÁREA
             string nombreAreaSafe = listaMantenimientos.First().AreaNombre.Replace(" ", "_");
-            string nombrePdf = $"Checklist_AREA_{nombreAreaSafe}_{fecha}.pdf";
-            string rutaPdfFinal = Path.Combine(_outputPath, nombrePdf);
+            string fechaSafe = fecha.Replace("/", "-");
+            string nombrePdf = $"Checklist_AREA_{nombreAreaSafe}_{fechaSafe}.pdf";
+
+            string carpetaDestino = DocumentPathHelper.ObtenerRutaMantenimientoAdministrativos();
+            string rutaPdfFinal = Path.Combine(carpetaDestino, nombrePdf);
 
             try
             {

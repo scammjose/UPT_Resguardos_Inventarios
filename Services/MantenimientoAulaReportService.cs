@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace AppEscritorioUPT.Services
 {
@@ -12,16 +13,13 @@ namespace AppEscritorioUPT.Services
     {
         private readonly string _templatesPath;
         private readonly string _htmlTempPath;
-        private readonly string _outputPath;
 
         public MantenimientoAulaReportService()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             _templatesPath = Path.Combine(baseDir, "Reports", "Templates");
             _htmlTempPath = Path.Combine(_templatesPath, "Html");
-            _outputPath = Path.Combine(baseDir, "Reports", "Output");
 
-            if (!Directory.Exists(_outputPath)) Directory.CreateDirectory(_outputPath);
             if (!Directory.Exists(_htmlTempPath)) Directory.CreateDirectory(_htmlTempPath);
         }
 
@@ -72,8 +70,14 @@ namespace AppEscritorioUPT.Services
             File.WriteAllText(rutaHtmlTemp, htmlFinal);
 
             string nombreEdifSafe = edificio.Nombre.Replace(" ", "_");
-            string nombrePdf = $"Checklist_{nombreEdifSafe}_{mantenimiento.FechaEjecucion}.pdf";
-            string rutaPdfFinal = Path.Combine(_outputPath, nombrePdf);
+            string fechaSafe = mantenimiento.FechaEjecucion.Replace("/", "-");
+            string nombrePdf = $"Checklist_{nombreEdifSafe}_{fechaSafe}.pdf";
+
+            // Llamamos a tu Helper para obtener la ruta universal de Documentos
+            string carpetaDestino = DocumentPathHelper.ObtenerRutaMantenimientoAulas();
+
+            // Unimos la carpeta de Documentos con el nombre del PDF
+            string rutaPdfFinal = Path.Combine(carpetaDestino, nombrePdf);
 
             try
             {

@@ -15,7 +15,6 @@ namespace AppEscritorioUPT.Services
         // Variables de ruta al igual que en Aulas
         private readonly string _templatesPath;
         private readonly string _htmlTempPath;
-        private readonly string _outputPath;
 
         public MantenimientoLaboratorioReportService()
         {
@@ -26,9 +25,7 @@ namespace AppEscritorioUPT.Services
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             _templatesPath = Path.Combine(baseDir, "Reports", "Templates");
             _htmlTempPath = Path.Combine(_templatesPath, "Html");
-            _outputPath = Path.Combine(baseDir, "Reports", "Output");
 
-            if (!Directory.Exists(_outputPath)) Directory.CreateDirectory(_outputPath);
             if (!Directory.Exists(_htmlTempPath)) Directory.CreateDirectory(_htmlTempPath);
         }
 
@@ -104,7 +101,8 @@ namespace AppEscritorioUPT.Services
 
             string nombreLabSafe = laboratorio.Nombre.Replace(" ", "_");
             string nombrePdf = $"Checklist_Lab_{nombreLabSafe}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
-            string rutaPdfFinal = Path.Combine(_outputPath, nombrePdf);
+            string carpetaDestino = DocumentPathHelper.ObtenerRutaMantenimientoLaboratorios();
+            string rutaPdfFinal = Path.Combine(carpetaDestino, nombrePdf);
 
             try
             {
@@ -235,7 +233,8 @@ namespace AppEscritorioUPT.Services
             File.WriteAllText(rutaHtmlTemp, htmlCombinado.ToString(), Encoding.UTF8);
 
             string nombrePdf = $"Checklist_Masivo_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
-            string rutaPdfFinal = Path.Combine(_outputPath, nombrePdf);
+            string carpetaDestino = DocumentPathHelper.ObtenerRutaMantenimientoLaboratorios();
+            string rutaPdfFinal = Path.Combine(carpetaDestino, nombrePdf);
 
             try
             {
