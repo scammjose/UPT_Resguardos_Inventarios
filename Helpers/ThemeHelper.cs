@@ -209,7 +209,10 @@ namespace AppEscritorioUPT.Helpers
                 StringFormat formato = new StringFormat
                 {
                     LineAlignment = StringAlignment.Center, // Centrado verticalmente
-                    Alignment = StringAlignment.Near        // Alineado a la izquierda
+                    Alignment = StringAlignment.Near,    // Alineado a la izquierda
+
+                    FormatFlags = StringFormatFlags.NoWrap,       // Prohíbe el salto de línea
+                    Trimming = StringTrimming.EllipsisCharacter  // Agrega "..." si el texto no cabe
                 };
 
                 e.Graphics.DrawString(textoItem, e.Font, brochaTexto, margenTexto, formato);
