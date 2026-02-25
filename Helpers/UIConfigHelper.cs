@@ -31,6 +31,7 @@ namespace AppEscritorioUPT.Helpers
 
                     // Altura de los elementos de la lista desplegable (para que no se vean apretados)
                     cmb.ItemHeight = 20;
+                    cmb.DropDownWidth = 400;
                 }
 
                 // ==========================================

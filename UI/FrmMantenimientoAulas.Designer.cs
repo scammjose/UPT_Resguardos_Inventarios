@@ -141,18 +141,18 @@
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(599, 237);
+            btnActualizar.Location = new Point(377, 237);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(75, 23);
+            btnActualizar.Size = new Size(95, 23);
             btnActualizar.TabIndex = 11;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(691, 237);
+            btnEliminar.Location = new Point(671, 237);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(75, 23);
+            btnEliminar.Size = new Size(95, 23);
             btnEliminar.TabIndex = 12;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;

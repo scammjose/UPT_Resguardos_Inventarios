@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Data.Repositories;
+using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 using System;
@@ -16,39 +17,66 @@ namespace AppEscritorioUPT.UI
 {
     public partial class FrmImpresionChecklist : Form
     {
-        private readonly AdministrativoRepository _adminRepo;
-        private readonly MantenimientoReportService _reportService;
+        private readonly AdministrativoRepository _adminRepo = new AdministrativoRepository();
+        private readonly MantenimientoReportService _reportService = new MantenimientoReportService();
 
         public FrmImpresionChecklist()
         {
             InitializeComponent();
-            _adminRepo = new AdministrativoRepository();
-            _reportService = new MantenimientoReportService();
+
             this.Load += FrmImpresionChecklist_Load;
             btnImprimir.Click += BtnImprimir_Click;
+            cmbAdministrativo.SelectedIndexChanged += CmbAdministrativo_SelectedIndexChanged;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
+
         }
 
         private void FrmImpresionChecklist_Load(object? sender, EventArgs e)
         {
-            // Cargar administrativos
-            var admins = _adminRepo.GetAll();
+            ConfigurarComboAdministrativo();
+            CargarAdministrativos();
+
+            // Evaluamos el botón al arrancar (se apagará por defecto)
+            EvaluarEstadoBoton();
+        }
+
+        private void ConfigurarComboAdministrativo()
+        {
+            // Para que el usuario pueda escribir y buscar rápidamente
+            cmbAdministrativo.DropDownStyle = ComboBoxStyle.DropDown;
+            cmbAdministrativo.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbAdministrativo.AutoCompleteSource = AutoCompleteSource.ListItems;
+        }
+
+        private void CargarAdministrativos()
+        {
+            // Traemos los datos y los ordenamos alfabéticamente
+            var admins = _adminRepo.GetAll().OrderBy(a => a.NombreCompleto).ToList();
+
             ComboBoxHelper.CargarConSeleccionDefault(
                 cmbAdministrativo,
                 admins,
-                "NombreCompleto",
-                "Id",
-                new Domain.Administrativo { Id = 0, NombreCompleto = "Seleccione..." }
+                displayMember: "NombreCompleto",
+                valueMember: "Id",
+                itemDefault: new Administrativo { Id = 0, NombreCompleto = "Selecciona una opción" }
             );
+        }
+
+        private void CmbAdministrativo_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            EvaluarEstadoBoton();
+        }
+
+        private void EvaluarEstadoBoton()
+        {
+            // El botón solo se enciende si se seleccionó un Administrativo válido (Id > 0)
+            btnImprimir.Enabled = cmbAdministrativo.SelectedValue is int idAdmin && idAdmin > 0;
         }
 
         private void BtnImprimir_Click(object? sender, EventArgs e)
         {
-            if (Convert.ToInt32(cmbAdministrativo.SelectedValue) == 0)
-            {
-                MessageBox.Show("Seleccione un administrativo.", "Aviso");
-                return;
-            }
-
             try
             {
                 Cursor = Cursors.WaitCursor;
@@ -62,9 +90,12 @@ namespace AppEscritorioUPT.UI
                 // Abrir el PDF automáticamente
                 MessageBox.Show("PDF Generado correctamente.", "Éxito");
 
-                var p = new Process();
-                p.StartInfo = new ProcessStartInfo(rutaPdf) { UseShellExecute = true };
-                p.Start();
+                var psi = new ProcessStartInfo
+                {
+                    FileName = rutaPdf,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
             }
             catch (Exception ex)
             {

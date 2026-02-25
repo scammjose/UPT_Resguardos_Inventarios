@@ -39,8 +39,8 @@
             // 
             btnImprimir.Location = new Point(27, 208);
             btnImprimir.Name = "btnImprimir";
-            btnImprimir.Size = new Size(89, 41);
-            btnImprimir.TabIndex = 9;
+            btnImprimir.Size = new Size(248, 41);
+            btnImprimir.TabIndex = 2;
             btnImprimir.Text = "Imprimir Checklist";
             btnImprimir.UseVisualStyleBackColor = true;
             // 
@@ -49,7 +49,7 @@
             dtpFecha.Location = new Point(27, 152);
             dtpFecha.Name = "dtpFecha";
             dtpFecha.Size = new Size(248, 23);
-            dtpFecha.TabIndex = 8;
+            dtpFecha.TabIndex = 1;
             // 
             // lblFecha
             // 
@@ -57,7 +57,7 @@
             lblFecha.Location = new Point(27, 123);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(139, 15);
-            lblFecha.TabIndex = 7;
+            lblFecha.TabIndex = 4;
             lblFecha.Text = "Fecha de Mantenimiento";
             // 
             // cmbAreas
@@ -68,7 +68,7 @@
             cmbAreas.Location = new Point(27, 71);
             cmbAreas.Name = "cmbAreas";
             cmbAreas.Size = new Size(248, 23);
-            cmbAreas.TabIndex = 6;
+            cmbAreas.TabIndex = 0;
             // 
             // label1
             // 
@@ -76,7 +76,7 @@
             label1.Location = new Point(27, 42);
             label1.Name = "label1";
             label1.Size = new Size(94, 15);
-            label1.TabIndex = 5;
+            label1.TabIndex = 3;
             label1.Text = "Seleccionar Área";
             // 
             // FrmImpresionPorArea

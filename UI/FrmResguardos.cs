@@ -35,6 +35,9 @@ namespace AppEscritorioUPT.UI
 
             dgvResguardos.CellClick += DgvResguardos_CellClick;
             dgvResguardos.CellContentClick += DgvResguardos_CellContentClick;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
         // ===== LOAD =====
         private void FrmResguardos_Load(object? sender, EventArgs e)
@@ -47,14 +50,6 @@ namespace AppEscritorioUPT.UI
 
         private void ConfigurarGrid()
         {
-            dgvResguardos.ReadOnly = true;
-            dgvResguardos.MultiSelect = false;
-            dgvResguardos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResguardos.AllowUserToAddRows = false;
-            dgvResguardos.AllowUserToDeleteRows = false;
-            dgvResguardos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-            dgvResguardos.ScrollBars = ScrollBars.Both;
-
             AgregarColumnaBotonPdf();
         }
 
@@ -170,6 +165,13 @@ namespace AppEscritorioUPT.UI
             }
         }
 
+        private void GestionarBotones(bool esNuevo = true)
+        {
+            btnAgregar.Enabled = esNuevo;
+            btnActualizar.Enabled = !esNuevo;
+            btnEliminar.Enabled = !esNuevo;
+        }
+
         private void LimpiarFormulario()
         {
             txtCodigoInventario.Text = string.Empty;
@@ -185,6 +187,8 @@ namespace AppEscritorioUPT.UI
                 cmbAdministrativo.SelectedIndex = 0;
             if (cmbResponsableSistemas.Items.Count > 0)
                 cmbResponsableSistemas.SelectedIndex = 0;
+
+            GestionarBotones(true);
         }
 
         private bool Validar()
@@ -253,12 +257,7 @@ namespace AppEscritorioUPT.UI
 
         private void BtnActualizar_Click(object? sender, EventArgs e)
         {
-            if (_resguardoSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un resguardo en la tabla.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            if (_resguardoSeleccionado == null) return;
 
             if (!Validar()) return;
 
@@ -279,6 +278,9 @@ namespace AppEscritorioUPT.UI
                     txtNotas.Text
                 );
 
+                MessageBox.Show("Resguardo actualizado correctamente.",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 CargarResguardos();
                 LimpiarFormulario();
             }
@@ -291,12 +293,7 @@ namespace AppEscritorioUPT.UI
 
         private void BtnEliminar_Click(object? sender, EventArgs e)
         {
-            if (_resguardoSeleccionado == null)
-            {
-                MessageBox.Show("Seleccione un resguardo en la tabla.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            if (_resguardoSeleccionado == null) return;
 
             var confirm = MessageBox.Show(
                 $"¿Seguro que desea eliminar el resguardo '{_resguardoSeleccionado.CodigoInventario}'?",
@@ -309,6 +306,9 @@ namespace AppEscritorioUPT.UI
                 try
                 {
                     _resguardoService.EliminarResguardo(_resguardoSeleccionado.Id);
+
+                    MessageBox.Show("Resguardo eliminado correctamente.",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     CargarResguardos();
                     LimpiarFormulario();
                 }
@@ -347,6 +347,8 @@ namespace AppEscritorioUPT.UI
                 cmbEquipo.SelectedValue = r.EquipoId;
                 cmbAdministrativo.SelectedValue = r.AdministrativoId;
                 cmbResponsableSistemas.SelectedValue = r.ResponsableSistemasId;
+
+                GestionarBotones(false);
             }
         }
 
@@ -367,6 +369,9 @@ namespace AppEscritorioUPT.UI
             {
                 // 1. Generar el PDF
                 var rutaPdf = _resguardoReportService.GenerarPdfResguardo(resguardo.Id);
+
+                MessageBox.Show("Resguardo generado correctamente.",
+                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // 2. Verificar que exista
                 if (!File.Exists(rutaPdf))

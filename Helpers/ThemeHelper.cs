@@ -90,7 +90,9 @@ namespace AppEscritorioUPT.Helpers
                     btn.Cursor = Cursors.Hand;
 
                     // 3. Si es el botón principal (Guardar / Agregar)
-                    if (btn.Name.Contains("Guardar") || btn.Name.Contains("Agregar"))
+                    if (btn.Name.Contains("Guardar") || btn.Name.Contains("Agregar") 
+                        || btn.Name.Contains("DescargarLote") || btn.Name.Contains("Generar")
+                        || btn.Name.Contains("Imprimir"))
                     {
                         btn.BackColor = ColorTextoGuinda; // Fondo Guinda
                         btn.ForeColor = Color.White;      // Texto Blanco

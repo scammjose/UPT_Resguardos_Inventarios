@@ -64,9 +64,11 @@
             // 
             // btnDescargarLote
             // 
-            btnDescargarLote.Location = new Point(605, 393);
+            btnDescargarLote.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnDescargarLote.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnDescargarLote.Location = new Point(544, 393);
             btnDescargarLote.Name = "btnDescargarLote";
-            btnDescargarLote.Size = new Size(168, 35);
+            btnDescargarLote.Size = new Size(225, 25);
             btnDescargarLote.TabIndex = 3;
             btnDescargarLote.Text = "Generar Resguardo por Lote";
             btnDescargarLote.UseVisualStyleBackColor = true;

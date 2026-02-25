@@ -16,27 +16,29 @@ namespace AppEscritorioUPT.UI
 {
     public partial class FrmMantenimientosPorArea : Form
     {
-        private readonly MantenimientoService _service;
-        private readonly TipoEquipoRepository _tipoEquipoRepo;
-        private readonly AreaRepository _areaRepo; // <--- Nuevo repo necesario
-        private readonly TipoMantenimientoService _tipoMantenimientoService;
+        private readonly MantenimientoService _service = new MantenimientoService();
+        private readonly TipoEquipoRepository _tipoEquipoRepo = new TipoEquipoRepository();
+        private readonly AreaRepository _areaRepo = new AreaRepository();
+        private readonly TipoMantenimientoService _tipoMantenimientoService = new TipoMantenimientoService();
         public FrmMantenimientosPorArea()
         {
             InitializeComponent();
-            _service = new MantenimientoService();
-            _tipoEquipoRepo = new TipoEquipoRepository();
-            _areaRepo = new AreaRepository();
-            _tipoMantenimientoService = new TipoMantenimientoService();
-
             this.Load += FrmMantenimientosPorArea_Load;
             btnGenerar.Click += BtnGenerar_Click;
 
+            // Eventos para escuchar cuando el usuario cambia la selección de los combos
+            cmbArea.SelectedIndexChanged += Combos_SelectedIndexChanged;
+            cmbTipoEquipo.SelectedIndexChanged += Combos_SelectedIndexChanged;
+            cmbTipoMantenimiento.SelectedIndexChanged += Combos_SelectedIndexChanged;
+
             UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmMantenimientosPorArea_Load(object? sender, EventArgs e)
         {
             CargarCombos();
+            EvaluarEstadoBoton();
         }
 
         private void CargarCombos()
@@ -73,10 +75,24 @@ namespace AppEscritorioUPT.UI
             );
         }
 
+        private void Combos_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            EvaluarEstadoBoton();
+        }
+
+        private void EvaluarEstadoBoton()
+        {
+            // Verificamos que LOS TRES combos tengan un valor válido (Id > 0)
+            bool areaValida = cmbArea.SelectedValue is int idArea && idArea > 0;
+            bool tipoEquipoValido = cmbTipoEquipo.SelectedValue is int idEq && idEq > 0;
+            bool tipoMantValido = cmbTipoMantenimiento.SelectedValue is int idMant && idMant > 0;
+
+            // El botón solo se enciende si TODOS son válidos
+            btnGenerar.Enabled = areaValida && tipoEquipoValido && tipoMantValido;
+        }
+
         private void BtnGenerar_Click(object? sender, EventArgs e)
         {
-            if (!Validar()) return;
-
             var confirm = MessageBox.Show(
                 $"Se generarán mantenimientos para:\n" +
                 $"Área: {cmbArea.Text}\n" +
@@ -115,21 +131,6 @@ namespace AppEscritorioUPT.UI
             {
                 Cursor = Cursors.Default;
             }
-        }
-
-        private bool Validar()
-        {
-            if (Convert.ToInt32(cmbArea.SelectedValue) == 0)
-            {
-                MessageBox.Show("Selecciona un Área.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            if (Convert.ToInt32(cmbTipoEquipo.SelectedValue) == 0)
-            {
-                MessageBox.Show("Selecciona un Tipo de Equipo.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            return true;
         }
 
     }

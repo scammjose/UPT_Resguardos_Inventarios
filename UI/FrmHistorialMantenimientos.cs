@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Data.Dto;
+using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 using System;
 using System.Collections.Generic;
@@ -14,36 +15,26 @@ namespace AppEscritorioUPT.UI
 {
     public partial class FrmHistorialMantenimientos : Form
     {
-        private readonly MantenimientoService _service;
+        private readonly MantenimientoService _service = new MantenimientoService();
         private int _idSeleccionado = 0; // Para saber qué registro estamos editando
         public FrmHistorialMantenimientos()
         {
             InitializeComponent();
-            _service = new MantenimientoService();
-            ConfigurarFormulario();
-        }
 
-        private void ConfigurarFormulario()
-        {
-            // Configurar Grid
-            dgvMantenimientos.ReadOnly = true;
-            dgvMantenimientos.MultiSelect = false;
-            dgvMantenimientos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMantenimientos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvMantenimientos.AllowUserToAddRows = false;
-
-            // Eventos
             this.Load += FrmHistorialMantenimientos_Load;
             dtpFiltro.ValueChanged += DtpFiltro_ValueChanged;
             dgvMantenimientos.CellClick += DgvMantenimientos_CellClick;
             btnGuardarCambios.Click += BtnGuardarCambios_Click;
 
-            // Estado inicial: Panel de edición deshabilitado hasta que seleccionen algo
-            HabilitarEdicion(false);
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmHistorialMantenimientos_Load(object? sender, EventArgs e)
         {
+            //dgvMantenimientos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            LimpiarEdicion();
             // Cargar datos de la fecha actual al iniciar
             CargarGrid(dtpFiltro.Value);
         }
@@ -67,11 +58,27 @@ namespace AppEscritorioUPT.UI
 
                 // Limpiar selección previa
                 LimpiarEdicion();
+                dgvMantenimientos.ClearSelection();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error al cargar: {ex.Message}");
             }
+        }
+
+        private void HabilitarEdicion(bool habilitar)
+        {
+            btnGuardarCambios.Enabled = habilitar;
+            dtpEditarFecha.Enabled = habilitar;
+            txtEditarObservaciones.Enabled = habilitar;
+        }
+
+        private void LimpiarEdicion()
+        {
+            _idSeleccionado = 0;
+            txtEditarObservaciones.Clear();
+            dtpEditarFecha.Value = DateTime.Now;
+            HabilitarEdicion(false);
         }
 
         private void DgvMantenimientos_CellClick(object? sender, DataGridViewCellEventArgs e)
@@ -129,21 +136,6 @@ namespace AppEscritorioUPT.UI
             {
                 MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void HabilitarEdicion(bool habilitar)
-        {
-            btnGuardarCambios.Enabled = habilitar;
-            dtpEditarFecha.Enabled = habilitar;
-            txtEditarObservaciones.Enabled = habilitar;
-        }
-
-        private void LimpiarEdicion()
-        {
-            _idSeleccionado = 0;
-            txtEditarObservaciones.Clear();
-            dtpEditarFecha.Value = DateTime.Now;
-            HabilitarEdicion(false);
         }
     }
 }

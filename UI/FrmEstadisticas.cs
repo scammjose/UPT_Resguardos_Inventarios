@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AppEscritorioUPT.Services;
 using System.Drawing;
+using AppEscritorioUPT.Helpers;
 
 namespace AppEscritorioUPT.UI
 {
@@ -20,6 +21,9 @@ namespace AppEscritorioUPT.UI
             InitializeComponent();
             _estadisticasService = new EstadisticasService();
             ConfigurarFormulario();
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void ConfigurarFormulario()

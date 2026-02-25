@@ -56,27 +56,27 @@
             // lblTituloAdmin
             // 
             lblTituloAdmin.AutoSize = true;
-            lblTituloAdmin.Location = new Point(13, 10);
+            lblTituloAdmin.Location = new Point(11, 8);
             lblTituloAdmin.Name = "lblTituloAdmin";
-            lblTituloAdmin.Size = new Size(173, 20);
+            lblTituloAdmin.Size = new Size(137, 15);
             lblTituloAdmin.TabIndex = 0;
             lblTituloAdmin.Text = "Total de Administrativos:";
             // 
             // lblTituloEquipos
             // 
             lblTituloEquipos.AutoSize = true;
-            lblTituloEquipos.Location = new Point(13, 47);
+            lblTituloEquipos.Location = new Point(11, 35);
             lblTituloEquipos.Name = "lblTituloEquipos";
-            lblTituloEquipos.Size = new Size(120, 20);
+            lblTituloEquipos.Size = new Size(93, 15);
             lblTituloEquipos.TabIndex = 1;
             lblTituloEquipos.Text = "Total de Equipos";
             // 
             // lblTituloResguardos
             // 
             lblTituloResguardos.AutoSize = true;
-            lblTituloResguardos.Location = new Point(13, 88);
+            lblTituloResguardos.Location = new Point(11, 66);
             lblTituloResguardos.Name = "lblTituloResguardos";
-            lblTituloResguardos.Size = new Size(144, 20);
+            lblTituloResguardos.Size = new Size(112, 15);
             lblTituloResguardos.TabIndex = 2;
             lblTituloResguardos.Text = "Total de Resguardos";
             // 
@@ -84,30 +84,33 @@
             // 
             dgvEquiposPorTipo.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvEquiposPorTipo.Dock = DockStyle.Fill;
-            dgvEquiposPorTipo.Location = new Point(3, 23);
+            dgvEquiposPorTipo.Location = new Point(3, 18);
+            dgvEquiposPorTipo.Margin = new Padding(3, 2, 3, 2);
             dgvEquiposPorTipo.Name = "dgvEquiposPorTipo";
             dgvEquiposPorTipo.RowHeadersWidth = 51;
-            dgvEquiposPorTipo.Size = new Size(803, 274);
+            dgvEquiposPorTipo.Size = new Size(703, 205);
             dgvEquiposPorTipo.TabIndex = 3;
             // 
             // dgvEquiposPorArea
             // 
             dgvEquiposPorArea.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvEquiposPorArea.Dock = DockStyle.Fill;
-            dgvEquiposPorArea.Location = new Point(3, 23);
+            dgvEquiposPorArea.Location = new Point(3, 18);
+            dgvEquiposPorArea.Margin = new Padding(3, 2, 3, 2);
             dgvEquiposPorArea.Name = "dgvEquiposPorArea";
             dgvEquiposPorArea.RowHeadersWidth = 51;
-            dgvEquiposPorArea.Size = new Size(803, 274);
+            dgvEquiposPorArea.Size = new Size(703, 205);
             dgvEquiposPorArea.TabIndex = 4;
             // 
             // dgvAdministrativosPorArea
             // 
             dgvAdministrativosPorArea.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvAdministrativosPorArea.Dock = DockStyle.Fill;
-            dgvAdministrativosPorArea.Location = new Point(3, 23);
+            dgvAdministrativosPorArea.Location = new Point(3, 18);
+            dgvAdministrativosPorArea.Margin = new Padding(3, 2, 3, 2);
             dgvAdministrativosPorArea.Name = "dgvAdministrativosPorArea";
             dgvAdministrativosPorArea.RowHeadersWidth = 51;
-            dgvAdministrativosPorArea.Size = new Size(803, 274);
+            dgvAdministrativosPorArea.Size = new Size(703, 205);
             dgvAdministrativosPorArea.TabIndex = 5;
             // 
             // panel1
@@ -121,43 +124,45 @@
             panel1.Controls.Add(lblTituloResguardos);
             panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(830, 182);
+            panel1.Size = new Size(726, 136);
             panel1.TabIndex = 7;
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(13, 126);
+            btnActualizar.Location = new Point(11, 94);
+            btnActualizar.Margin = new Padding(3, 2, 3, 2);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(165, 39);
+            btnActualizar.Size = new Size(258, 29);
             btnActualizar.TabIndex = 4;
-            btnActualizar.Text = "Refrescas Cambios";
+            btnActualizar.Text = "Refrescar Cambios";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
             // lblValTotalResguardos
             // 
             lblValTotalResguardos.AutoSize = true;
-            lblValTotalResguardos.Location = new Point(204, 88);
+            lblValTotalResguardos.Location = new Point(178, 66);
             lblValTotalResguardos.Name = "lblValTotalResguardos";
-            lblValTotalResguardos.Size = new Size(17, 20);
+            lblValTotalResguardos.Size = new Size(13, 15);
             lblValTotalResguardos.TabIndex = 3;
             lblValTotalResguardos.Text = "0";
             // 
             // lblValTotalEquipos
             // 
             lblValTotalEquipos.AutoSize = true;
-            lblValTotalEquipos.Location = new Point(204, 47);
+            lblValTotalEquipos.Location = new Point(178, 35);
             lblValTotalEquipos.Name = "lblValTotalEquipos";
-            lblValTotalEquipos.Size = new Size(17, 20);
+            lblValTotalEquipos.Size = new Size(13, 15);
             lblValTotalEquipos.TabIndex = 2;
             lblValTotalEquipos.Text = "0";
             // 
             // lblValTotalAdministrativos
             // 
             lblValTotalAdministrativos.AutoSize = true;
-            lblValTotalAdministrativos.Location = new Point(204, 10);
+            lblValTotalAdministrativos.Location = new Point(178, 8);
             lblValTotalAdministrativos.Name = "lblValTotalAdministrativos";
-            lblValTotalAdministrativos.Size = new Size(17, 20);
+            lblValTotalAdministrativos.Size = new Size(13, 15);
             lblValTotalAdministrativos.TabIndex = 1;
             lblValTotalAdministrativos.Text = "0";
             // 
@@ -168,18 +173,21 @@
             pnlContenedor.Controls.Add(grpEquiposArea);
             pnlContenedor.Controls.Add(grpEquiposTipo);
             pnlContenedor.Dock = DockStyle.Fill;
-            pnlContenedor.Location = new Point(0, 182);
+            pnlContenedor.Location = new Point(0, 136);
+            pnlContenedor.Margin = new Padding(3, 2, 3, 2);
             pnlContenedor.Name = "pnlContenedor";
-            pnlContenedor.Size = new Size(830, 415);
+            pnlContenedor.Size = new Size(726, 312);
             pnlContenedor.TabIndex = 8;
             // 
             // grpPersonal
             // 
             grpPersonal.Controls.Add(dgvAdministrativosPorArea);
             grpPersonal.Dock = DockStyle.Top;
-            grpPersonal.Location = new Point(0, 600);
+            grpPersonal.Location = new Point(0, 450);
+            grpPersonal.Margin = new Padding(3, 2, 3, 2);
             grpPersonal.Name = "grpPersonal";
-            grpPersonal.Size = new Size(809, 300);
+            grpPersonal.Padding = new Padding(3, 2, 3, 2);
+            grpPersonal.Size = new Size(709, 225);
             grpPersonal.TabIndex = 2;
             grpPersonal.TabStop = false;
             grpPersonal.Text = "Personal por Área";
@@ -188,9 +196,11 @@
             // 
             grpEquiposArea.Controls.Add(dgvEquiposPorArea);
             grpEquiposArea.Dock = DockStyle.Top;
-            grpEquiposArea.Location = new Point(0, 300);
+            grpEquiposArea.Location = new Point(0, 225);
+            grpEquiposArea.Margin = new Padding(3, 2, 3, 2);
             grpEquiposArea.Name = "grpEquiposArea";
-            grpEquiposArea.Size = new Size(809, 300);
+            grpEquiposArea.Padding = new Padding(3, 2, 3, 2);
+            grpEquiposArea.Size = new Size(709, 225);
             grpEquiposArea.TabIndex = 1;
             grpEquiposArea.TabStop = false;
             grpEquiposArea.Text = "Distribución por Área";
@@ -200,19 +210,22 @@
             grpEquiposTipo.Controls.Add(dgvEquiposPorTipo);
             grpEquiposTipo.Dock = DockStyle.Top;
             grpEquiposTipo.Location = new Point(0, 0);
+            grpEquiposTipo.Margin = new Padding(3, 2, 3, 2);
             grpEquiposTipo.Name = "grpEquiposTipo";
-            grpEquiposTipo.Size = new Size(809, 300);
+            grpEquiposTipo.Padding = new Padding(3, 2, 3, 2);
+            grpEquiposTipo.Size = new Size(709, 225);
             grpEquiposTipo.TabIndex = 0;
             grpEquiposTipo.TabStop = false;
             grpEquiposTipo.Text = "Desglose de Equipos por Tipo";
             // 
             // FrmEstadisticas
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(830, 597);
+            ClientSize = new Size(726, 448);
             Controls.Add(pnlContenedor);
             Controls.Add(panel1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "FrmEstadisticas";
             Text = "FrmEstadisticas";
             ((System.ComponentModel.ISupportInitialize)dgvEquiposPorTipo).EndInit();

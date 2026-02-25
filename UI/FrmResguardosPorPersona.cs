@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,9 @@ namespace AppEscritorioUPT.UI
             // cmbAdministrativo.Leave += CmbAdministrativo_Leave;
 
             btnDescargarLote.Click += BtnDescargarLote_Click;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmResguardoPorPersona_Load(object? sender, EventArgs e)
@@ -60,12 +64,6 @@ namespace AppEscritorioUPT.UI
 
         private void ConfigurarGrid()
         {
-            dgvResguardosPersona.ReadOnly = true;
-            dgvResguardosPersona.MultiSelect = false;
-            dgvResguardosPersona.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvResguardosPersona.AllowUserToAddRows = false;
-            dgvResguardosPersona.AllowUserToDeleteRows = false;
-
             // Para ver texto completo y tener scroll horizontal
             dgvResguardosPersona.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dgvResguardosPersona.ScrollBars = ScrollBars.Both;
@@ -189,15 +187,19 @@ namespace AppEscritorioUPT.UI
                 // Ajusta el nombre del método si el tuyo se llama distinto.
                 var pdfPath = _reportService.GenerarPdfResguardosPorAdministrativo(_administrativoSeleccionado.Id);
 
-                MessageBox.Show("PDF generado correctamente.",
-                    "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Verificamos si realmente se creó el archivo
+                if (File.Exists(pdfPath))
+                {
+                    MessageBox.Show("PDF generado y guardado correctamente en tus Documentos.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Opcional: abrir el PDF
-                // System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                // {
-                //     FileName = pdfPath,
-                //     UseShellExecute = true
-                // });
+                    // Abrir el PDF automáticamente
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = pdfPath,
+                        UseShellExecute = true
+                    };
+                    Process.Start(psi);
+                }
             }
             catch (Exception ex)
             {

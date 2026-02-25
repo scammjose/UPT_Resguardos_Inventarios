@@ -177,23 +177,51 @@ namespace AppEscritorioUPT.Data.Repositories
             using var connection = Database.GetOpenConnection();
             using var cmd = connection.CreateCommand();
 
+            //cmd.CommandText = @"
+            //    SELECT 
+            //        m.Id, 
+            //        m.Fecha, 
+            //        m.Tipo, 
+            //        m.Observaciones,
+            //        -- Concatenamos datos del equipo
+            //        e.Marca || ' ' || e.Modelo || ' (' || ifnull(e.NumeroSerie,'S/N') || ')' as EquipoInfo,
+            //        -- Nombre del administrativo dueño
+            //        a.NombreCompleto as AdminNombre,
+            //        -- Nombre del técnico (Join doble: Mantenimiento -> RespSistemas -> Administrativo)
+            //        a_tec.NombreCompleto as TecnicoNombre
+            //    FROM Mantenimientos_administrativos m
+            //    INNER JOIN Equipos e ON m.EquipoId = e.Id
+            //    INNER JOIN Administrativos a ON m.AdministrativoId = a.Id
+            //    INNER JOIN ResponsablesSistemas rs ON m.ResponsableSistemasId = rs.Id
+            //    INNER JOIN Administrativos a_tec ON rs.AdministrativoId = a_tec.Id
+            //    WHERE m.Fecha = @fecha
+            //    ORDER BY m.Id DESC;
+            //";
+
             cmd.CommandText = @"
                 SELECT 
-                    m.Id, 
-                    m.Fecha, 
-                    m.Tipo, 
-                    m.Observaciones,
-                    -- Concatenamos datos del equipo
-                    e.Marca || ' ' || e.Modelo || ' (' || ifnull(e.NumeroSerie,'S/N') || ')' as EquipoInfo,
-                    -- Nombre del administrativo dueño
-                    a.NombreCompleto as AdminNombre,
-                    -- Nombre del técnico (Join doble: Mantenimiento -> RespSistemas -> Administrativo)
-                    a_tec.NombreCompleto as TecnicoNombre
+                    m.Id,                                          -- 0: Id
+                    m.Fecha,                                       -- 1: Fecha
+                    m.Tipo,                                        -- 2: Tipo
+                    m.Observaciones,                               -- 3: Observaciones
+                    ifnull(e.Marca, '') || ' ' || ifnull(e.Modelo, '') as EquipoInfo, -- 4: EquipoInfo
+                    a.NombreCompleto as AdminNombre,               -- 5: AdminNombre
+                    a_tec.NombreCompleto as TecnicoNombre,         -- 6: TecnicoNombre
+                    te.Nombre as TipoEquipoNombre,                 -- 7: TipoEquipoNombre (De TiposEquipos)
+                    r.CodigoInventario,                            -- 8: CodigoInventario (De Resguardos)
+                    ar.Nombre as AreaNombre,                       -- 9: AreaNombre (De Areas)
+                    ifnull(e.NumeroSerie, 'S/N') as Serie          -- 10: Serie
                 FROM Mantenimientos_administrativos m
                 INNER JOIN Equipos e ON m.EquipoId = e.Id
                 INNER JOIN Administrativos a ON m.AdministrativoId = a.Id
                 INNER JOIN ResponsablesSistemas rs ON m.ResponsableSistemasId = rs.Id
                 INNER JOIN Administrativos a_tec ON rs.AdministrativoId = a_tec.Id
+                -- JOIN correcto a TiposEquipos (Plural)
+                LEFT JOIN TiposEquipos te ON e.TipoEquipoId = te.Id
+                -- JOIN a Areas a través del Administrativo dueño
+                LEFT JOIN Areas ar ON a.AreaId = ar.Id
+                -- JOIN a Resguardos para obtener el Código de Inventario
+                LEFT JOIN Resguardos r ON r.EquipoId = m.EquipoId AND r.AdministrativoId = m.AdministrativoId
                 WHERE m.Fecha = @fecha
                 ORDER BY m.Id DESC;
             ";
@@ -211,11 +239,13 @@ namespace AppEscritorioUPT.Data.Repositories
                     Fecha = reader.GetString(1),
                     Tipo = reader.GetString(2),
                     Observaciones = reader.IsDBNull(3) ? "" : reader.GetString(3),
-
-                    // CORRECCIÓN: Usar los nombres exactos del DTO
-                    EquipoInfo = reader.GetString(4),     // Antes decía Equipo
-                    AdminNombre = reader.GetString(5),    // Antes decía Administrativo
-                    TecnicoNombre = reader.GetString(6)   // Antes decía Responsable
+                    EquipoInfo = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                    AdminNombre = reader.IsDBNull(5) ? "" : reader.GetString(5),
+                    TecnicoNombre = reader.IsDBNull(6) ? "" : reader.GetString(6),
+                    TipoEquipoNombre = reader.IsDBNull(7) ? "" : reader.GetString(7),
+                    CodigoInventario = reader.IsDBNull(8) ? "" : reader.GetString(8),
+                    AreaNombre = reader.IsDBNull(9) ? "" : reader.GetString(9),
+                    Serie = reader.IsDBNull(10) ? "" : reader.GetString(10)
                 });
             }
 

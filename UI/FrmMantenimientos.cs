@@ -16,28 +16,29 @@ namespace AppEscritorioUPT.UI
 {
     public partial class FrmMantenimientos : Form
     {
-        private readonly MantenimientoService _service;
-        private readonly TipoEquipoRepository _tipoEquipoRepository;
-        private readonly TipoMantenimientoService _tipoMantenimientoService;
+        private readonly MantenimientoService _service = new MantenimientoService();
+        private readonly TipoEquipoRepository _tipoEquipoRepository = new TipoEquipoRepository();
+        private readonly TipoMantenimientoService _tipoMantenimientoService = new TipoMantenimientoService();
         public FrmMantenimientos()
         {
             InitializeComponent();
-            _service = new MantenimientoService();
-            _tipoEquipoRepository = new TipoEquipoRepository();
-            _tipoMantenimientoService = new TipoMantenimientoService();
 
-            ConfigurarFormulario();
-        }
-
-        private void ConfigurarFormulario()
-        {
+            // Eventos principales
             this.Load += FrmMantenimientos_Load;
             btnGenerar.Click += BtnGenerar_Click;
+
+            // Eventos para escuchar cuando el usuario cambia la selección de los combos
+            cmbTipoMantenimiento.SelectedIndexChanged += Combos_SelectedIndexChanged;
+            cmbTipoEquipo.SelectedIndexChanged += Combos_SelectedIndexChanged;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmMantenimientos_Load(object? sender, EventArgs e)
         {
             CargarCombos();
+            EvaluarEstadoBoton();
         }
 
         private void CargarCombos()
@@ -65,22 +66,26 @@ namespace AppEscritorioUPT.UI
             );
         }
 
+        // =========================
+        // VALIDACIÓN DINÁMICA
+        // =========================
+        private void Combos_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            EvaluarEstadoBoton();
+        }
+
+        private void EvaluarEstadoBoton()
+        {
+            // Verificamos que ambos combos tengan un valor válido (Id > 0)
+            bool tipoMantValido = cmbTipoMantenimiento.SelectedValue is int idMant && idMant > 0;
+            bool tipoEquipoValido = cmbTipoEquipo.SelectedValue is int idEq && idEq > 0;
+
+            // El botón solo se enciende si AMBOS son válidos
+            btnGenerar.Enabled = tipoMantValido && tipoEquipoValido;
+        }
+
         private void BtnGenerar_Click(object? sender, EventArgs e)
         {
-            // Validaciones
-            if (string.IsNullOrEmpty(cmbTipoMantenimiento.Text))
-            {
-                MessageBox.Show("Selecciona el tipo de mantenimiento.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Validar que se haya seleccionado un Tipo de Equipo real (Id != 0)
-            if (cmbTipoEquipo.SelectedValue == null || (int)cmbTipoEquipo.SelectedValue == 0)
-            {
-                MessageBox.Show("Por favor selecciona un Tipo de Equipo.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
             // Confirmación
             var confirm = MessageBox.Show(
                 $"Se generarán los checklist para TODOS los equipos del tipo '{cmbTipoEquipo.Text}'.\n¿Deseas continuar?",
@@ -95,7 +100,7 @@ namespace AppEscritorioUPT.UI
                 Cursor = Cursors.WaitCursor;
 
                 // Datos para el servicio
-                int tipoEquipoId = (int)cmbTipoEquipo.SelectedValue;
+                int tipoEquipoId = (int)cmbTipoEquipo.SelectedValue!;
                 string fecha = dtpFecha.Value.ToString("yyyy-MM-dd");
                 string tipoMant = cmbTipoMantenimiento.Text;
 

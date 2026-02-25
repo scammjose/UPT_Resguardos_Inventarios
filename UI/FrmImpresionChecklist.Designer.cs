@@ -41,7 +41,7 @@
             label1.Location = new Point(12, 32);
             label1.Name = "label1";
             label1.Size = new Size(148, 15);
-            label1.TabIndex = 0;
+            label1.TabIndex = 3;
             label1.Text = "Seleccionar Administrativo";
             // 
             // cmbAdministrativo
@@ -52,7 +52,7 @@
             cmbAdministrativo.Location = new Point(12, 61);
             cmbAdministrativo.Name = "cmbAdministrativo";
             cmbAdministrativo.Size = new Size(248, 23);
-            cmbAdministrativo.TabIndex = 1;
+            cmbAdministrativo.TabIndex = 0;
             // 
             // lblFecha
             // 
@@ -60,7 +60,7 @@
             lblFecha.Location = new Point(12, 113);
             lblFecha.Name = "lblFecha";
             lblFecha.Size = new Size(139, 15);
-            lblFecha.TabIndex = 2;
+            lblFecha.TabIndex = 4;
             lblFecha.Text = "Fecha de Mantenimiento";
             // 
             // dtpFecha
@@ -68,14 +68,14 @@
             dtpFecha.Location = new Point(12, 142);
             dtpFecha.Name = "dtpFecha";
             dtpFecha.Size = new Size(248, 23);
-            dtpFecha.TabIndex = 3;
+            dtpFecha.TabIndex = 1;
             // 
             // btnImprimir
             // 
             btnImprimir.Location = new Point(12, 198);
             btnImprimir.Name = "btnImprimir";
-            btnImprimir.Size = new Size(89, 41);
-            btnImprimir.TabIndex = 4;
+            btnImprimir.Size = new Size(248, 41);
+            btnImprimir.TabIndex = 2;
             btnImprimir.Text = "Imprimir Checklist";
             btnImprimir.UseVisualStyleBackColor = true;
             // 
@@ -83,7 +83,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(308, 275);
+            ClientSize = new Size(294, 275);
             Controls.Add(btnImprimir);
             Controls.Add(dtpFecha);
             Controls.Add(lblFecha);

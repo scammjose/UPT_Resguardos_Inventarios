@@ -221,6 +221,24 @@ namespace AppEscritorioUPT.Data
                     FOREIGN KEY(TipoMantenimientoId) REFERENCES TiposMantenimiento(Id)
                 );
             ");
+
+            // 13. Historial de Resguardos (Rastreo de reasignaciones y bajas)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Historico_Resguardos (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EquipoId INTEGER NOT NULL,
+                    AdministrativoId INTEGER NOT NULL, -- La persona que TENÍA el equipo
+                    ResponsableSistemasId INTEGER NOT NULL, -- El técnico que recibió el equipo
+                    CodigoInventario TEXT NOT NULL,
+                    FechaInicio TEXT NOT NULL, -- Cuándo se le asignó originalmente
+                    FechaFin TEXT NOT NULL, -- Cuándo se le quitó o reasignó
+                    Motivo TEXT NOT NULL, -- Ej: 'Reasignación', 'Baja por daño', 'Devolución a inventario'
+                    Notas TEXT,
+                    FOREIGN KEY (EquipoId) REFERENCES Equipos (Id),
+                    FOREIGN KEY (AdministrativoId) REFERENCES Administrativos (Id),
+                    FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
+                );
+            ");
         }
 
         /// <summary>

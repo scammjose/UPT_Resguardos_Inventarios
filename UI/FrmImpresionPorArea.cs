@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Data.Repositories;
+using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 using System;
@@ -16,40 +17,68 @@ namespace AppEscritorioUPT.UI
 {
     public partial class FrmImpresionPorArea : Form
     {
-        private readonly AreaRepository _areaRepo;
-        private readonly MantenimientoReportService _reportService;
+        private readonly AreaRepository _areaRepo = new AreaRepository();
+        private readonly MantenimientoReportService _reportService = new MantenimientoReportService();
 
         public FrmImpresionPorArea()
         {
             InitializeComponent();
-            _areaRepo = new AreaRepository();
-            _reportService = new MantenimientoReportService();
 
             this.Load += FrmImpresionPorArea_Load;
             btnImprimir.Click += BtnImprimir_Click;
+            cmbAreas.SelectedIndexChanged += CmbAreas_SelectedIndexChanged;
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void FrmImpresionPorArea_Load(object? sender, EventArgs e)
         {
-            // Cargar Áreas
-            var areas = _areaRepo.GetAll();
+            ConfigurarComboArea();
+            CargarAreas();
+
+            // Evaluamos el botón al arrancar (se apagará por defecto)
+            EvaluarEstadoBoton();
+        }
+
+        private void ConfigurarComboArea()
+        {
+            // Para que el usuario pueda escribir y buscar rápidamente
+            cmbAreas.DropDownStyle = ComboBoxStyle.DropDown;
+            cmbAreas.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbAreas.AutoCompleteSource = AutoCompleteSource.ListItems;
+        }
+
+        private void CargarAreas()
+        {
+            // Traemos los datos y los ordenamos alfabéticamente
+            var areas = _areaRepo.GetAll().OrderBy(a => a.Nombre).ToList();
+
             ComboBoxHelper.CargarConSeleccionDefault(
                 cmbAreas,
                 areas,
-                "Nombre", // Asegúrate que tu clase Area tenga propiedad 'Nombre'
-                "Id",
-                new Domain.Area { Id = 0, Nombre = "Seleccione un Área..." }
+                displayMember: "Nombre",
+                valueMember: "Id",
+                itemDefault: new Area { Id = 0, Nombre = "Seleccione un Área..." }
             );
+        }
+
+        // =========================
+        // VALIDACIÓN DINÁMICA
+        // =========================
+        private void CmbAreas_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            EvaluarEstadoBoton();
+        }
+
+        private void EvaluarEstadoBoton()
+        {
+            // El botón solo se enciende si se seleccionó un Área válida (Id > 0)
+            btnImprimir.Enabled = cmbAreas.SelectedValue is int idArea && idArea > 0;
         }
 
         private void BtnImprimir_Click(object? sender, EventArgs e)
         {
-            if (Convert.ToInt32(cmbAreas.SelectedValue) == 0)
-            {
-                MessageBox.Show("Seleccione un Área.", "Aviso");
-                return;
-            }
-
             try
             {
                 Cursor = Cursors.WaitCursor;
@@ -63,7 +92,12 @@ namespace AppEscritorioUPT.UI
                 MessageBox.Show("Reporte generado correctamente.", "Éxito");
 
                 // Abrir PDF
-                new Process { StartInfo = new ProcessStartInfo(rutaPdf) { UseShellExecute = true } }.Start();
+                var psi = new ProcessStartInfo
+                {
+                    FileName = rutaPdf,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
             }
             catch (Exception ex)
             {

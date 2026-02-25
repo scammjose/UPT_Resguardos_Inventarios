@@ -33,6 +33,9 @@ namespace AppEscritorioUPT.UI
             _tipoMantenimientoService = new TipoMantenimientoService();
 
             ConfigurarEventos();
+
+            UIConfigHelper.ConfigurarControles(this);
+            ThemeHelper.AplicarTema(this);
         }
 
         private void ConfigurarEventos()
