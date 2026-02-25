@@ -43,60 +43,65 @@
             // 
             // btnEliminar
             // 
-            btnEliminar.Location = new Point(1059, 105);
+            btnEliminar.Location = new Point(927, 79);
+            btnEliminar.Margin = new Padding(3, 2, 3, 2);
             btnEliminar.Name = "btnEliminar";
-            btnEliminar.Size = new Size(109, 40);
+            btnEliminar.Size = new Size(95, 30);
             btnEliminar.TabIndex = 6;
             btnEliminar.Text = "Eliminar";
             btnEliminar.UseVisualStyleBackColor = true;
             // 
             // btnActualizar
             // 
-            btnActualizar.Location = new Point(933, 105);
+            btnActualizar.Location = new Point(816, 79);
+            btnActualizar.Margin = new Padding(3, 2, 3, 2);
             btnActualizar.Name = "btnActualizar";
-            btnActualizar.Size = new Size(109, 40);
+            btnActualizar.Size = new Size(95, 30);
             btnActualizar.TabIndex = 5;
             btnActualizar.Text = "Actualizar";
             btnActualizar.UseVisualStyleBackColor = true;
             // 
             // btnAgregar
             // 
-            btnAgregar.Location = new Point(530, 105);
+            btnAgregar.Location = new Point(464, 79);
+            btnAgregar.Margin = new Padding(3, 2, 3, 2);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(109, 40);
+            btnAgregar.Size = new Size(95, 30);
             btnAgregar.TabIndex = 3;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
             // 
             // txtPuesto
             // 
-            txtPuesto.Location = new Point(12, 112);
+            txtPuesto.Location = new Point(10, 84);
+            txtPuesto.Margin = new Padding(3, 2, 3, 2);
             txtPuesto.Name = "txtPuesto";
-            txtPuesto.Size = new Size(469, 27);
+            txtPuesto.Size = new Size(411, 23);
             txtPuesto.TabIndex = 2;
             // 
             // txtNombreCompleto
             // 
-            txtNombreCompleto.Location = new Point(12, 51);
+            txtNombreCompleto.Location = new Point(10, 38);
+            txtNombreCompleto.Margin = new Padding(3, 2, 3, 2);
             txtNombreCompleto.Name = "txtNombreCompleto";
-            txtNombreCompleto.Size = new Size(469, 27);
+            txtNombreCompleto.Size = new Size(411, 23);
             txtNombreCompleto.TabIndex = 0;
             // 
             // lbPuesto
             // 
             lbPuesto.AutoSize = true;
-            lbPuesto.Location = new Point(12, 89);
+            lbPuesto.Location = new Point(10, 67);
             lbPuesto.Name = "lbPuesto";
-            lbPuesto.Size = new Size(53, 20);
+            lbPuesto.Size = new Size(43, 15);
             lbPuesto.TabIndex = 9;
             lbPuesto.Text = "Puesto";
             // 
             // lbNombreCompleto
             // 
             lbNombreCompleto.AutoSize = true;
-            lbNombreCompleto.Location = new Point(12, 28);
+            lbNombreCompleto.Location = new Point(10, 21);
             lbNombreCompleto.Name = "lbNombreCompleto";
-            lbNombreCompleto.Size = new Size(134, 20);
+            lbNombreCompleto.Size = new Size(107, 15);
             lbNombreCompleto.TabIndex = 7;
             lbNombreCompleto.Text = "Nombre Completo";
             // 
@@ -104,38 +109,41 @@
             // 
             dgvAdministrativos.AllowUserToAddRows = false;
             dgvAdministrativos.AllowUserToDeleteRows = false;
+            dgvAdministrativos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvAdministrativos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvAdministrativos.Location = new Point(12, 155);
+            dgvAdministrativos.Location = new Point(10, 116);
+            dgvAdministrativos.Margin = new Padding(3, 2, 3, 2);
             dgvAdministrativos.MultiSelect = false;
             dgvAdministrativos.Name = "dgvAdministrativos";
             dgvAdministrativos.ReadOnly = true;
             dgvAdministrativos.RowHeadersWidth = 51;
             dgvAdministrativos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvAdministrativos.Size = new Size(1156, 283);
+            dgvAdministrativos.Size = new Size(1012, 212);
             dgvAdministrativos.TabIndex = 4;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(530, 27);
+            label1.Location = new Point(464, 20);
             label1.Name = "label1";
-            label1.Size = new Size(40, 20);
+            label1.Size = new Size(31, 15);
             label1.TabIndex = 8;
             label1.Text = "Área";
             // 
             // cmbArea
             // 
             cmbArea.FormattingEnabled = true;
-            cmbArea.Location = new Point(530, 50);
+            cmbArea.Location = new Point(464, 38);
+            cmbArea.Margin = new Padding(3, 2, 3, 2);
             cmbArea.Name = "cmbArea";
-            cmbArea.Size = new Size(341, 28);
+            cmbArea.Size = new Size(299, 23);
             cmbArea.TabIndex = 1;
             // 
             // FrmAdministrativos
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1180, 450);
+            ClientSize = new Size(1032, 338);
             Controls.Add(cmbArea);
             Controls.Add(label1);
             Controls.Add(btnEliminar);
@@ -146,6 +154,7 @@
             Controls.Add(lbPuesto);
             Controls.Add(lbNombreCompleto);
             Controls.Add(dgvAdministrativos);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "FrmAdministrativos";
             StartPosition = FormStartPosition.CenterParent;
             Text = "FrmAdministrativos";
