@@ -53,12 +53,22 @@ namespace AppEscritorioUPT.UI
             CargarEquipos();
 
             cmbTipoImpresion.Items.AddRange(new object[]
-            {
-                "Láser",
-                "Inyección de tinta",
-                "Tinta continua",
-                "Multifuncional",
-                "Escáner"
+{
+                "LÁSER",
+                "INYECCIÓN DE TINTA",
+                "TINTA CONTINUA",
+                "MULTIFUNCIONAL",
+                "ESCÁNER",
+                "TÓNER",
+                "CARTUCHO",
+                "TINTA",
+                "CREDENCIALIZADORA",
+                "IMPRESORA TÉRMICA",
+                "IMPRESORA DE MATRIZ DE PUNTO",
+                "PLOTTER",
+                "FOTOCOPIADORA",
+                "SUBLIMACIÓN",
+                "IMPRESORA 3D"
             });
         }
 
