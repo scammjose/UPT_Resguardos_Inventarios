@@ -53,6 +53,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
+            consultarEquiposToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -69,7 +70,7 @@
             // 
             // catálogosToolStripMenuItem
             // 
-            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios });
+            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios, consultarEquiposToolStripMenuItem });
             catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
             catálogosToolStripMenuItem.Size = new Size(72, 20);
             catálogosToolStripMenuItem.Text = "Catálogos";
@@ -226,6 +227,13 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
+            // consultarEquiposToolStripMenuItem
+            // 
+            consultarEquiposToolStripMenuItem.Name = "consultarEquiposToolStripMenuItem";
+            consultarEquiposToolStripMenuItem.Size = new Size(210, 22);
+            consultarEquiposToolStripMenuItem.Text = "Consultar Equipos";
+            consultarEquiposToolStripMenuItem.Click += consultarEquiposToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -269,5 +277,6 @@
         private ToolStripMenuItem menuTiposMantenimiento;
         private ToolStripMenuItem menuLaboratorios;
         private ToolStripMenuItem menuGenerarCheckListLaboratorios;
+        private ToolStripMenuItem consultarEquiposToolStripMenuItem;
     }
 }

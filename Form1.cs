@@ -8,7 +8,7 @@ namespace AppEscritorioUPT
         public Form1()
         {
             InitializeComponent();
-            
+
             // 1.Aplicamos el color de fondo a la barra para asegurarnos de que toda sea Guinda
             menuStrip1.BackColor = ColorTranslator.FromHtml("#A02142");
 
@@ -191,6 +191,16 @@ namespace AppEscritorioUPT
         private void menuGenerarCheckListLaboratorios_Click(object sender, EventArgs e)
         {
             using (var frm = new FrmMantenimientoLaboratorios())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void consultarEquiposToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmConsultaEquipos())
             {
                 frm.StartPosition = FormStartPosition.CenterParent;
                 frm.ShowDialog(this);
