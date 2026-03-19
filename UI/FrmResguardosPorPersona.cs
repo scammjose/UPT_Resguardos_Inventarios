@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AppEscritorioUPT.Domain;
+using AppEscritorioUPT.Domain.Reports;
 using AppEscritorioUPT.Helpers;
 using AppEscritorioUPT.Services;
 
@@ -19,6 +20,7 @@ namespace AppEscritorioUPT.UI
         private readonly AdministrativoService _adminService = new AdministrativoService();
         private readonly ResguardoService _resguardoService = new ResguardoService();
         private readonly ResguardoReportService _reportService = new ResguardoReportService();
+        private ContextMenuStrip _menuContextual = new ContextMenuStrip();
 
         private Administrativo? _administrativoSeleccionado;
 
@@ -45,6 +47,7 @@ namespace AppEscritorioUPT.UI
             ConfigurarComboAdministrativo();
             ConfigurarGrid();
             CargarAdministrativos();
+            ConfigurarMenuContextual();
 
             // Estado inicial
             btnDescargarLote.Enabled = false;
@@ -207,5 +210,77 @@ namespace AppEscritorioUPT.UI
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        // =========================
+        // MENÚ CONTEXTUAL (CLIC DERECHO)
+        // =========================
+        private void ConfigurarMenuContextual()
+        {
+            _menuContextual = new ContextMenuStrip();
+
+            // Opción 1: Editar Equipo
+            var itemEditarEquipo = new ToolStripMenuItem("Editar Equipo");
+            itemEditarEquipo.Click += ItemEditarEquipo_Click;
+
+            // Opción 2: Editar Resguardo
+            var itemEditarResguardo = new ToolStripMenuItem("Editar Resguardo");
+            itemEditarResguardo.Click += ItemEditarResguardo_Click;
+
+            // Agregamos las opciones al menú
+            _menuContextual.Items.Add(itemEditarEquipo);
+            _menuContextual.Items.Add(itemEditarResguardo);
+
+            // Suscribimos la tabla al evento de soltar el clic del mouse
+            dgvResguardosPersona.CellMouseUp += DgvResguardosPersona_CellMouseUp;
+        }
+
+        private void DgvResguardosPersona_CellMouseUp(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Si el clic fue con el botón derecho y fue sobre una fila válida
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
+            {
+                // Forzamos a que esa fila se seleccione visualmente
+                dgvResguardosPersona.ClearSelection();
+                dgvResguardosPersona.Rows[e.RowIndex].Selected = true;
+
+                // Mostramos el menú exactamente donde está el cursor del mouse
+                _menuContextual.Show(Cursor.Position);
+            }
+        }
+
+        private void ItemEditarEquipo_Click(object? sender, EventArgs e)
+        {
+            if (dgvResguardosPersona.SelectedRows.Count == 0) return;
+
+            var resguardoSeleccionado = dgvResguardosPersona.SelectedRows[0].DataBoundItem as ResguardoReportModel;
+            if (resguardoSeleccionado != null)
+            {
+                var frmEquipos = new FrmEquipos();
+                frmEquipos.EquipoIdParaEditar = resguardoSeleccionado.EquipoId;
+                frmEquipos.ShowDialog();
+
+                CargarResguardosDeSeleccion(); // Recargar por si hubo cambios
+            }
+        }
+
+        private void ItemEditarResguardo_Click(object? sender, EventArgs e)
+        {
+            if (dgvResguardosPersona.SelectedRows.Count == 0) return;
+
+            var resguardoSeleccionado = dgvResguardosPersona.SelectedRows[0].DataBoundItem as ResguardoReportModel;
+            if (resguardoSeleccionado != null)
+            {
+                // TRUCO DE DEBUG: Pon este MessageBox temporalmente para descubrir si el ID viaja bien o viaja como 0
+                //MessageBox.Show($"Viajando hacia FrmResguardos con el ID de Resguardo: {resguardoSeleccionado.Id}");
+
+                var frmResguardos = new FrmResguardos();
+                // Ojo: Aquí pasamos el Id del resguardo, NO el del equipo
+                frmResguardos.ResguardoIdParaEditar = resguardoSeleccionado.Id;
+                frmResguardos.ShowDialog();
+
+                CargarResguardosDeSeleccion(); // Recargar por si hubo cambios
+            }
+        }
+
     }
 }

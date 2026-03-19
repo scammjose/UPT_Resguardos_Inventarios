@@ -24,10 +24,12 @@ namespace AppEscritorioUPT.UI
         private readonly ResponsableSistemasService _responsableService = new ResponsableSistemasService();
 
         private Resguardo? _resguardoSeleccionado;
+        public int? ResguardoIdParaEditar { get; set; }
         public FrmResguardos()
         {
             InitializeComponent();
             this.Load += FrmResguardos_Load;
+            this.Shown += FrmResguardos_Shown;
 
             btnAgregar.Click += BtnAgregar_Click;
             btnActualizar.Click += BtnActualizar_Click;
@@ -46,6 +48,39 @@ namespace AppEscritorioUPT.UI
             CargarCombos();
             CargarResguardos();
             LimpiarFormulario();
+        }
+
+        private void FrmResguardos_Shown(object? sender, EventArgs e)
+        {
+            if (ResguardoIdParaEditar.HasValue)
+            {
+                bool encontrado = false;
+
+                // Buscamos el registro en las filas de la tabla
+                foreach (DataGridViewRow fila in dgvResguardos.Rows)
+                {
+                    if (fila.DataBoundItem is Resguardo resg && resg.Id == ResguardoIdParaEditar.Value)
+                    {
+                        encontrado = true;
+
+                        // 1. Seleccionamos la fila para que se vea pintada de azul
+                        fila.Selected = true;
+
+                        // 2. Le decimos al Grid que baje el scroll automáticamente hasta esa fila
+                        dgvResguardos.FirstDisplayedScrollingRowIndex = fila.Index;
+
+                        // 3. ¡Llenamos los datos mágicamente y de forma segura!
+                        CargarDatosEnControles(resg);
+                        break;
+                    }
+                }
+
+                // Si por alguna extraña razón no lo encontró, nos avisará:
+                if (!encontrado)
+                {
+                    MessageBox.Show($"¡Raro! El resguardo ID {ResguardoIdParaEditar.Value} no está en la tabla principal.", "Error de Sincronización");
+                }
+            }
         }
 
         private void ConfigurarGrid()
@@ -189,6 +224,25 @@ namespace AppEscritorioUPT.UI
                 cmbResponsableSistemas.SelectedIndex = 0;
 
             GestionarBotones(true);
+        }
+
+        private void CargarDatosEnControles(Resguardo r)
+        {
+            _resguardoSeleccionado = r;
+
+            txtCodigoInventario.Text = r.CodigoInventario;
+            txtNotas.Text = r.Notas ?? string.Empty;
+
+            if (DateTime.TryParse(r.FechaResguardo, out var fecha))
+                dtpFechaResguardo.Value = fecha;
+            else
+                dtpFechaResguardo.Value = DateTime.Today;
+
+            cmbEquipo.SelectedValue = r.EquipoId;
+            cmbAdministrativo.SelectedValue = r.AdministrativoId;
+            cmbResponsableSistemas.SelectedValue = r.ResponsableSistemasId;
+
+            GestionarBotones(false); // Apaga el botón de agregar, enciende el de actualizar
         }
 
         private bool Validar()
@@ -349,6 +403,7 @@ namespace AppEscritorioUPT.UI
                 cmbResponsableSistemas.SelectedValue = r.ResponsableSistemasId;
 
                 GestionarBotones(false);
+                CargarDatosEnControles(r);
             }
         }
 

@@ -125,5 +125,60 @@ namespace AppEscritorioUPT.Services
             // si tu repo está en interfaz, agrega también el método a la interfaz
             return ((ResguardoRepository)_resguardoRepo).GetByIdForReport(id);
         }
+
+        public void CrearResguardoMasivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas)
+        {
+            if (equiposIds == null || !equiposIds.Any())
+                throw new ArgumentException("Debe seleccionar al menos un equipo para resguardar.");
+            if (administrativoId <= 0)
+                throw new ArgumentException("Debe seleccionar un administrativo válido.", nameof(administrativoId));
+            if (responsableSistemasId <= 0)
+                throw new ArgumentException("Debe seleccionar un responsable de sistemas válido.", nameof(responsableSistemasId));
+
+            // 1. Preparamos los datos del prefijo (Área y Año)
+            var admin = _adminRepo.GetById(administrativoId)
+                        ?? throw new InvalidOperationException("No se encontró el administrativo.");
+            var area = _areaRepo.GetById(admin.AreaId)
+                       ?? throw new InvalidOperationException("No se encontró el área del administrativo.");
+
+            var anio = fechaResguardo.Year;
+            var prefijo = $"UPT-{area.NomenclaturaInventario}-{anio}-";
+
+            // 2. Obtenemos el ÚLTIMO consecutivo de la base de datos
+            var ultimoCodigo = _resguardoRepo.GetUltimoCodigoInventarioPorPrefijo(prefijo);
+            int consecutivoActual = 1;
+
+            if (!string.IsNullOrWhiteSpace(ultimoCodigo))
+            {
+                var partes = ultimoCodigo.Split('-');
+                if (partes.Length >= 4 && int.TryParse(partes[^1], out int num))
+                {
+                    consecutivoActual = num + 1; // Arrancamos desde el siguiente disponible
+                }
+            }
+
+            // 3. Procesamos todos los equipos de golpe
+            foreach (var equipoId in equiposIds)
+            {
+                // Armamos el código usando el consecutivo actual
+                string codigo = $"{prefijo}{consecutivoActual:0000}";
+
+                var resguardo = new Resguardo
+                {
+                    EquipoId = equipoId,
+                    AdministrativoId = administrativoId,
+                    ResponsableSistemasId = responsableSistemasId,
+                    CodigoInventario = codigo,
+                    FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd"),
+                    Notas = notas
+                };
+
+                _resguardoRepo.Add(resguardo);
+
+                // Incrementamos el consecutivo para la siguiente vuelta del ciclo
+                consecutivoActual++;
+            }
+        }
+
     }
 }

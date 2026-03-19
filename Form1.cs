@@ -207,5 +207,19 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void registrarResguardoMasivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmResguardoMasivo())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+
+            //var frm = new FrmResguardoMasivo();
+            //frm.StartPosition = FormStartPosition.CenterScreen;
+            //frm.Show();
+        }
     }
 }

@@ -69,5 +69,10 @@ namespace AppEscritorioUPT.Services
 
             _equipoRepo.Delete(id);
         }
+
+        public IEnumerable<Equipo> ObtenerEquiposSinResguardo()
+        {
+            return _equipoRepo.GetEquiposSinResguardo();
+        }
     }
 }

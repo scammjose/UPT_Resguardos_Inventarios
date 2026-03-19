@@ -302,6 +302,7 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.CommandText = @"
                 SELECT
                     r.Id,
+                    r.EquipoId,
                     r.CodigoInventario,
                     r.FechaResguardo,
                     r.Notas,
@@ -377,6 +378,8 @@ namespace AppEscritorioUPT.Data.Repositories
             {
                 lista.Add(new ResguardoReportModel
                 {
+                    Id = reader.GetInt32(0),
+                    EquipoId = reader.GetInt32(1),
                     CodigoInventario = reader["CodigoInventario"].ToString() ?? "",
                     FechaResguardo = reader["FechaResguardo"]?.ToString() ?? "",
                     Notas = reader["Notas"]?.ToString() ?? "",

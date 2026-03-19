@@ -9,6 +9,8 @@ namespace AppEscritorioUPT.Domain.Reports
     public class ResguardoReportModel
     {
         // Resguardo
+        public int Id { get; set; }
+        public int EquipoId { get; set; }
         public string CodigoInventario { get; set; } = string.Empty;
         public string FechaResguardo { get; set; } = string.Empty;
         public string Notas { get; set; } = string.Empty;

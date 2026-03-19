@@ -21,6 +21,8 @@ namespace AppEscritorioUPT.UI
 
         private Equipo? _equipoSeleccionado;
 
+        public int? EquipoIdParaEditar { get; set; }
+
         public FrmEquipos()
         {
             InitializeComponent();
@@ -76,6 +78,22 @@ namespace AppEscritorioUPT.UI
         {
             // Windows ya pintó todo, ahora sí ordenamos limpiar y ajustar paneles
             LimpiarFormulario();
+
+            // NUEVO: Si nos mandaron un ID desde otra pantalla, lo buscamos y lo autoseleccionamos
+            if (EquipoIdParaEditar.HasValue)
+            {
+                foreach (DataGridViewRow fila in dgvEquipos.Rows)
+                {
+                    if (fila.DataBoundItem is Equipo eq && eq.Id == EquipoIdParaEditar.Value)
+                    {
+                        fila.Selected = true;
+                        // Simulamos el evento CellClick para que se llenen los TextBox y se muestren los paneles
+                        DgvEquipos_CellClick(dgvEquipos, new DataGridViewCellEventArgs(0, fila.Index));
+                        break;
+                    }
+                }
+            }
+
         }
 
         // ========== CONFIGURACIÓN GRID ==========

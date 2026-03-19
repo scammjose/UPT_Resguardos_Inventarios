@@ -312,5 +312,34 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.Parameters.AddWithValue("@EsAllInOne", equipo.EsAllInOne ? 1 : 0);
         }
 
+        public IEnumerable<Equipo> GetEquiposSinResguardo()
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            // Traemos los equipos cuyo ID no está en la tabla de resguardos
+            cmd.CommandText = @"
+            SELECT Id, Marca, Modelo, NumeroSerie 
+            FROM Equipos 
+            WHERE Id NOT IN (SELECT EquipoId FROM Resguardos)
+            ORDER BY Marca, Modelo;";
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<Equipo>();
+
+            while (reader.Read())
+            {
+                lista.Add(new Equipo
+                {
+                    Id = reader.GetInt32(0),
+                    Marca = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                    Modelo = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                    NumeroSerie = reader.IsDBNull(3) ? "S/N" : reader.GetString(3)
+                });
+            }
+
+            return lista;
+        }
+
     }
 }

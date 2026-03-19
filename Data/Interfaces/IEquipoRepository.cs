@@ -14,5 +14,6 @@ namespace AppEscritorioUPT.Data.Interfaces
         void Add(Equipo equipo);
         void Update(Equipo equipo);
         void Delete(int id);
+        IEnumerable<Equipo> GetEquiposSinResguardo();
     }
 }

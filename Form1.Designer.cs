@@ -39,6 +39,7 @@
             menuEdificios = new ToolStripMenuItem();
             menuTiposMantenimiento = new ToolStripMenuItem();
             menuLaboratorios = new ToolStripMenuItem();
+            consultarEquiposToolStripMenuItem = new ToolStripMenuItem();
             menuResguardos = new ToolStripMenuItem();
             menuRegistrarResguardo = new ToolStripMenuItem();
             menuPorAdministrativo = new ToolStripMenuItem();
@@ -53,7 +54,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            consultarEquiposToolStripMenuItem = new ToolStripMenuItem();
+            registrarResguardoMasivoToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -131,9 +132,16 @@
             menuLaboratorios.Text = "Laboratorios";
             menuLaboratorios.Click += menuLaboratorios_Click;
             // 
+            // consultarEquiposToolStripMenuItem
+            // 
+            consultarEquiposToolStripMenuItem.Name = "consultarEquiposToolStripMenuItem";
+            consultarEquiposToolStripMenuItem.Size = new Size(210, 22);
+            consultarEquiposToolStripMenuItem.Text = "Consultar Equipos";
+            consultarEquiposToolStripMenuItem.Click += consultarEquiposToolStripMenuItem_Click;
+            // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
@@ -141,21 +149,21 @@
             // menuRegistrarResguardo
             // 
             menuRegistrarResguardo.Name = "menuRegistrarResguardo";
-            menuRegistrarResguardo.Size = new Size(196, 22);
+            menuRegistrarResguardo.Size = new Size(220, 22);
             menuRegistrarResguardo.Text = "Registrar un Resguardo";
             menuRegistrarResguardo.Click += menuRegistrarResguardo_Click;
             // 
             // menuPorAdministrativo
             // 
             menuPorAdministrativo.Name = "menuPorAdministrativo";
-            menuPorAdministrativo.Size = new Size(196, 22);
+            menuPorAdministrativo.Size = new Size(220, 22);
             menuPorAdministrativo.Text = "Por Administrativo";
             menuPorAdministrativo.Click += menuPorAdministrativo_Click;
             // 
             // menuEstadisticos
             // 
             menuEstadisticos.Name = "menuEstadisticos";
-            menuEstadisticos.Size = new Size(196, 22);
+            menuEstadisticos.Size = new Size(220, 22);
             menuEstadisticos.Text = "Estadísticos";
             menuEstadisticos.Click += menuEstadisticos_Click;
             // 
@@ -227,12 +235,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // consultarEquiposToolStripMenuItem
+            // registrarResguardoMasivoToolStripMenuItem
             // 
-            consultarEquiposToolStripMenuItem.Name = "consultarEquiposToolStripMenuItem";
-            consultarEquiposToolStripMenuItem.Size = new Size(210, 22);
-            consultarEquiposToolStripMenuItem.Text = "Consultar Equipos";
-            consultarEquiposToolStripMenuItem.Click += consultarEquiposToolStripMenuItem_Click;
+            registrarResguardoMasivoToolStripMenuItem.Name = "registrarResguardoMasivoToolStripMenuItem";
+            registrarResguardoMasivoToolStripMenuItem.Size = new Size(220, 22);
+            registrarResguardoMasivoToolStripMenuItem.Text = "Registrar Resguardo Masivo";
+            registrarResguardoMasivoToolStripMenuItem.Click += registrarResguardoMasivoToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -278,5 +286,6 @@
         private ToolStripMenuItem menuLaboratorios;
         private ToolStripMenuItem menuGenerarCheckListLaboratorios;
         private ToolStripMenuItem consultarEquiposToolStripMenuItem;
+        private ToolStripMenuItem registrarResguardoMasivoToolStripMenuItem;
     }
 }
