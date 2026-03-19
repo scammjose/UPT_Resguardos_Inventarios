@@ -185,7 +185,7 @@ namespace AppEscritorioUPT.UI
                 var idsEquipos = _equiposAsignados.Select(eq => eq.Id).ToList();
 
                 // Llamada al servicio que genera los códigos consecutivos y guarda
-                _resguardoService.CrearResguardoMasivo(idsEquipos, idAdmin, idTecnico, fecha, "Asignación Masiva");
+                _resguardoService.CrearResguardoMasivo(idsEquipos, idAdmin, idTecnico, fecha);
 
                 MessageBox.Show($"¡Éxito! Se generaron {_equiposAsignados.Count} resguardos correctamente.", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

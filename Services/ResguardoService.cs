@@ -126,7 +126,7 @@ namespace AppEscritorioUPT.Services
             return ((ResguardoRepository)_resguardoRepo).GetByIdForReport(id);
         }
 
-        public void CrearResguardoMasivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas)
+        public void CrearResguardoMasivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas = null)
         {
             if (equiposIds == null || !equiposIds.Any())
                 throw new ArgumentException("Debe seleccionar al menos un equipo para resguardar.");
