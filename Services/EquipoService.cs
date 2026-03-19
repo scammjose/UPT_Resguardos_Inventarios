@@ -74,5 +74,13 @@ namespace AppEscritorioUPT.Services
         {
             return _equipoRepo.GetEquiposSinResguardo();
         }
+
+        public Equipo? ObtenerPorId(int id)
+        {
+            if (id <= 0)
+                throw new ArgumentException("El Id del equipo no es válido.", nameof(id));
+
+            return _equipoRepo.GetById(id);
+        }
     }
 }

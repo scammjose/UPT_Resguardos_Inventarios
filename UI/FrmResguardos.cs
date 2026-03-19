@@ -107,21 +107,8 @@ namespace AppEscritorioUPT.UI
 
         private void CargarCombos()
         {
-            // Equipos
-            var equipos = _equipoService.ObtenerEquipos();
-            ComboBoxHelper.CargarConSeleccionDefault(
-                cmbEquipo,
-                equipos,
-                displayMember: "DescripcionCorta",
-                valueMember: "Id",
-                itemDefault: new Equipo
-                {
-                    Id = 0,
-                    Marca = "",   // no importa, DescripcionCorta lo ignora
-                    Modelo = "",
-                    NumeroSerie = ""
-                }
-            );
+            // Llamamos a nuestro nuevo método inteligente (sin parámetros = solo libres)
+            CargarComboEquipos();
 
             // Administrativos
             var admins = _administrativoService.ObtenerAdministrativos()
@@ -216,6 +203,8 @@ namespace AppEscritorioUPT.UI
             _resguardoSeleccionado = null;
             dgvResguardos.ClearSelection();
 
+            CargarComboEquipos();
+
             if (cmbEquipo.Items.Count > 0)
                 cmbEquipo.SelectedIndex = 0;
             if (cmbAdministrativo.Items.Count > 0)
@@ -229,6 +218,8 @@ namespace AppEscritorioUPT.UI
         private void CargarDatosEnControles(Resguardo r)
         {
             _resguardoSeleccionado = r;
+
+            CargarComboEquipos(r.EquipoId);
 
             txtCodigoInventario.Text = r.CodigoInventario;
             txtNotas.Text = r.Notas ?? string.Empty;
@@ -450,5 +441,43 @@ namespace AppEscritorioUPT.UI
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void CargarComboEquipos(int? equipoIdPermitido = null)
+        {
+            // 1. Obtenemos solo los equipos que están arrumbados en el almacén (Sin Resguardo)
+            var equiposDisponibles = _equipoService.ObtenerEquiposSinResguardo().ToList();
+
+            // 2. Si estamos EDITANDO, ese equipo en particular no está libre (lo tiene este resguardo).
+            // Así que lo buscamos en la base de datos y lo metemos a la lista a la fuerza.
+            if (equipoIdPermitido.HasValue && equipoIdPermitido.Value > 0)
+            {
+                // Revisamos que no esté ya en la lista
+                if (!equiposDisponibles.Any(e => e.Id == equipoIdPermitido.Value))
+                {
+                    // Asumo que tienes un método ObtenerPorId u ObtenerEquipoPorId en tu servicio
+                    var equipoActual = _equipoService.ObtenerPorId(equipoIdPermitido.Value);
+                    if (equipoActual != null)
+                    {
+                        equiposDisponibles.Add(equipoActual);
+                    }
+                }
+            }
+
+            // 3. Volvemos a llenar el ComboBox ordenando todo para que se vea bonito
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbEquipo,
+                equiposDisponibles.OrderBy(e => e.Marca).ThenBy(e => e.Modelo).ToList(),
+                displayMember: "DescripcionCorta",
+                valueMember: "Id",
+                itemDefault: new Equipo
+                {
+                    Id = 0,
+                    Marca = "Selecciona una opción",
+                    Modelo = "",
+                    NumeroSerie = ""
+                }
+            );
+        }
+
     }
 }
