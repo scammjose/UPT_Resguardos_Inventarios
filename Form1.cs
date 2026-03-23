@@ -221,5 +221,15 @@ namespace AppEscritorioUPT
             //frm.StartPosition = FormStartPosition.CenterScreen;
             //frm.Show();
         }
+
+        private void faltantesDeResguardoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmFaltantesResguardo())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

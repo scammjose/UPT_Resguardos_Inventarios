@@ -119,5 +119,34 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.ExecuteNonQuery();
         }
 
+        public IEnumerable<Administrativo> GetAdministrativosSinResguardo()
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            // Traemos a los administrativos cuyo ID no existe en la tabla de Resguardos
+            cmd.CommandText = @"
+        SELECT Id, NombreCompleto, Puesto, AreaId
+        FROM Administrativos
+        WHERE Id NOT IN (SELECT AdministrativoId FROM Resguardos)
+        ORDER BY NombreCompleto;";
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<Administrativo>();
+
+            while (reader.Read())
+            {
+                lista.Add(new Administrativo
+                {
+                    Id = reader.GetInt32(0),
+                    NombreCompleto = reader.IsDBNull(1) ? "" : reader.GetString(1),
+                    Puesto = reader.IsDBNull(2) ? "" : reader.GetString(2),
+                    AreaId = reader.GetInt32(3)
+                });
+            }
+
+            return lista;
+        }
+
     }
 }

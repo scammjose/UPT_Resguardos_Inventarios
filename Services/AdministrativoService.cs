@@ -75,5 +75,10 @@ namespace AppEscritorioUPT.Services
             _repo.Delete(id);
         }
 
+        public IEnumerable<Administrativo> ObtenerAdministrativosSinResguardo()
+        {
+            return _repo.GetAdministrativosSinResguardo();
+        }
+
     }
 }

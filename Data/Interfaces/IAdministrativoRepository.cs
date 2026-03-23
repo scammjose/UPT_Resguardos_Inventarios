@@ -14,5 +14,6 @@ namespace AppEscritorioUPT.Data.Interfaces
         int Add(Administrativo admin);
         void Update(Administrativo admin);
         void Delete(int id);
+        IEnumerable<Administrativo> GetAdministrativosSinResguardo();
     }
 }
