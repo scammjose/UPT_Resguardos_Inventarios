@@ -46,7 +46,7 @@ namespace AppEscritorioUPT.UI
 
         private void ConfigurarGrid()
         {
-            dgvFaltantes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvFaltantes.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvFaltantes.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvFaltantes.AllowUserToAddRows = false;
             dgvFaltantes.ReadOnly = true;
@@ -62,6 +62,12 @@ namespace AppEscritorioUPT.UI
 
             if (dgvFaltantes.Columns["Puesto"] != null)
                 dgvFaltantes.Columns["Puesto"].HeaderText = "Puesto";
+
+            if (dgvFaltantes.Columns["AreaNombre"] != null)
+            {
+                dgvFaltantes.Columns["AreaNombre"].HeaderText = "Área Asignada";
+                dgvFaltantes.Columns["AreaNombre"].DisplayIndex = 2; // Para ponerla después del nombre
+            }
         }
     }
 }

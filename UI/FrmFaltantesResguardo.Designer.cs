@@ -44,10 +44,11 @@
             // 
             // dgvFaltantes
             // 
+            dgvFaltantes.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvFaltantes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvFaltantes.Location = new Point(22, 56);
             dgvFaltantes.Name = "dgvFaltantes";
-            dgvFaltantes.Size = new Size(766, 364);
+            dgvFaltantes.Size = new Size(766, 382);
             dgvFaltantes.TabIndex = 1;
             // 
             // FrmFaltantesResguardo

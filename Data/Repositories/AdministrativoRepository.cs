@@ -124,12 +124,18 @@ namespace AppEscritorioUPT.Data.Repositories
             using var connection = Database.GetOpenConnection();
             using var cmd = connection.CreateCommand();
 
-            // Traemos a los administrativos cuyo ID no existe en la tabla de Resguardos
+            // Agregamos el INNER JOIN para traer ar.Nombre
             cmd.CommandText = @"
-        SELECT Id, NombreCompleto, Puesto, AreaId
-        FROM Administrativos
-        WHERE Id NOT IN (SELECT AdministrativoId FROM Resguardos)
-        ORDER BY NombreCompleto;";
+            SELECT 
+                a.Id, 
+                a.NombreCompleto, 
+                a.Puesto, 
+                a.AreaId, 
+                ar.Nombre AS AreaNombre
+            FROM Administrativos a
+            INNER JOIN Areas ar ON ar.Id = a.AreaId
+            WHERE a.Id NOT IN (SELECT AdministrativoId FROM Resguardos)
+            ORDER BY a.NombreCompleto;";
 
             using var reader = cmd.ExecuteReader();
             var lista = new List<Administrativo>();
@@ -141,7 +147,8 @@ namespace AppEscritorioUPT.Data.Repositories
                     Id = reader.GetInt32(0),
                     NombreCompleto = reader.IsDBNull(1) ? "" : reader.GetString(1),
                     Puesto = reader.IsDBNull(2) ? "" : reader.GetString(2),
-                    AreaId = reader.GetInt32(3)
+                    AreaId = reader.GetInt32(3),
+                    AreaNombre = reader.IsDBNull(4) ? "" : reader.GetString(4) // ¡Aquí leemos el nombre!
                 });
             }
 
