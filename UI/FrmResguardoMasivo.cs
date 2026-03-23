@@ -24,6 +24,8 @@ namespace AppEscritorioUPT.UI
         private BindingList<Equipo> _equiposDisponibles = new BindingList<Equipo>();
         private BindingList<Equipo> _equiposAsignados = new BindingList<Equipo>();
 
+        public int? AdministrativoIdPreseleccionado { get; set; }
+
         public FrmResguardoMasivo()
         {
             InitializeComponent();
@@ -53,6 +55,12 @@ namespace AppEscritorioUPT.UI
         {
             ConfigurarListas();
             CargarCombos();
+
+            if (AdministrativoIdPreseleccionado.HasValue)
+            {
+                cmbAdministrativo.SelectedValue = AdministrativoIdPreseleccionado.Value;
+            }
+
             EvaluarBotonGuardar();
         }
 

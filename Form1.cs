@@ -231,5 +231,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void transferenciaDeResguardosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmTransferenciaResguardos())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

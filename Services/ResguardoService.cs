@@ -180,5 +180,29 @@ namespace AppEscritorioUPT.Services
             }
         }
 
+        public void TransferirResguardosMasivo(List<int> resguardosIds, int nuevoAdministrativoId, DateTime nuevaFecha)
+        {
+            if (resguardosIds == null || !resguardosIds.Any()) return;
+
+            if (nuevoAdministrativoId <= 0)
+                throw new ArgumentException("Debe seleccionar un administrativo destino válido.");
+
+            foreach (var id in resguardosIds)
+            {
+                // 1. Buscamos el resguardo original en la base de datos
+                var resguardo = _resguardoRepo.GetById(id);
+
+                if (resguardo != null)
+                {
+                    // 2. Le cambiamos el dueño y la fecha (el código de inventario se queda igual)
+                    resguardo.AdministrativoId = nuevoAdministrativoId;
+                    resguardo.FechaResguardo = nuevaFecha.ToString("yyyy-MM-dd");
+
+                    // 3. Guardamos los cambios
+                    _resguardoRepo.Update(resguardo);
+                }
+            }
+        }
+
     }
 }
