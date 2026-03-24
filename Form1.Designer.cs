@@ -46,6 +46,7 @@
             menuEstadisticos = new ToolStripMenuItem();
             registrarResguardoMasivoToolStripMenuItem = new ToolStripMenuItem();
             faltantesDeResguardoToolStripMenuItem = new ToolStripMenuItem();
+            transferenciaDeResguardosToolStripMenuItem = new ToolStripMenuItem();
             mantenimientosToolStripMenuItem = new ToolStripMenuItem();
             menuAsignarCheckList = new ToolStripMenuItem();
             asignarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
@@ -56,7 +57,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            transferenciaDeResguardosToolStripMenuItem = new ToolStripMenuItem();
+            generarPDFPorÁreaToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -143,7 +144,7 @@
             // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
@@ -182,6 +183,13 @@
             faltantesDeResguardoToolStripMenuItem.Size = new Size(223, 22);
             faltantesDeResguardoToolStripMenuItem.Text = "Faltantes de Resguardo";
             faltantesDeResguardoToolStripMenuItem.Click += faltantesDeResguardoToolStripMenuItem_Click;
+            // 
+            // transferenciaDeResguardosToolStripMenuItem
+            // 
+            transferenciaDeResguardosToolStripMenuItem.Name = "transferenciaDeResguardosToolStripMenuItem";
+            transferenciaDeResguardosToolStripMenuItem.Size = new Size(223, 22);
+            transferenciaDeResguardosToolStripMenuItem.Text = "Transferencia de Resguardos";
+            transferenciaDeResguardosToolStripMenuItem.Click += transferenciaDeResguardosToolStripMenuItem_Click;
             // 
             // mantenimientosToolStripMenuItem
             // 
@@ -251,12 +259,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // transferenciaDeResguardosToolStripMenuItem
+            // generarPDFPorÁreaToolStripMenuItem
             // 
-            transferenciaDeResguardosToolStripMenuItem.Name = "transferenciaDeResguardosToolStripMenuItem";
-            transferenciaDeResguardosToolStripMenuItem.Size = new Size(223, 22);
-            transferenciaDeResguardosToolStripMenuItem.Text = "Transferencia de Resguardos";
-            transferenciaDeResguardosToolStripMenuItem.Click += transferenciaDeResguardosToolStripMenuItem_Click;
+            generarPDFPorÁreaToolStripMenuItem.Name = "generarPDFPorÁreaToolStripMenuItem";
+            generarPDFPorÁreaToolStripMenuItem.Size = new Size(223, 22);
+            generarPDFPorÁreaToolStripMenuItem.Text = "Generar PDF por Área";
+            generarPDFPorÁreaToolStripMenuItem.Click += generarPDFPorÁreaToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -305,5 +313,6 @@
         private ToolStripMenuItem registrarResguardoMasivoToolStripMenuItem;
         private ToolStripMenuItem faltantesDeResguardoToolStripMenuItem;
         private ToolStripMenuItem transferenciaDeResguardosToolStripMenuItem;
+        private ToolStripMenuItem generarPDFPorÁreaToolStripMenuItem;
     }
 }

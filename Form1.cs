@@ -241,5 +241,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void generarPDFPor¡reaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmImpresionResguardoPorArea())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

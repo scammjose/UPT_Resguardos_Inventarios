@@ -331,5 +331,81 @@ namespace AppEscritorioUPT.Services
             return html; // fallback
         }
 
+        public string GenerarPdfConcentradoPorArea(int areaId)
+        {
+            // 1. Obtenemos TODOS los resguardos de esa área (ordenados por persona)
+            var modelos = _resguardoService.ObtenerResguardosPorArea(areaId);
+
+            if (modelos == null || modelos.Count == 0)
+                throw new Exception("El área seleccionada no tiene equipos asignados.");
+
+            // 2. Cargar plantilla HTML base
+            var template = CargarPlantillaHtml();
+            var sb = new StringBuilder();
+
+            // 3. Abrimos el documento HTML "Master"
+            sb.AppendLine("<!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>");
+            sb.AppendLine("<title>Resguardos por Área</title>");
+            sb.AppendLine("<link rel='stylesheet' href='../Static/Css/resguardo.css'>");
+
+            // Agregamos una regla CSS dinámica para forzar los saltos de página en el PDF
+            sb.AppendLine("<style>.page-break { page-break-after: always; }</style>");
+            sb.AppendLine("</head><body>");
+
+            // 4. Iteramos sobre todos los equipos (que ya vienen ordenados por persona desde el SQL)
+            for (int i = 0; i < modelos.Count; i++)
+            {
+                var m = modelos[i];
+
+                var html = template;
+                html = ReemplazarPlaceholders(html, m);
+
+                var (bPc, bImp, bTel) = ConstruirBloques(m);
+                html = html.Replace("{{BLOQUE_PC}}", bPc)
+                           .Replace("{{BLOQUE_IMPRESORA}}", bImp)
+                           .Replace("{{BLOQUE_TELEFONIA}}", bTel);
+
+                // Quitamos <html>, <head>, <body> del template individual para insertarlo en el master
+                html = ExtraerSoloBody(html);
+
+                sb.AppendLine(html);
+
+                // Insertamos un salto de página entre cada hoja de resguardo
+                if (i < modelos.Count - 1)
+                    sb.AppendLine("<div class='page-break'></div>");
+            }
+
+            sb.AppendLine("</body></html>");
+
+            // 5. Guardar el HTML temporal
+            var templatesRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Templates");
+            var htmlOutputDir = Path.Combine(templatesRoot, "Html");
+            Directory.CreateDirectory(htmlOutputDir);
+
+            var areaNombreSafe = SafeFileName(modelos[0].AreaNombre);
+            var fecha = DateTime.Now.ToString("dd-MM-yyyy");
+            var htmlFileName = $"resguardos_AREA_{areaNombreSafe}_{fecha}.html";
+            var htmlPath = Path.Combine(htmlOutputDir, htmlFileName);
+
+            File.WriteAllText(htmlPath, sb.ToString(), Encoding.UTF8);
+
+            // 6. Definir la ruta final del PDF destino
+            var pdfOutputDir = DocumentPathHelper.ObtenerRutaResguardos();
+            var pdfFileName = $"Resguardos_AREA_{areaNombreSafe}_{fecha}.pdf";
+            var pdfPath = Path.Combine(pdfOutputDir, pdfFileName);
+
+            // 7. Convertir a PDF usando tu Helper y limpiar el HTML temporal
+            try
+            {
+                PdfHelper.HtmlToPdf(htmlPath, pdfPath);
+            }
+            finally
+            {
+                if (File.Exists(htmlPath)) File.Delete(htmlPath);
+            }
+
+            return pdfPath;
+        }
+
     }
 }

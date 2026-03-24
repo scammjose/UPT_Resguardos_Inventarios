@@ -204,5 +204,10 @@ namespace AppEscritorioUPT.Services
             }
         }
 
+        public List<ResguardoReportModel> ObtenerResguardosPorArea(int areaId)
+        {
+            return ((ResguardoRepository)_resguardoRepo).GetByAreaIdForReport(areaId);
+        }
+
     }
 }
