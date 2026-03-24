@@ -209,5 +209,51 @@ namespace AppEscritorioUPT.Services
             return ((ResguardoRepository)_resguardoRepo).GetByAreaIdForReport(areaId);
         }
 
+        public void ReclasificarCodigosInventarioMasivo(List<int> resguardosIds, int areaIdDestino)
+        {
+            if (resguardosIds == null || !resguardosIds.Any())
+                throw new ArgumentException("Debe seleccionar al menos un resguardo para reclasificar.");
+
+            if (areaIdDestino <= 0)
+                throw new ArgumentException("Debe seleccionar un área destino válida.");
+
+            // 1. Buscamos el área destino para armar el nuevo prefijo
+            var area = _areaRepo.GetById(areaIdDestino)
+                       ?? throw new InvalidOperationException("No se encontró el área destino.");
+
+            // 2. Usamos el año actual para los nuevos códigos
+            var anio = DateTime.Now.Year;
+            var prefijo = $"UPT-{area.NomenclaturaInventario}-{anio}-";
+
+            // 3. Obtenemos el último código usado en esa área para no pisar números existentes
+            var ultimoCodigo = _resguardoRepo.GetUltimoCodigoInventarioPorPrefijo(prefijo);
+            int consecutivoActual = 1;
+
+            if (!string.IsNullOrWhiteSpace(ultimoCodigo))
+            {
+                var partes = ultimoCodigo.Split('-');
+                if (partes.Length >= 4 && int.TryParse(partes[^1], out int num))
+                {
+                    consecutivoActual = num + 1;
+                }
+            }
+
+            // 4. Actualizamos el código de cada resguardo seleccionado
+            foreach (var id in resguardosIds)
+            {
+                var resguardo = _resguardoRepo.GetById(id);
+                if (resguardo != null)
+                {
+                    // Fabricamos el nuevo código
+                    string nuevoCodigo = $"{prefijo}{consecutivoActual:0000}";
+
+                    // Usamos tu nuevo método súper seguro
+                    _resguardoRepo.UpdateCodigoInventario(id, nuevoCodigo);
+
+                    consecutivoActual++; // Avanzamos el contador para la siguiente computadora
+                }
+            }
+        }
+
     }
 }

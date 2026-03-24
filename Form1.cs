@@ -251,5 +251,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void reasignaciónDeCódigoDeInventarioToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmReclasificarCodigos())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

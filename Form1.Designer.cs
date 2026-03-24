@@ -47,6 +47,7 @@
             registrarResguardoMasivoToolStripMenuItem = new ToolStripMenuItem();
             faltantesDeResguardoToolStripMenuItem = new ToolStripMenuItem();
             transferenciaDeResguardosToolStripMenuItem = new ToolStripMenuItem();
+            generarPDFPorÁreaToolStripMenuItem = new ToolStripMenuItem();
             mantenimientosToolStripMenuItem = new ToolStripMenuItem();
             menuAsignarCheckList = new ToolStripMenuItem();
             asignarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
@@ -57,7 +58,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            generarPDFPorÁreaToolStripMenuItem = new ToolStripMenuItem();
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -144,7 +145,7 @@
             // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem, reasignaciónDeCódigoDeInventarioToolStripMenuItem });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
@@ -152,44 +153,51 @@
             // menuRegistrarResguardo
             // 
             menuRegistrarResguardo.Name = "menuRegistrarResguardo";
-            menuRegistrarResguardo.Size = new Size(223, 22);
+            menuRegistrarResguardo.Size = new Size(274, 22);
             menuRegistrarResguardo.Text = "Registrar un Resguardo";
             menuRegistrarResguardo.Click += menuRegistrarResguardo_Click;
             // 
             // menuPorAdministrativo
             // 
             menuPorAdministrativo.Name = "menuPorAdministrativo";
-            menuPorAdministrativo.Size = new Size(223, 22);
+            menuPorAdministrativo.Size = new Size(274, 22);
             menuPorAdministrativo.Text = "Por Administrativo";
             menuPorAdministrativo.Click += menuPorAdministrativo_Click;
             // 
             // menuEstadisticos
             // 
             menuEstadisticos.Name = "menuEstadisticos";
-            menuEstadisticos.Size = new Size(223, 22);
+            menuEstadisticos.Size = new Size(274, 22);
             menuEstadisticos.Text = "Estadísticos";
             menuEstadisticos.Click += menuEstadisticos_Click;
             // 
             // registrarResguardoMasivoToolStripMenuItem
             // 
             registrarResguardoMasivoToolStripMenuItem.Name = "registrarResguardoMasivoToolStripMenuItem";
-            registrarResguardoMasivoToolStripMenuItem.Size = new Size(223, 22);
+            registrarResguardoMasivoToolStripMenuItem.Size = new Size(274, 22);
             registrarResguardoMasivoToolStripMenuItem.Text = "Registrar Resguardo Masivo";
             registrarResguardoMasivoToolStripMenuItem.Click += registrarResguardoMasivoToolStripMenuItem_Click;
             // 
             // faltantesDeResguardoToolStripMenuItem
             // 
             faltantesDeResguardoToolStripMenuItem.Name = "faltantesDeResguardoToolStripMenuItem";
-            faltantesDeResguardoToolStripMenuItem.Size = new Size(223, 22);
+            faltantesDeResguardoToolStripMenuItem.Size = new Size(274, 22);
             faltantesDeResguardoToolStripMenuItem.Text = "Faltantes de Resguardo";
             faltantesDeResguardoToolStripMenuItem.Click += faltantesDeResguardoToolStripMenuItem_Click;
             // 
             // transferenciaDeResguardosToolStripMenuItem
             // 
             transferenciaDeResguardosToolStripMenuItem.Name = "transferenciaDeResguardosToolStripMenuItem";
-            transferenciaDeResguardosToolStripMenuItem.Size = new Size(223, 22);
+            transferenciaDeResguardosToolStripMenuItem.Size = new Size(274, 22);
             transferenciaDeResguardosToolStripMenuItem.Text = "Transferencia de Resguardos";
             transferenciaDeResguardosToolStripMenuItem.Click += transferenciaDeResguardosToolStripMenuItem_Click;
+            // 
+            // generarPDFPorÁreaToolStripMenuItem
+            // 
+            generarPDFPorÁreaToolStripMenuItem.Name = "generarPDFPorÁreaToolStripMenuItem";
+            generarPDFPorÁreaToolStripMenuItem.Size = new Size(274, 22);
+            generarPDFPorÁreaToolStripMenuItem.Text = "Generar PDF por Área";
+            generarPDFPorÁreaToolStripMenuItem.Click += generarPDFPorÁreaToolStripMenuItem_Click;
             // 
             // mantenimientosToolStripMenuItem
             // 
@@ -259,12 +267,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // generarPDFPorÁreaToolStripMenuItem
+            // reasignaciónDeCódigoDeInventarioToolStripMenuItem
             // 
-            generarPDFPorÁreaToolStripMenuItem.Name = "generarPDFPorÁreaToolStripMenuItem";
-            generarPDFPorÁreaToolStripMenuItem.Size = new Size(223, 22);
-            generarPDFPorÁreaToolStripMenuItem.Text = "Generar PDF por Área";
-            generarPDFPorÁreaToolStripMenuItem.Click += generarPDFPorÁreaToolStripMenuItem_Click;
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Name = "reasignaciónDeCódigoDeInventarioToolStripMenuItem";
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Size = new Size(274, 22);
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Text = "Reasignación de Código de Inventario";
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Click += reasignaciónDeCódigoDeInventarioToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -314,5 +322,6 @@
         private ToolStripMenuItem faltantesDeResguardoToolStripMenuItem;
         private ToolStripMenuItem transferenciaDeResguardosToolStripMenuItem;
         private ToolStripMenuItem generarPDFPorÁreaToolStripMenuItem;
+        private ToolStripMenuItem reasignaciónDeCódigoDeInventarioToolStripMenuItem;
     }
 }

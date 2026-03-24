@@ -588,5 +588,18 @@ namespace AppEscritorioUPT.Data.Repositories
             return lista;
         }
 
+        public void UpdateCodigoInventario(int id, string nuevoCodigo)
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            cmd.CommandText = "UPDATE Resguardos SET CodigoInventario = @Codigo WHERE Id = @Id;";
+
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Parameters.AddWithValue("@Codigo", nuevoCodigo);
+
+            cmd.ExecuteNonQuery();
+        }
+
     }
 }

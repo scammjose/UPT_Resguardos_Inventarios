@@ -23,5 +23,7 @@ namespace AppEscritorioUPT.Data.Interfaces
 
         IEnumerable<Resguardo> GetByTipoEquipoId(int tipoEquipoId);
         IEnumerable<Resguardo> GetByAreaAndTipoEquipo(int areaId, int tipoEquipoId);
+
+        void UpdateCodigoInventario(int id, string nuevoCodigo);
     }
 }
