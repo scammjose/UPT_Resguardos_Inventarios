@@ -47,7 +47,7 @@ namespace AppEscritorioUPT.Services
         public Resguardo? ObtenerPorId(int id) => _resguardoRepo.GetById(id);
 
         public void CrearResguardo(int equipoId, int administrativoId, int responsableSistemasId,
-                                   DateTime fechaResguardo, string? notas)
+                                   DateTime fechaResguardo, string? notas, int tipoUsoId = 1)
         {
             if (equipoId <= 0)
                 throw new ArgumentException("Debe seleccionar un equipo válido.", nameof(equipoId));
@@ -65,7 +65,8 @@ namespace AppEscritorioUPT.Services
                 ResponsableSistemasId = responsableSistemasId,
                 CodigoInventario = codigo,
                 FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd"),
-                Notas = notas
+                Notas = notas,
+                TipoUsoId = tipoUsoId
             };
 
             _resguardoRepo.Add(resguardo);
@@ -126,7 +127,7 @@ namespace AppEscritorioUPT.Services
             return ((ResguardoRepository)_resguardoRepo).GetByIdForReport(id);
         }
 
-        public void CrearResguardoMasivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas = null)
+        public void CrearResguardoMasivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas = null, int tipoUsoId = 1)
         {
             if (equiposIds == null || !equiposIds.Any())
                 throw new ArgumentException("Debe seleccionar al menos un equipo para resguardar.");
@@ -170,7 +171,8 @@ namespace AppEscritorioUPT.Services
                     ResponsableSistemasId = responsableSistemasId,
                     CodigoInventario = codigo,
                     FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd"),
-                    Notas = notas
+                    Notas = notas,
+                    TipoUsoId = tipoUsoId
                 };
 
                 _resguardoRepo.Add(resguardo);

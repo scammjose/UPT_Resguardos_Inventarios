@@ -44,6 +44,8 @@
             dtpFechaResguardo = new DateTimePicker();
             lnObservaciones = new Label();
             txtNotas = new TextBox();
+            label2 = new Label();
+            cmbTipoUso = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvResguardos).BeginInit();
             SuspendLayout();
             // 
@@ -202,11 +204,30 @@
             txtNotas.Size = new Size(298, 94);
             txtNotas.TabIndex = 5;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(12, 186);
+            label2.Name = "label2";
+            label2.Size = new Size(69, 15);
+            label2.TabIndex = 16;
+            label2.Text = "Tipo de Uso";
+            // 
+            // cmbTipoUso
+            // 
+            cmbTipoUso.FormattingEnabled = true;
+            cmbTipoUso.Location = new Point(12, 204);
+            cmbTipoUso.Name = "cmbTipoUso";
+            cmbTipoUso.Size = new Size(298, 23);
+            cmbTipoUso.TabIndex = 17;
+            // 
             // FrmResguardos
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 559);
+            Controls.Add(cmbTipoUso);
+            Controls.Add(label2);
             Controls.Add(txtNotas);
             Controls.Add(lnObservaciones);
             Controls.Add(dtpFechaResguardo);
@@ -248,5 +269,7 @@
         private DateTimePicker dtpFechaResguardo;
         private Label lnObservaciones;
         private TextBox txtNotas;
+        private Label label2;
+        private ComboBox cmbTipoUso;
     }
 }

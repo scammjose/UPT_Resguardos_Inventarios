@@ -21,6 +21,7 @@ namespace AppEscritorioUPT.Data.Repositories
                 r.CodigoInventario,
                 r.FechaResguardo,
                 r.Notas,
+                r.TipoUsoId,
 
                 -- Equipo
                 e.Marca || ' ' || e.Modelo || ' - ' || IFNULL(e.NumeroSerie, '') AS EquipoDescripcion,
@@ -30,13 +31,18 @@ namespace AppEscritorioUPT.Data.Repositories
                 ar.Nombre AS AreaNombre,
 
                 -- Responsable de sistemas (administrativo ligado)
-                aResp.NombreCompleto AS ResponsableSistemasNombre
+                aResp.NombreCompleto AS ResponsableSistemasNombre,
+    
+                -- Tipo de Uso
+                tu.Nombre AS TipoUsoNombre
+
             FROM Resguardos r
             INNER JOIN Equipos e ON e.Id = r.EquipoId
             INNER JOIN Administrativos a ON a.Id = r.AdministrativoId
             INNER JOIN Areas ar ON ar.Id = a.AreaId
             INNER JOIN ResponsablesSistemas rs ON rs.Id = r.ResponsableSistemasId
             INNER JOIN Administrativos aResp ON aResp.Id = rs.AdministrativoId
+            INNER JOIN TiposUso tu ON tu.Id = r.TipoUsoId
         ";
 
         public IEnumerable<Resguardo> GetAll()
@@ -77,10 +83,10 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.CommandText = @"
                 INSERT INTO Resguardos
                 (EquipoId, AdministrativoId, ResponsableSistemasId,
-                 CodigoInventario, FechaResguardo, Notas)
+                 CodigoInventario, FechaResguardo, Notas, TipoUsoId)
                 VALUES
                 (@EquipoId, @AdministrativoId, @ResponsableSistemasId,
-                 @CodigoInventario, @FechaResguardo, @Notas);
+                 @CodigoInventario, @FechaResguardo, @Notas, @TipoUsoId);
             ";
 
             cmd.Parameters.AddWithValue("@EquipoId", resguardo.EquipoId);
@@ -89,6 +95,7 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.Parameters.AddWithValue("@CodigoInventario", resguardo.CodigoInventario);
             cmd.Parameters.AddWithValue("@FechaResguardo", resguardo.FechaResguardo ?? "");
             cmd.Parameters.AddWithValue("@Notas", resguardo.Notas ?? "");
+            cmd.Parameters.AddWithValue("@TipoUsoId", resguardo.TipoUsoId);
 
             cmd.ExecuteNonQuery();
         }
@@ -105,7 +112,8 @@ namespace AppEscritorioUPT.Data.Repositories
                     ResponsableSistemasId = @ResponsableSistemasId,
                     -- Normalmente no cambiamos CodigoInventario
                     FechaResguardo = @FechaResguardo,
-                    Notas = @Notas
+                    Notas = @Notas,
+                    TipoUsoId = @TipoUsoId
                 WHERE Id = @Id;
             ";
 
@@ -115,6 +123,7 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.Parameters.AddWithValue("@ResponsableSistemasId", resguardo.ResponsableSistemasId);
             cmd.Parameters.AddWithValue("@FechaResguardo", resguardo.FechaResguardo ?? "");
             cmd.Parameters.AddWithValue("@Notas", resguardo.Notas ?? "");
+            cmd.Parameters.AddWithValue("@TipoUsoId", resguardo.TipoUsoId);
 
             cmd.ExecuteNonQuery();
         }
@@ -156,11 +165,13 @@ namespace AppEscritorioUPT.Data.Repositories
                 CodigoInventario = reader.GetString(4),
                 FechaResguardo = reader.IsDBNull(5) ? null : reader.GetString(5),
                 Notas = reader.IsDBNull(6) ? null : reader.GetString(6),
+                TipoUsoId = reader.IsDBNull(7) ? 1 : reader.GetInt32(7),
 
-                EquipoDescripcion = reader.IsDBNull(7) ? null : reader.GetString(7),
-                AdministrativoNombre = reader.IsDBNull(8) ? null : reader.GetString(8),
-                AreaNombre = reader.IsDBNull(9) ? null : reader.GetString(9),
-                ResponsableSistemasNombre = reader.IsDBNull(10) ? null : reader.GetString(10),
+                EquipoDescripcion = reader.IsDBNull(8) ? null : reader.GetString(8),
+                AdministrativoNombre = reader.IsDBNull(9) ? null : reader.GetString(9),
+                AreaNombre = reader.IsDBNull(10) ? null : reader.GetString(10),
+                ResponsableSistemasNombre = reader.IsDBNull(11) ? null : reader.GetString(11),
+                TipoUsoNombre = reader.IsDBNull(12) ? "" : reader.GetString(12)
             };
         }
 

@@ -14,6 +14,7 @@ namespace AppEscritorioUPT.Domain.Reports
         public string CodigoInventario { get; set; } = string.Empty;
         public string FechaResguardo { get; set; } = string.Empty;
         public string Notas { get; set; } = string.Empty;
+        public string TipoUsoNombre { get; set; } = string.Empty;
 
         // Área y responsables
         public string AreaNombre { get; set; } = string.Empty;

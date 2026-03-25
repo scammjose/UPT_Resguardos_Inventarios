@@ -19,6 +19,7 @@ namespace AppEscritorioUPT.UI
         private readonly ResponsableSistemasService _responsableService = new ResponsableSistemasService();
         private readonly EquipoService _equipoService = new EquipoService();
         private readonly ResguardoService _resguardoService = new ResguardoService();
+        private readonly TipoUsoService _tipoUsoService = new TipoUsoService();
 
         // BindingLists para que los ListBox se actualicen mágicamente al mover elementos
         private BindingList<Equipo> _equiposDisponibles = new BindingList<Equipo>();
@@ -34,6 +35,7 @@ namespace AppEscritorioUPT.UI
             this.Load += FrmResguardoMasivo_Load;
             cmbAdministrativo.SelectedIndexChanged += CmbAdministrativo_SelectedIndexChanged;
             cmbResponsableSistemas.SelectedIndexChanged += CmbResponsableSistemas_SelectedIndexChanged;
+            cmbTipoUso.SelectedIndexChanged += CmbTipoUso_SelectedIndexChanged;
 
             // Eventos de botones
             btnAgregar.Click += BtnAgregar_Click;
@@ -97,6 +99,21 @@ namespace AppEscritorioUPT.UI
             ComboBoxHelper.CargarConSeleccionDefault(
                 cmbResponsableSistemas, responsables, "AdministrativoNombre", "Id",
                 new ResponsableSistemas { Id = 0, AdministrativoNombre = "Técnico que entrega..." });
+
+            var tiposUso = _tipoUsoService.ObtenerTiposUso().ToList();
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbTipoUso,
+                tiposUso,
+                "Nombre",
+                "Id",
+                new TipoUso { Id = 0, Nombre = "Seleccione el Tipo de Uso..." }
+            );
+
+            // Seleccionamos "USO ADMINISTRATIVO" (Id = 1) por defecto
+            if (tiposUso.Any(t => t.Id == 1))
+            {
+                cmbTipoUso.SelectedValue = 1;
+            }
         }
 
         // ==========================================
@@ -128,6 +145,11 @@ namespace AppEscritorioUPT.UI
         }
 
         private void CmbResponsableSistemas_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            EvaluarBotonGuardar();
+        }
+
+        private void CmbTipoUso_SelectedIndexChanged(object? sender, EventArgs e)
         {
             EvaluarBotonGuardar();
         }
@@ -170,6 +192,7 @@ namespace AppEscritorioUPT.UI
             // Solo se enciende si eligió un Admin, eligió un Técnico, y pasó al menos 1 equipo a la derecha
             btnGuardar.Enabled = (cmbAdministrativo.SelectedValue is int idAdmin && idAdmin > 0) &&
                                  (cmbResponsableSistemas.SelectedValue is int idTec && idTec > 0) &&
+                                 (cmbTipoUso.SelectedValue is int idUso && idUso > 0) &&
                                  _equiposAsignados.Count > 0;
         }
 
@@ -187,13 +210,14 @@ namespace AppEscritorioUPT.UI
 
                 int idAdmin = (int)cmbAdministrativo.SelectedValue!;
                 int idTecnico = (int)cmbResponsableSistemas.SelectedValue!;
+                int tipoUsoId = (int)cmbTipoUso.SelectedValue!;
                 DateTime fecha = dtpFechaResguardo.Value;
 
                 // Extraemos solo los IDs de los equipos que quedaron en la lista derecha
                 var idsEquipos = _equiposAsignados.Select(eq => eq.Id).ToList();
 
                 // Llamada al servicio que genera los códigos consecutivos y guarda
-                _resguardoService.CrearResguardoMasivo(idsEquipos, idAdmin, idTecnico, fecha);
+                _resguardoService.CrearResguardoMasivo(idsEquipos, idAdmin, idTecnico, fecha, null, tipoUsoId);
 
                 MessageBox.Show($"¡Éxito! Se generaron {_equiposAsignados.Count} resguardos correctamente.", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

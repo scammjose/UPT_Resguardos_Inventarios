@@ -17,11 +17,13 @@ namespace AppEscritorioUPT.Domain
         public string CodigoInventario { get; set; } = string.Empty;
         public string? FechaResguardo { get; set; }   // luego podemos manejar DateTime
         public string? Notas { get; set; }
+        public int TipoUsoId { get; set; } = 1;
 
         // Props solo para mostrar en UI
         public string? EquipoDescripcion { get; set; }          // Marca/Modelo/Serie combinados
         public string? AdministrativoNombre { get; set; }
         public string? ResponsableSistemasNombre { get; set; }
         public string? AreaNombre { get; set; }
+        public string TipoUsoNombre { get; set; } = string.Empty;
     }
 }

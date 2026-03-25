@@ -239,6 +239,53 @@ namespace AppEscritorioUPT.Data
                     FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
                 );
             ");
+
+            // 14. Catálogo de Tipos de Uso
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS TiposUso (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Nombre TEXT NOT NULL UNIQUE
+                );
+            ");
+
+            // 14.1 Insertamos los valores por defecto si no existen
+            ExecuteNonQuery(connection, @"
+                INSERT INTO TiposUso (Nombre)
+                SELECT 'USO ADMINISTRATIVO'
+                WHERE NOT EXISTS (SELECT 1 FROM TiposUso WHERE Nombre = 'USO ADMINISTRATIVO');
+
+                INSERT INTO TiposUso (Nombre)
+                SELECT 'USO ESTUDIANTIL / KIOSCO'
+                WHERE NOT EXISTS (SELECT 1 FROM TiposUso WHERE Nombre = 'USO ESTUDIANTIL / KIOSCO');
+
+                INSERT INTO TiposUso (Nombre)
+                SELECT 'LABORATORIO GENERAL'
+                WHERE NOT EXISTS (SELECT 1 FROM TiposUso WHERE Nombre = 'LABORATORIO GENERAL');
+            ");
+
+            // 15. MIGRACIÓN: Agregar la columna TipoUsoId a Resguardos sin perder datos
+            bool columnaExiste = false;
+            using (var cmdInfo = connection.CreateCommand())
+            {
+                // PRAGMA table_info nos da la lista de columnas de una tabla
+                cmdInfo.CommandText = "PRAGMA table_info(Resguardos);";
+                using var reader = cmdInfo.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["name"].ToString() == "TipoUsoId")
+                    {
+                        columnaExiste = true;
+                        break;
+                    }
+                }
+            }
+
+            // Si la columna no existe (porque es una versión vieja de la base de datos), la agregamos
+            if (!columnaExiste)
+            {
+                // DEFAULT 1 hace que todas tus computadoras actuales se queden como 'USO ADMINISTRATIVO' automáticamente
+                ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN TipoUsoId INTEGER NOT NULL DEFAULT 1;");
+            }
         }
 
         /// <summary>

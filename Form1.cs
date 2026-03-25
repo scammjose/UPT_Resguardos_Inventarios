@@ -261,5 +261,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void tipoDeUsoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmTiposUso())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

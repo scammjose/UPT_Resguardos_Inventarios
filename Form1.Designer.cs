@@ -48,6 +48,7 @@
             faltantesDeResguardoToolStripMenuItem = new ToolStripMenuItem();
             transferenciaDeResguardosToolStripMenuItem = new ToolStripMenuItem();
             generarPDFPorÁreaToolStripMenuItem = new ToolStripMenuItem();
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem = new ToolStripMenuItem();
             mantenimientosToolStripMenuItem = new ToolStripMenuItem();
             menuAsignarCheckList = new ToolStripMenuItem();
             asignarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
@@ -58,7 +59,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            reasignaciónDeCódigoDeInventarioToolStripMenuItem = new ToolStripMenuItem();
+            tipoDeUsoToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -75,7 +76,7 @@
             // 
             // catálogosToolStripMenuItem
             // 
-            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios, consultarEquiposToolStripMenuItem });
+            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios, consultarEquiposToolStripMenuItem, tipoDeUsoToolStripMenuItem });
             catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
             catálogosToolStripMenuItem.Size = new Size(72, 20);
             catálogosToolStripMenuItem.Text = "Catálogos";
@@ -199,6 +200,13 @@
             generarPDFPorÁreaToolStripMenuItem.Text = "Generar PDF por Área";
             generarPDFPorÁreaToolStripMenuItem.Click += generarPDFPorÁreaToolStripMenuItem_Click;
             // 
+            // reasignaciónDeCódigoDeInventarioToolStripMenuItem
+            // 
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Name = "reasignaciónDeCódigoDeInventarioToolStripMenuItem";
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Size = new Size(274, 22);
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Text = "Reasignación de Código de Inventario";
+            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Click += reasignaciónDeCódigoDeInventarioToolStripMenuItem_Click;
+            // 
             // mantenimientosToolStripMenuItem
             // 
             mantenimientosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAsignarCheckList, asignarCheckListPorÁreaToolStripMenuItem, historialYEdiciónDeMantenimientosToolStripMenuItem });
@@ -267,12 +275,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // reasignaciónDeCódigoDeInventarioToolStripMenuItem
+            // tipoDeUsoToolStripMenuItem
             // 
-            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Name = "reasignaciónDeCódigoDeInventarioToolStripMenuItem";
-            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Size = new Size(274, 22);
-            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Text = "Reasignación de Código de Inventario";
-            reasignaciónDeCódigoDeInventarioToolStripMenuItem.Click += reasignaciónDeCódigoDeInventarioToolStripMenuItem_Click;
+            tipoDeUsoToolStripMenuItem.Name = "tipoDeUsoToolStripMenuItem";
+            tipoDeUsoToolStripMenuItem.Size = new Size(210, 22);
+            tipoDeUsoToolStripMenuItem.Text = "Tipo de Uso";
+            tipoDeUsoToolStripMenuItem.Click += tipoDeUsoToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -323,5 +331,6 @@
         private ToolStripMenuItem transferenciaDeResguardosToolStripMenuItem;
         private ToolStripMenuItem generarPDFPorÁreaToolStripMenuItem;
         private ToolStripMenuItem reasignaciónDeCódigoDeInventarioToolStripMenuItem;
+        private ToolStripMenuItem tipoDeUsoToolStripMenuItem;
     }
 }

@@ -22,6 +22,7 @@ namespace AppEscritorioUPT.UI
         private readonly EquipoService _equipoService = new EquipoService();
         private readonly AdministrativoService _administrativoService = new AdministrativoService();
         private readonly ResponsableSistemasService _responsableService = new ResponsableSistemasService();
+        private readonly TipoUsoService _tipoUsoService = new TipoUsoService();
 
         private Resguardo? _resguardoSeleccionado;
         public int? ResguardoIdParaEditar { get; set; }
@@ -141,6 +142,22 @@ namespace AppEscritorioUPT.UI
                     AdministrativoNombre = "Selecciona una opción"
                 }
             );
+
+            // ¡NUEVO! Llenamos el combo de Tipos de Uso
+            var tiposUso = _tipoUsoService.ObtenerTiposUso().ToList();
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbTipoUso,
+                tiposUso,
+                "Nombre",
+                "Id",
+                new TipoUso { Id = 0, Nombre = "Seleccione el Tipo de Uso..." }
+            );
+
+            // Seleccionamos "USO ADMINISTRATIVO" (Id = 1) por defecto para ahorrarle clics al usuario
+            if (tiposUso.Any(t => t.Id == 1))
+            {
+                cmbTipoUso.SelectedValue = 1;
+            }
         }
 
         private void CargarResguardos()
@@ -157,6 +174,8 @@ namespace AppEscritorioUPT.UI
                 dgvResguardos.Columns["AdministrativoId"].Visible = false;
             if (dgvResguardos.Columns["ResponsableSistemasId"] != null)
                 dgvResguardos.Columns["ResponsableSistemasId"].Visible = false;
+            if (dgvResguardos.Columns["TipoUsoId"] != null)
+                dgvResguardos.Columns["TipoUsoId"].Visible = false;
 
             if (dgvResguardos.Columns["CodigoInventario"] != null)
                 dgvResguardos.Columns["CodigoInventario"].HeaderText = "Inventario";
@@ -175,6 +194,14 @@ namespace AppEscritorioUPT.UI
 
             if (dgvResguardos.Columns["ResponsableSistemasNombre"] != null)
                 dgvResguardos.Columns["ResponsableSistemasNombre"].HeaderText = "Resp. Sistemas";
+
+            if (dgvResguardos.Columns["TipoUsoNombre"] != null)
+            {
+                dgvResguardos.Columns["TipoUsoNombre"].HeaderText = "Uso";
+
+                // Opcional: Si quieres mover la columna para que aparezca después del Inventario (índice visual 3 o 4)
+                dgvResguardos.Columns["TipoUsoNombre"].DisplayIndex = 4; 
+            }
 
             foreach (DataGridViewColumn col in dgvResguardos.Columns)
             {
@@ -211,6 +238,8 @@ namespace AppEscritorioUPT.UI
                 cmbAdministrativo.SelectedIndex = 0;
             if (cmbResponsableSistemas.Items.Count > 0)
                 cmbResponsableSistemas.SelectedIndex = 0;
+            if (cmbTipoUso.Items.Count > 0)
+                cmbTipoUso.SelectedValue = 1;
 
             GestionarBotones(true);
         }
@@ -232,6 +261,7 @@ namespace AppEscritorioUPT.UI
             cmbEquipo.SelectedValue = r.EquipoId;
             cmbAdministrativo.SelectedValue = r.AdministrativoId;
             cmbResponsableSistemas.SelectedValue = r.ResponsableSistemasId;
+            cmbTipoUso.SelectedValue = r.TipoUsoId > 0 ? r.TipoUsoId : 1;
 
             GestionarBotones(false); // Apaga el botón de agregar, enciende el de actualizar
         }
@@ -262,6 +292,14 @@ namespace AppEscritorioUPT.UI
                 return false;
             }
 
+            if (cmbTipoUso.SelectedValue is not int tipoUsoId || tipoUsoId <= 0)
+            {
+                MessageBox.Show("Seleccione un Tipo de Uso.",
+                    "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbTipoUso.Focus();
+                return false;
+            }
+
             // Si quisieras agregar alguna validación de fecha o notas, este es el lugar.
 
             return true;
@@ -278,13 +316,15 @@ namespace AppEscritorioUPT.UI
                 var equipoId = (int)cmbEquipo.SelectedValue!;
                 var adminId = (int)cmbAdministrativo.SelectedValue!;
                 var respSisId = (int)cmbResponsableSistemas.SelectedValue!;
+                var tipoUsoId = (int)cmbTipoUso.SelectedValue!;
 
                 _resguardoService.CrearResguardo(
                     equipoId,
                     adminId,
                     respSisId,
                     dtpFechaResguardo.Value,
-                    txtNotas.Text
+                    txtNotas.Text,
+                    tipoUsoId
                 );
 
                 CargarResguardos();
@@ -311,11 +351,13 @@ namespace AppEscritorioUPT.UI
                 var equipoId = (int)cmbEquipo.SelectedValue!;
                 var adminId = (int)cmbAdministrativo.SelectedValue!;
                 var respSisId = (int)cmbResponsableSistemas.SelectedValue!;
+                var tipoUsoId = (int)cmbTipoUso.SelectedValue!;
 
                 _resguardoSeleccionado.EquipoId = equipoId;
                 _resguardoSeleccionado.AdministrativoId = adminId;
                 _resguardoSeleccionado.ResponsableSistemasId = respSisId;
                 _resguardoSeleccionado.Notas = txtNotas.Text;
+                _resguardoSeleccionado.TipoUsoId = tipoUsoId;
 
                 _resguardoService.ActualizarResguardo(
                     _resguardoSeleccionado,

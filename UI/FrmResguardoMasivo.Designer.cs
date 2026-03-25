@@ -43,6 +43,8 @@
             btnGuardar = new Button();
             cmbResponsableSistemas = new ComboBox();
             label4 = new Label();
+            label5 = new Label();
+            cmbTipoUso = new ComboBox();
             SuspendLayout();
             // 
             // lstDisponibles
@@ -181,11 +183,30 @@
             label4.TabIndex = 24;
             label4.Text = "Responsable de Sistemas";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(576, 125);
+            label5.Name = "label5";
+            label5.Size = new Size(69, 15);
+            label5.TabIndex = 26;
+            label5.Text = "Tipo de Uso";
+            // 
+            // cmbTipoUso
+            // 
+            cmbTipoUso.FormattingEnabled = true;
+            cmbTipoUso.Location = new Point(576, 143);
+            cmbTipoUso.Name = "cmbTipoUso";
+            cmbTipoUso.Size = new Size(365, 23);
+            cmbTipoUso.TabIndex = 27;
+            // 
             // FrmResguardoMasivo
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1026, 668);
+            Controls.Add(cmbTipoUso);
+            Controls.Add(label5);
             Controls.Add(cmbResponsableSistemas);
             Controls.Add(label4);
             Controls.Add(btnGuardar);
@@ -224,5 +245,7 @@
         private Button btnGuardar;
         private ComboBox cmbResponsableSistemas;
         private Label label4;
+        private Label label5;
+        private ComboBox cmbTipoUso;
     }
 }
