@@ -40,6 +40,7 @@
             menuTiposMantenimiento = new ToolStripMenuItem();
             menuLaboratorios = new ToolStripMenuItem();
             consultarEquiposToolStripMenuItem = new ToolStripMenuItem();
+            tipoDeUsoToolStripMenuItem = new ToolStripMenuItem();
             menuResguardos = new ToolStripMenuItem();
             menuRegistrarResguardo = new ToolStripMenuItem();
             menuPorAdministrativo = new ToolStripMenuItem();
@@ -59,7 +60,7 @@
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            tipoDeUsoToolStripMenuItem = new ToolStripMenuItem();
+            registrarEquiposPorLoteToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -76,7 +77,7 @@
             // 
             // catálogosToolStripMenuItem
             // 
-            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios, consultarEquiposToolStripMenuItem, tipoDeUsoToolStripMenuItem });
+            catálogosToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { menuAreas, menuTipos, menuAdministrativos, menuEquipos, menuResponsablesSistemas, menuEdificios, menuTiposMantenimiento, menuLaboratorios, consultarEquiposToolStripMenuItem, tipoDeUsoToolStripMenuItem, registrarEquiposPorLoteToolStripMenuItem });
             catálogosToolStripMenuItem.Name = "catálogosToolStripMenuItem";
             catálogosToolStripMenuItem.Size = new Size(72, 20);
             catálogosToolStripMenuItem.Text = "Catálogos";
@@ -84,65 +85,72 @@
             // menuAreas
             // 
             menuAreas.Name = "menuAreas";
-            menuAreas.Size = new Size(210, 22);
+            menuAreas.Size = new Size(212, 22);
             menuAreas.Text = "Áreas";
             menuAreas.Click += menuAreas_Click;
             // 
             // menuTipos
             // 
             menuTipos.Name = "menuTipos";
-            menuTipos.Size = new Size(210, 22);
+            menuTipos.Size = new Size(212, 22);
             menuTipos.Text = "Tipos de Equipos";
             menuTipos.Click += menuTipos_Click;
             // 
             // menuAdministrativos
             // 
             menuAdministrativos.Name = "menuAdministrativos";
-            menuAdministrativos.Size = new Size(210, 22);
+            menuAdministrativos.Size = new Size(212, 22);
             menuAdministrativos.Text = "Administrativos";
             menuAdministrativos.Click += menuAdministrativos_Click;
             // 
             // menuEquipos
             // 
             menuEquipos.Name = "menuEquipos";
-            menuEquipos.Size = new Size(210, 22);
+            menuEquipos.Size = new Size(212, 22);
             menuEquipos.Text = "Equipos";
             menuEquipos.Click += menuEquipos_Click;
             // 
             // menuResponsablesSistemas
             // 
             menuResponsablesSistemas.Name = "menuResponsablesSistemas";
-            menuResponsablesSistemas.Size = new Size(210, 22);
+            menuResponsablesSistemas.Size = new Size(212, 22);
             menuResponsablesSistemas.Text = "Responsables de Sistemas";
             menuResponsablesSistemas.Click += menuResponsablesSistemas_Click;
             // 
             // menuEdificios
             // 
             menuEdificios.Name = "menuEdificios";
-            menuEdificios.Size = new Size(210, 22);
+            menuEdificios.Size = new Size(212, 22);
             menuEdificios.Text = "Edificios";
             menuEdificios.Click += menuEdificios_Click;
             // 
             // menuTiposMantenimiento
             // 
             menuTiposMantenimiento.Name = "menuTiposMantenimiento";
-            menuTiposMantenimiento.Size = new Size(210, 22);
+            menuTiposMantenimiento.Size = new Size(212, 22);
             menuTiposMantenimiento.Text = "Tipos de Mantenimientos";
             menuTiposMantenimiento.Click += menuTiposMantenimiento_Click;
             // 
             // menuLaboratorios
             // 
             menuLaboratorios.Name = "menuLaboratorios";
-            menuLaboratorios.Size = new Size(210, 22);
+            menuLaboratorios.Size = new Size(212, 22);
             menuLaboratorios.Text = "Laboratorios";
             menuLaboratorios.Click += menuLaboratorios_Click;
             // 
             // consultarEquiposToolStripMenuItem
             // 
             consultarEquiposToolStripMenuItem.Name = "consultarEquiposToolStripMenuItem";
-            consultarEquiposToolStripMenuItem.Size = new Size(210, 22);
+            consultarEquiposToolStripMenuItem.Size = new Size(212, 22);
             consultarEquiposToolStripMenuItem.Text = "Consultar Equipos";
             consultarEquiposToolStripMenuItem.Click += consultarEquiposToolStripMenuItem_Click;
+            // 
+            // tipoDeUsoToolStripMenuItem
+            // 
+            tipoDeUsoToolStripMenuItem.Name = "tipoDeUsoToolStripMenuItem";
+            tipoDeUsoToolStripMenuItem.Size = new Size(212, 22);
+            tipoDeUsoToolStripMenuItem.Text = "Tipo de Uso";
+            tipoDeUsoToolStripMenuItem.Click += tipoDeUsoToolStripMenuItem_Click;
             // 
             // menuResguardos
             // 
@@ -275,12 +283,12 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // tipoDeUsoToolStripMenuItem
+            // registrarEquiposPorLoteToolStripMenuItem
             // 
-            tipoDeUsoToolStripMenuItem.Name = "tipoDeUsoToolStripMenuItem";
-            tipoDeUsoToolStripMenuItem.Size = new Size(210, 22);
-            tipoDeUsoToolStripMenuItem.Text = "Tipo de Uso";
-            tipoDeUsoToolStripMenuItem.Click += tipoDeUsoToolStripMenuItem_Click;
+            registrarEquiposPorLoteToolStripMenuItem.Name = "registrarEquiposPorLoteToolStripMenuItem";
+            registrarEquiposPorLoteToolStripMenuItem.Size = new Size(212, 22);
+            registrarEquiposPorLoteToolStripMenuItem.Text = "Registrar Equipos por Lote";
+            registrarEquiposPorLoteToolStripMenuItem.Click += registrarEquiposPorLoteToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -332,5 +340,6 @@
         private ToolStripMenuItem generarPDFPorÁreaToolStripMenuItem;
         private ToolStripMenuItem reasignaciónDeCódigoDeInventarioToolStripMenuItem;
         private ToolStripMenuItem tipoDeUsoToolStripMenuItem;
+        private ToolStripMenuItem registrarEquiposPorLoteToolStripMenuItem;
     }
 }

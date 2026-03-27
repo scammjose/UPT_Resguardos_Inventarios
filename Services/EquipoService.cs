@@ -82,5 +82,35 @@ namespace AppEscritorioUPT.Services
 
             return _equipoRepo.GetById(id);
         }
+
+        public List<int> CrearLote(List<Equipo> lote)
+        {
+            var idsNuevos = new List<int>();
+
+            foreach (var equipo in lote)
+            {
+                if (equipo.TipoEquipoId <= 0)
+                    throw new ArgumentException("Un equipo del lote no tiene tipo válido.");
+
+                // Reutilizamos tu lógica de limpieza
+                equipo.Marca = string.IsNullOrWhiteSpace(equipo.Marca) ? null : equipo.Marca.Trim();
+                equipo.Modelo = string.IsNullOrWhiteSpace(equipo.Modelo) ? null : equipo.Modelo.Trim();
+                equipo.NumeroSerie = string.IsNullOrWhiteSpace(equipo.NumeroSerie) ? null : equipo.NumeroSerie.Trim();
+
+                // Guardamos en Base de Datos
+                _equipoRepo.Add(equipo);
+
+                // Como necesitamos el ID exacto que le dio SQLite para poder asignarlo después...
+                // Buscamos el equipo recién insertado por su número de serie
+                var equipoGuardado = _equipoRepo.GetAll().FirstOrDefault(e => e.NumeroSerie == equipo.NumeroSerie);
+
+                if (equipoGuardado != null)
+                {
+                    idsNuevos.Add(equipoGuardado.Id);
+                }
+            }
+
+            return idsNuevos;
+        }
     }
 }

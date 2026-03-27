@@ -271,5 +271,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void registrarEquiposPorLoteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmEquiposPorLote())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }
