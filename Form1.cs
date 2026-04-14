@@ -281,5 +281,45 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void consumiblesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmConsumibles())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void asinarTonerAImpresoraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmCompatibilidad())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void entregaDeConsumiblesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmEntregaConsumible())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void reportesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmReporteConsumibles())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

@@ -41,6 +41,7 @@
             menuLaboratorios = new ToolStripMenuItem();
             consultarEquiposToolStripMenuItem = new ToolStripMenuItem();
             tipoDeUsoToolStripMenuItem = new ToolStripMenuItem();
+            registrarEquiposPorLoteToolStripMenuItem = new ToolStripMenuItem();
             menuResguardos = new ToolStripMenuItem();
             menuRegistrarResguardo = new ToolStripMenuItem();
             menuPorAdministrativo = new ToolStripMenuItem();
@@ -59,19 +60,23 @@
             generarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
             menuMantenimientosAulas = new ToolStripMenuItem();
             menuGenerarCheckListLaboratorios = new ToolStripMenuItem();
+            inventarioDeTonersToolStripMenuItem = new ToolStripMenuItem();
+            consumiblesToolStripMenuItem = new ToolStripMenuItem();
+            asinarTonerAImpresoraToolStripMenuItem = new ToolStripMenuItem();
+            entregaDeConsumiblesToolStripMenuItem = new ToolStripMenuItem();
+            reportesToolStripMenuItem = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            registrarEquiposPorLoteToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem, menuResguardos, mantenimientosToolStripMenuItem, checkLisDeMantenimientosToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem, menuResguardos, mantenimientosToolStripMenuItem, checkLisDeMantenimientosToolStripMenuItem, inventarioDeTonersToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(5, 2, 0, 2);
-            menuStrip1.Size = new Size(700, 24);
+            menuStrip1.Size = new Size(984, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -151,6 +156,13 @@
             tipoDeUsoToolStripMenuItem.Size = new Size(212, 22);
             tipoDeUsoToolStripMenuItem.Text = "Tipo de Uso";
             tipoDeUsoToolStripMenuItem.Click += tipoDeUsoToolStripMenuItem_Click;
+            // 
+            // registrarEquiposPorLoteToolStripMenuItem
+            // 
+            registrarEquiposPorLoteToolStripMenuItem.Name = "registrarEquiposPorLoteToolStripMenuItem";
+            registrarEquiposPorLoteToolStripMenuItem.Size = new Size(212, 22);
+            registrarEquiposPorLoteToolStripMenuItem.Text = "Registrar Equipos por Lote";
+            registrarEquiposPorLoteToolStripMenuItem.Click += registrarEquiposPorLoteToolStripMenuItem_Click;
             // 
             // menuResguardos
             // 
@@ -278,23 +290,51 @@
             menuGenerarCheckListLaboratorios.Text = "Generar CheckList Mantenimientos de Laboratorios";
             menuGenerarCheckListLaboratorios.Click += menuGenerarCheckListLaboratorios_Click;
             // 
+            // inventarioDeTonersToolStripMenuItem
+            // 
+            inventarioDeTonersToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { consumiblesToolStripMenuItem, asinarTonerAImpresoraToolStripMenuItem, entregaDeConsumiblesToolStripMenuItem, reportesToolStripMenuItem });
+            inventarioDeTonersToolStripMenuItem.Name = "inventarioDeTonersToolStripMenuItem";
+            inventarioDeTonersToolStripMenuItem.Size = new Size(125, 20);
+            inventarioDeTonersToolStripMenuItem.Text = "Inventario de Toners";
+            // 
+            // consumiblesToolStripMenuItem
+            // 
+            consumiblesToolStripMenuItem.Name = "consumiblesToolStripMenuItem";
+            consumiblesToolStripMenuItem.Size = new Size(244, 22);
+            consumiblesToolStripMenuItem.Text = "Consumibles";
+            consumiblesToolStripMenuItem.Click += consumiblesToolStripMenuItem_Click;
+            // 
+            // asinarTonerAImpresoraToolStripMenuItem
+            // 
+            asinarTonerAImpresoraToolStripMenuItem.Name = "asinarTonerAImpresoraToolStripMenuItem";
+            asinarTonerAImpresoraToolStripMenuItem.Size = new Size(244, 22);
+            asinarTonerAImpresoraToolStripMenuItem.Text = "Asinar Consumibles a Impresora";
+            asinarTonerAImpresoraToolStripMenuItem.Click += asinarTonerAImpresoraToolStripMenuItem_Click;
+            // 
+            // entregaDeConsumiblesToolStripMenuItem
+            // 
+            entregaDeConsumiblesToolStripMenuItem.Name = "entregaDeConsumiblesToolStripMenuItem";
+            entregaDeConsumiblesToolStripMenuItem.Size = new Size(244, 22);
+            entregaDeConsumiblesToolStripMenuItem.Text = "Entrega de Consumibles";
+            entregaDeConsumiblesToolStripMenuItem.Click += entregaDeConsumiblesToolStripMenuItem_Click;
+            // 
+            // reportesToolStripMenuItem
+            // 
+            reportesToolStripMenuItem.Name = "reportesToolStripMenuItem";
+            reportesToolStripMenuItem.Size = new Size(244, 22);
+            reportesToolStripMenuItem.Text = "Reporte Consumibles";
+            reportesToolStripMenuItem.Click += reportesToolStripMenuItem_Click;
+            // 
             // tiposDeEquiposToolStripMenuItem
             // 
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // registrarEquiposPorLoteToolStripMenuItem
-            // 
-            registrarEquiposPorLoteToolStripMenuItem.Name = "registrarEquiposPorLoteToolStripMenuItem";
-            registrarEquiposPorLoteToolStripMenuItem.Size = new Size(212, 22);
-            registrarEquiposPorLoteToolStripMenuItem.Text = "Registrar Equipos por Lote";
-            registrarEquiposPorLoteToolStripMenuItem.Click += registrarEquiposPorLoteToolStripMenuItem_Click;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(700, 338);
+            ClientSize = new Size(984, 461);
             Controls.Add(menuStrip1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
@@ -341,5 +381,10 @@
         private ToolStripMenuItem reasignaciónDeCódigoDeInventarioToolStripMenuItem;
         private ToolStripMenuItem tipoDeUsoToolStripMenuItem;
         private ToolStripMenuItem registrarEquiposPorLoteToolStripMenuItem;
+        private ToolStripMenuItem inventarioDeTonersToolStripMenuItem;
+        private ToolStripMenuItem consumiblesToolStripMenuItem;
+        private ToolStripMenuItem asinarTonerAImpresoraToolStripMenuItem;
+        private ToolStripMenuItem entregaDeConsumiblesToolStripMenuItem;
+        private ToolStripMenuItem reportesToolStripMenuItem;
     }
 }

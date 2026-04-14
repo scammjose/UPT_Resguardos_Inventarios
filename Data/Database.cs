@@ -280,6 +280,63 @@ namespace AppEscritorioUPT.Data
                 }
             }
 
+            // 16. Catálogo de Consumibles (El Almacén)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS Consumibles (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Modelo TEXT NOT NULL,
+                    Tipo TEXT NOT NULL,
+                    StockActual INTEGER NOT NULL DEFAULT 0,
+                    StockMinimo INTEGER NOT NULL DEFAULT 0
+                );
+            ");
+
+            // 17. Compatibilidad (Tabla ternaria Equipos - Consumibles)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS EquiposConsumibles (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EquipoId INTEGER NOT NULL,
+                    ConsumibleId INTEGER NOT NULL,
+                    FOREIGN KEY (EquipoId) REFERENCES Equipos (Id),
+                    FOREIGN KEY (ConsumibleId) REFERENCES Consumibles (Id)
+                );
+            ");
+
+            // 18. Historial de Entregas (Instalación de tóners/tintas)
+            ExecuteNonQuery(connection, @"
+                CREATE TABLE IF NOT EXISTS EntregasConsumibles (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ConsumibleId INTEGER NOT NULL,
+                    EquipoId INTEGER NOT NULL,
+                    AdministrativoId INTEGER NOT NULL,
+                    ResponsableSistemasId INTEGER NOT NULL,
+                    FechaEntrega TEXT NOT NULL,
+                    Cantidad INTEGER NOT NULL DEFAULT 1,
+                    FOREIGN KEY (ConsumibleId) REFERENCES Consumibles (Id),
+                    FOREIGN KEY (EquipoId) REFERENCES Equipos (Id),
+                    FOREIGN KEY (AdministrativoId) REFERENCES Administrativos (Id),
+                    FOREIGN KEY (ResponsableSistemasId) REFERENCES ResponsablesSistemas (Id)
+                );
+            ");
+
+            // 19. MIGRACIÓN: Agregar la columna Color a Consumibles
+            bool columnaColorExiste = false;
+            using (var cmdInfo = connection.CreateCommand())
+            {
+                cmdInfo.CommandText = "PRAGMA table_info(Consumibles);";
+                using var reader = cmdInfo.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["name"].ToString() == "Color") { columnaColorExiste = true; break; }
+                }
+            }
+
+            if (!columnaColorExiste)
+            {
+                // Agregamos la columna y le ponemos "N/A" a lo que ya existiera
+                ExecuteNonQuery(connection, "ALTER TABLE Consumibles ADD COLUMN Color TEXT NOT NULL DEFAULT 'N/A';");
+            }
+
             // Si la columna no existe (porque es una versión vieja de la base de datos), la agregamos
             if (!columnaExiste)
             {

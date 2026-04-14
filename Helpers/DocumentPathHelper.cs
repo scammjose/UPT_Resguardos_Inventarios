@@ -56,6 +56,16 @@ namespace AppEscritorioUPT.Helpers
             return ruta;
         }
 
+        /// <summary>
+        /// Devuelve la ruta para los Reportes de Inventario de Consumibles
+        /// </summary>
+        public static string ObtenerRutaReportesConsumibles()
+        {
+            string ruta = Path.Combine(RutaBase, "Reportes_Consumibles");
+            AsegurarCarpeta(ruta);
+            return ruta;
+        }
+
         // Método privado de apoyo para no repetir el "Directory.Exists"
         private static void AsegurarCarpeta(string ruta)
         {
