@@ -194,7 +194,7 @@ namespace AppEscritorioUPT.Data.Repositories
                 LEFT JOIN Administrativos ad ON r.AdministrativoId = ad.Id
                 LEFT JOIN Areas ar ON ad.AreaId = ar.Id
                 GROUP BY c.Id, c.Modelo, c.Tipo, c.Color, c.StockActual, c.StockMinimo
-                ORDER BY Faltante DESC, c.Modelo ASC;";
+                ORDER BY c.Id ASC;";
 
             using var reader = command.ExecuteReader();
             while (reader.Read())

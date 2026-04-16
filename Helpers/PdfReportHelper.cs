@@ -117,11 +117,10 @@ namespace AppEscritorioUPT.Helpers
             return sb.ToString();
         }
 
-        public static string GenerarHtmlCompras(IEnumerable<dynamic> datos)
+        public static string GenerarHtmlCompras(IEnumerable<dynamic> datos) // (Si usaste el DTO, cámbialo a IEnumerable<RequisicionCompraDto>)
         {
             var sb = new StringBuilder();
 
-            // Mismo CSS institucional que te pasé antes (Guinda, Gris, Dorado)
             sb.Append(@"
             <!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>
             <style>
@@ -148,7 +147,7 @@ namespace AppEscritorioUPT.Helpers
                         <th>Color</th>
                         <th>Stock Actual</th>
                         <th>Mínimo</th>
-                        <th>A Comprar</th>
+                        <th style='width: 100px;'>A Comprar</th>
                         <th>Equipos Destino (Justificación)</th>
                     </tr>
                 </thead>
@@ -156,15 +155,18 @@ namespace AppEscritorioUPT.Helpers
 
             foreach (var item in datos)
             {
-                // Solo pintamos de alerta si realmente necesitamos comprar
-                string alerta = item.Faltante > 0 ? "class='danger-bg danger'" : "";
+                // NUEVO: Movimos la alerta al <tr> para pintar todo el renglón si hay faltante
+                string alertaRow = item.Faltante > 0 ? "class='danger-bg'" : "";
 
-                sb.Append("<tr>");
+                sb.Append($"<tr {alertaRow}>");
                 sb.Append($"<td style='font-weight:bold;'>{item.ModeloConsumible}</td>");
                 sb.Append($"<td>{item.Color}</td>");
                 sb.Append($"<td>{item.StockActual}</td>");
                 sb.Append($"<td>{item.StockMinimo}</td>");
-                sb.Append($"<td {alerta}>{item.Faltante}</td>");
+
+                // NUEVO: Dejamos la celda completamente vacía para rellenar a lápiz
+                sb.Append($"<td></td>");
+
                 sb.Append($"<td class='text-left'>{item.Equipos}</td>");
                 sb.Append("</tr>");
             }
