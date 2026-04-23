@@ -66,6 +66,7 @@
             entregaDeConsumiblesToolStripMenuItem = new ToolStripMenuItem();
             reportesToolStripMenuItem = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
+            resguardosColectivosToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -166,7 +167,7 @@
             // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem, reasignaciónDeCódigoDeInventarioToolStripMenuItem });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem, reasignaciónDeCódigoDeInventarioToolStripMenuItem, resguardosColectivosToolStripMenuItem });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
@@ -330,6 +331,13 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
+            // resguardosColectivosToolStripMenuItem
+            // 
+            resguardosColectivosToolStripMenuItem.Name = "resguardosColectivosToolStripMenuItem";
+            resguardosColectivosToolStripMenuItem.Size = new Size(274, 22);
+            resguardosColectivosToolStripMenuItem.Text = "Resguardos Colectivos";
+            resguardosColectivosToolStripMenuItem.Click += resguardosColectivosToolStripMenuItem_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -386,5 +394,6 @@
         private ToolStripMenuItem asinarTonerAImpresoraToolStripMenuItem;
         private ToolStripMenuItem entregaDeConsumiblesToolStripMenuItem;
         private ToolStripMenuItem reportesToolStripMenuItem;
+        private ToolStripMenuItem resguardosColectivosToolStripMenuItem;
     }
 }

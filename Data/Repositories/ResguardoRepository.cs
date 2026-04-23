@@ -1,4 +1,5 @@
-﻿using AppEscritorioUPT.Data.Interfaces;
+﻿using AppEscritorioUPT.Data.Dto;
+using AppEscritorioUPT.Data.Interfaces;
 using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Domain.Reports;
 using Microsoft.Data.Sqlite;
@@ -83,10 +84,10 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.CommandText = @"
                 INSERT INTO Resguardos
                 (EquipoId, AdministrativoId, ResponsableSistemasId,
-                 CodigoInventario, FechaResguardo, Notas, TipoUsoId)
+                 CodigoInventario, FechaResguardo, Notas, TipoUsoId, FolioLote, TipoResguardo)
                 VALUES
                 (@EquipoId, @AdministrativoId, @ResponsableSistemasId,
-                 @CodigoInventario, @FechaResguardo, @Notas, @TipoUsoId);
+                 @CodigoInventario, @FechaResguardo, @Notas, @TipoUsoId, @FolioLote, @TipoResguardo);
             ";
 
             cmd.Parameters.AddWithValue("@EquipoId", resguardo.EquipoId);
@@ -96,6 +97,8 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.Parameters.AddWithValue("@FechaResguardo", resguardo.FechaResguardo ?? "");
             cmd.Parameters.AddWithValue("@Notas", resguardo.Notas ?? "");
             cmd.Parameters.AddWithValue("@TipoUsoId", resguardo.TipoUsoId);
+            cmd.Parameters.AddWithValue("@FolioLote", string.IsNullOrEmpty(resguardo.FolioLote) ? DBNull.Value : resguardo.FolioLote);
+            cmd.Parameters.AddWithValue("@TipoResguardo", resguardo.TipoResguardo ?? "INDIVIDUAL");
 
             cmd.ExecuteNonQuery();
         }
@@ -376,7 +379,7 @@ namespace AppEscritorioUPT.Data.Repositories
                 INNER JOIN Areas ar ON ar.Id = a.AreaId
                 INNER JOIN ResponsablesSistemas rs ON rs.Id = r.ResponsableSistemasId
                 INNER JOIN Administrativos aResp ON aResp.Id = rs.AdministrativoId
-                WHERE r.AdministrativoId = @AdministrativoId
+                WHERE r.AdministrativoId = @AdministrativoId and r.TipoResguardo = 'INDIVIDUAL'
                 ORDER BY r.FechaResguardo;
             ";
 
@@ -610,6 +613,125 @@ namespace AppEscritorioUPT.Data.Repositories
             cmd.Parameters.AddWithValue("@Codigo", nuevoCodigo);
 
             cmd.ExecuteNonQuery();
+        }
+
+        public List<ResguardoReportModel> GetByFolioLoteForReport(string folioLote)
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            cmd.CommandText = @"
+        SELECT 
+            r.Id, r.EquipoId, r.CodigoInventario, r.FechaResguardo, r.Notas,
+            tu.Nombre AS TipoUsoNombre, -- NUEVO: Traemos el nombre del tipo de uso
+            a.NombreCompleto AS AdministrativoNombre, IFNULL(a.Puesto, '') AS AdministrativoPuesto,
+            ar.Nombre AS AreaNombre,
+            aResp.NombreCompleto AS ResponsableSistemasNombre, IFNULL(aResp.Puesto, '') AS ResponsableSistemasPuesto,
+            te.Nombre AS TipoEquipoNombre,
+            e.Marca AS EquipoMarca, e.Modelo AS EquipoModelo, IFNULL(e.NumeroSerie, '') AS EquipoNumeroSerie,
+            IFNULL(e.DireccionIp, '') AS EquipoDireccionIp,
+            IFNULL(e.MemoriaRam, '') AS MemoriaRam, IFNULL(e.Procesador, '') AS Procesador, IFNULL(e.DiscoDuro, '') AS DiscoDuro,
+            IFNULL(e.TieneLectorCd, 0) AS TieneLectorCd, IFNULL(e.EsPcEscritorio, 0) AS EsPcEscritorio, IFNULL(e.EsAllInOne, 0) AS EsAllInOne,
+            IFNULL(e.MarcaMonitor, '') AS MarcaMonitor, IFNULL(e.ModeloMonitor, '') AS ModeloMonitor, IFNULL(e.SerieMonitor, '') AS SerieMonitor,
+            IFNULL(e.MarcaTeclado, '') AS MarcaTeclado, IFNULL(e.ModeloTeclado, '') AS ModeloTeclado, IFNULL(e.SerieTeclado, '') AS SerieTeclado,
+            IFNULL(e.MarcaMouse, '') AS MarcaMouse, IFNULL(e.ModeloMouse, '') AS ModeloMouse, IFNULL(e.SerieMouse, '') AS SerieMouse,
+            IFNULL(e.MarcaWebcam, '') AS MarcaWebcam, IFNULL(e.ModeloWebcam, '') AS ModeloWebcam, IFNULL(e.SerieWebcam, '') AS SerieWebcam,
+            IFNULL(e.TipoImpresion, '') AS TipoImpresion,
+            IFNULL(e.MacAddress, '') AS MacAddress, IFNULL(e.NumeroExtension, '') AS NumeroExtension, IFNULL(e.PrivilegiosLlamadas, '') AS PrivilegiosLlamadas
+        FROM Resguardos r
+        INNER JOIN Equipos e ON e.Id = r.EquipoId
+        INNER JOIN TiposEquipos te ON te.Id = e.TipoEquipoId
+        INNER JOIN Administrativos a ON a.Id = r.AdministrativoId
+        INNER JOIN Areas ar ON ar.Id = a.AreaId
+        INNER JOIN ResponsablesSistemas rs ON rs.Id = r.ResponsableSistemasId
+        INNER JOIN Administrativos aResp ON aResp.Id = rs.AdministrativoId
+        INNER JOIN TiposUso tu ON tu.Id = r.TipoUsoId -- NUEVO: Conectamos la tabla de Tipos de Uso
+        WHERE r.FolioLote = @FolioLote
+        ORDER BY r.CodigoInventario ASC; 
+    ";
+
+            cmd.Parameters.AddWithValue("@FolioLote", folioLote);
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<ResguardoReportModel>();
+
+            while (reader.Read())
+            {
+                lista.Add(new ResguardoReportModel
+                {
+                    Id = reader.GetInt32(0),
+                    EquipoId = reader.GetInt32(1),
+                    CodigoInventario = reader["CodigoInventario"].ToString() ?? "",
+                    FechaResguardo = reader["FechaResguardo"]?.ToString() ?? "",
+                    Notas = reader["Notas"]?.ToString() ?? "",
+                    TipoUsoNombre = reader["TipoUsoNombre"].ToString() ?? "", // NUEVO: Lo guardamos en el modelo
+                    AdministrativoNombre = reader["AdministrativoNombre"].ToString() ?? "",
+                    AdministrativoPuesto = reader["AdministrativoPuesto"].ToString() ?? "",
+                    AreaNombre = reader["AreaNombre"].ToString() ?? "",
+                    ResponsableSistemasNombre = reader["ResponsableSistemasNombre"].ToString() ?? "",
+                    ResponsableSistemasPuesto = reader["ResponsableSistemasPuesto"].ToString() ?? "",
+                    TipoEquipoNombre = reader["TipoEquipoNombre"].ToString() ?? "",
+                    EquipoMarca = reader["EquipoMarca"].ToString() ?? "",
+                    EquipoModelo = reader["EquipoModelo"].ToString() ?? "",
+                    EquipoNumeroSerie = reader["EquipoNumeroSerie"].ToString() ?? "",
+                    EquipoDireccionIp = reader["EquipoDireccionIp"].ToString() ?? "",
+                    MemoriaRam = reader["MemoriaRam"].ToString() ?? "",
+                    Procesador = reader["Procesador"].ToString() ?? "",
+                    DiscoDuro = reader["DiscoDuro"].ToString() ?? "",
+                    TieneLectorCd = Convert.ToInt32(reader["TieneLectorCd"]) == 1,
+                    EsPcEscritorio = Convert.ToInt32(reader["EsPcEscritorio"]) == 1,
+                    EsAllInOne = Convert.ToInt32(reader["EsAllInOne"]) == 1,
+                    MarcaMonitor = reader["MarcaMonitor"].ToString() ?? "",
+                    ModeloMonitor = reader["ModeloMonitor"].ToString() ?? "",
+                    SerieMonitor = reader["SerieMonitor"].ToString() ?? "",
+                    MarcaTeclado = reader["MarcaTeclado"].ToString() ?? "",
+                    ModeloTeclado = reader["ModeloTeclado"].ToString() ?? "",
+                    SerieTeclado = reader["SerieTeclado"].ToString() ?? "",
+                    MarcaMouse = reader["MarcaMouse"].ToString() ?? "",
+                    ModeloMouse = reader["ModeloMouse"].ToString() ?? "",
+                    SerieMouse = reader["SerieMouse"].ToString() ?? "",
+                    MarcaWebcam = reader["MarcaWebcam"].ToString() ?? "",
+                    ModeloWebcam = reader["ModeloWebcam"].ToString() ?? "",
+                    SerieWebcam = reader["SerieWebcam"].ToString() ?? "",
+                    TipoImpresion = reader["TipoImpresion"].ToString() ?? "",
+                    MacAddress = reader["MacAddress"].ToString() ?? "",
+                    NumeroExtension = reader["NumeroExtension"].ToString() ?? "",
+                    PrivilegiosLlamadas = reader["PrivilegiosLlamadas"].ToString() ?? ""
+                });
+            }
+
+            return lista;
+        }
+
+        public List<LoteResguardoDto> ObtenerLotesDisponibles()
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            cmd.CommandText = @"
+                SELECT 
+                    r.FolioLote, 
+                    r.FolioLote || ' - ' || a.NombreCompleto || ' (' || COUNT(r.Id) || ' equipos)' AS Descripcion
+                FROM Resguardos r
+                INNER JOIN Administrativos a ON a.Id = r.AdministrativoId
+                WHERE r.TipoResguardo = 'COLECTIVO' AND r.FolioLote IS NOT NULL
+                GROUP BY r.FolioLote, a.NombreCompleto
+                ORDER BY r.Id DESC;
+            ";
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<LoteResguardoDto>();
+
+            while (reader.Read())
+            {
+                lista.Add(new LoteResguardoDto
+                {
+                    FolioLote = reader.GetString(0),
+                    Descripcion = reader.GetString(1)
+                });
+            }
+
+            return lista;
         }
 
     }

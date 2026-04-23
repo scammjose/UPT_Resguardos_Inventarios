@@ -407,5 +407,48 @@ namespace AppEscritorioUPT.Services
             return pdfPath;
         }
 
+        public string GenerarPdfResguardoColectivo(string folioLote)
+        {
+            // 1. Obtenemos los datos desde el repositorio
+            var modelos = _resguardoRepo.GetByFolioLoteForReport(folioLote);
+
+            if (modelos == null || modelos.Count == 0)
+                throw new Exception("El lote seleccionado no tiene equipos asignados.");
+
+            // 2. Generamos el HTML con el Helper que armamos antes
+            // (Asegúrate de tener el 'using AppEscritorioUPT.Helpers;' arriba)
+            string html = PdfReportHelper.GenerarHtmlResguardoColectivo(modelos, folioLote);
+
+            // 3. Guardar HTML temporalmente usando tu estructura de directorios
+            var templatesRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Reports", "Templates");
+            var htmlOutputDir = Path.Combine(templatesRoot, "Html");
+            if (!Directory.Exists(htmlOutputDir)) Directory.CreateDirectory(htmlOutputDir);
+
+            var fecha = DateTime.Now.ToString("dd-MM-yyyy");
+            var folioSafe = SafeFileName(folioLote);
+            var htmlFileName = $"lote_{folioSafe}_{fecha}.html";
+            var htmlPath = Path.Combine(htmlOutputDir, htmlFileName);
+
+            File.WriteAllText(htmlPath, html, Encoding.UTF8);
+
+            // 4. PDF destino (Usando tu DocumentPathHelper)
+            var pdfOutputDir = DocumentPathHelper.ObtenerRutaResguardos();
+            var pdfFileName = $"Responsiva_Colectiva_{folioSafe}_{fecha}.pdf";
+            var pdfPath = Path.Combine(pdfOutputDir, pdfFileName);
+
+            // 5. Convertir y limpiar basura
+            try
+            {
+                // Pasamos 'false' si tu PdfHelper acepta landscape para forzarlo a vertical (Portrait)
+                PdfHelper.HtmlToPdf(htmlPath, pdfPath, false);
+            }
+            finally
+            {
+                if (File.Exists(htmlPath)) File.Delete(htmlPath);
+            }
+
+            return pdfPath;
+        }
+
     }
 }

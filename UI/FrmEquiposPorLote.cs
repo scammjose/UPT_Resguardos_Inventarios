@@ -318,7 +318,7 @@ namespace AppEscritorioUPT.UI
                 if (idAdmin > 0 && idTec > 0 && idsGenerados.Any())
                 {
                     // ¡Reutilizamos la magia masiva de resguardos que hicimos ayer!
-                    _resguardoService.CrearResguardoMasivo(
+                    _resguardoService.CrearResguardoColectivo(
                         idsGenerados, idAdmin, idTec, DateTime.Today, null,idUso);
                 }
 

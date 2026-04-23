@@ -343,6 +343,25 @@ namespace AppEscritorioUPT.Data
                 // DEFAULT 1 hace que todas tus computadoras actuales se queden como 'USO ADMINISTRATIVO' automáticamente
                 ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN TipoUsoId INTEGER NOT NULL DEFAULT 1;");
             }
+
+            // 20. MIGRACIÓN: Agregar columnas para Resguardos Colectivos (Lotes)
+            bool columnaFolioLoteExiste = false;
+            using (var cmdInfo = connection.CreateCommand())
+            {
+                cmdInfo.CommandText = "PRAGMA table_info(Resguardos);";
+                using var reader = cmdInfo.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["name"].ToString() == "FolioLote") { columnaFolioLoteExiste = true; break; }
+                }
+            }
+
+            if (!columnaFolioLoteExiste)
+            {
+                // Agregamos un identificador de Lote y un Tipo ('INDIVIDUAL' o 'COLECTIVO')
+                ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN FolioLote TEXT;");
+                ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN TipoResguardo TEXT NOT NULL DEFAULT 'INDIVIDUAL';");
+            }
         }
 
         /// <summary>

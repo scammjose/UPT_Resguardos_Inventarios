@@ -321,5 +321,15 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void resguardosColectivosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmResguardosColectivos())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

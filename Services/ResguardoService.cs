@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Data;
+using AppEscritorioUPT.Data.Dto;
 using AppEscritorioUPT.Data.Interfaces;
 using AppEscritorioUPT.Data.Repositories;
 using AppEscritorioUPT.Domain;
@@ -35,8 +36,7 @@ namespace AppEscritorioUPT.Services
             if (administrativoId <= 0)
                 throw new ArgumentException("Administrativo inválido.", nameof(administrativoId));
 
-            return ((ResguardoRepository)_resguardoRepo)
-                .GetByAdministrativoIdForReport(administrativoId);
+            return _resguardoRepo.GetByAdministrativoIdForReport(administrativoId);
         }
 
         public List<ResguardoReportModel> ObtenerModelosReportePorAdministrativo(int administrativoId)
@@ -255,6 +255,74 @@ namespace AppEscritorioUPT.Services
                     consecutivoActual++; // Avanzamos el contador para la siguiente computadora
                 }
             }
+        }
+
+        public void CrearResguardoColectivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas = null, int tipoUsoId = 1)
+        {
+            if (equiposIds == null || !equiposIds.Any())
+                throw new ArgumentException("Debe seleccionar al menos un equipo para resguardar.");
+
+            // 1. Preparamos los datos del prefijo
+            var admin = _adminRepo.GetById(administrativoId) ?? throw new InvalidOperationException("No se encontró el administrativo.");
+            var area = _areaRepo.GetById(admin.AreaId) ?? throw new InvalidOperationException("No se encontró el área del administrativo.");
+
+            var anio = fechaResguardo.Year;
+            var prefijo = $"UPT-{area.NomenclaturaInventario}-{anio}-";
+
+            // 2. Consecutivo para el Código de Inventario UPT
+            var ultimoCodigo = _resguardoRepo.GetUltimoCodigoInventarioPorPrefijo(prefijo);
+            int consecutivoActual = 1;
+
+            if (!string.IsNullOrWhiteSpace(ultimoCodigo))
+            {
+                var partes = ultimoCodigo.Split('-');
+                if (partes.Length >= 4 && int.TryParse(partes[^1], out int num))
+                {
+                    consecutivoActual = num + 1;
+                }
+            }
+
+            // 3. ¡EL TRUCO DEL LOTE! Generamos un folio maestro para este grupo. 
+            // Ej: "LOTE-RECTORIA-202604231106"
+            string folioColectivo = $"LOTE-{area.NomenclaturaInventario}-{DateTime.Now:yyyyMMddHHmmss}";
+
+            // 4. Procesamos todos los equipos de golpe
+            foreach (var equipoId in equiposIds)
+            {
+                string codigo = $"{prefijo}{consecutivoActual:0000}";
+
+                var resguardo = new Resguardo
+                {
+                    EquipoId = equipoId,
+                    AdministrativoId = administrativoId,
+                    ResponsableSistemasId = responsableSistemasId,
+                    CodigoInventario = codigo,
+                    FechaResguardo = fechaResguardo.ToString("yyyy-MM-dd"),
+                    Notas = notas,
+                    TipoUsoId = tipoUsoId,
+
+                    // ¡ASIGNAMOS EL LOTE!
+                    FolioLote = folioColectivo,
+                    TipoResguardo = "COLECTIVO"
+                };
+
+                // OJO: Asegúrate de que el método Add de tu repositorio esté preparado para 
+                // insertar FolioLote y TipoResguardo en la base de datos (comando SQL).
+                _resguardoRepo.Add(resguardo);
+
+                consecutivoActual++;
+            }
+        }
+
+        public List<LoteResguardoDto> ObtenerLotesDisponibles() => _resguardoRepo.ObtenerLotesDisponibles();
+
+        public List<ResguardoReportModel> ObtenerPorFolioLoteParaReporte(string folioLote)
+        {
+            if (string.IsNullOrWhiteSpace(folioLote))
+                throw new ArgumentException("El folio del lote no puede estar vacío.", nameof(folioLote));
+
+            // Aquí llamamos al método del repositorio que creaste en el paso anterior
+            return _resguardoRepo.GetByFolioLoteForReport(folioLote);
         }
 
     }

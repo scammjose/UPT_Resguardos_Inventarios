@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AppEscritorioUPT.Data.Dto;
 using AppEscritorioUPT.Domain;
 using AppEscritorioUPT.Domain.Reports;
 
@@ -25,5 +26,9 @@ namespace AppEscritorioUPT.Data.Interfaces
         IEnumerable<Resguardo> GetByAreaAndTipoEquipo(int areaId, int tipoEquipoId);
 
         void UpdateCodigoInventario(int id, string nuevoCodigo);
+
+        List<ResguardoReportModel> GetByFolioLoteForReport(string folioLote);
+        List<ResguardoReportModel> GetByAdministrativoIdForReport(int administrativoId);
+        List<LoteResguardoDto> ObtenerLotesDisponibles();
     }
 }

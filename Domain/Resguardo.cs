@@ -19,6 +19,9 @@ namespace AppEscritorioUPT.Domain
         public string? Notas { get; set; }
         public int TipoUsoId { get; set; } = 1;
 
+        public string? FolioLote { get; set; }
+        public string TipoResguardo { get; set; } = "INDIVIDUAL";
+
         // Props solo para mostrar en UI
         public string? EquipoDescripcion { get; set; }          // Marca/Modelo/Serie combinados
         public string? AdministrativoNombre { get; set; }

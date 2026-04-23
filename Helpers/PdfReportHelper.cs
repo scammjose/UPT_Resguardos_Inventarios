@@ -1,4 +1,5 @@
 ﻿using AppEscritorioUPT.Data.Dto;
+using AppEscritorioUPT.Domain.Reports;
 using System.Text;
 
 namespace AppEscritorioUPT.Helpers
@@ -172,6 +173,138 @@ namespace AppEscritorioUPT.Helpers
             }
 
             sb.Append("</tbody></table></body></html>");
+            return sb.ToString();
+        }
+
+        public static string GenerarHtmlResguardoColectivo(List<ResguardoReportModel> equiposLote, string folioLote)
+        {
+            if (equiposLote == null || !equiposLote.Any()) return "";
+
+            var sb = new StringBuilder();
+
+            // Tomamos los datos del administrativo y características comunes de la primera máquina
+            var responsable = equiposLote.First();
+            int totalEquipos = equiposLote.Count;
+
+            // Obtenemos el tipo de uso (Ej. "USO ESTUDIANTIL / KIOSCO")
+            // Nota: Si esto sale en blanco, revisa la nota que te dejé debajo del código
+            string tipoUso = string.IsNullOrEmpty(responsable.TipoUsoNombre) ? "USO GENERAL" : responsable.TipoUsoNombre;
+
+            sb.Append(@"
+            <!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>
+            <style>
+                body { font-family: 'Segoe UI', Arial, sans-serif; color: #39393a; margin: 30px; font-size: 13px; line-height: 1.5; }
+                .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #a0825a; padding-bottom: 10px; }
+                .header h1 { color: #a02142; margin: 0; font-size: 22px; text-transform: uppercase; font-weight: 800; }
+                .header h2 { color: #39393a; margin: 5px 0; font-size: 16px; text-transform: uppercase; }
+                .folio-box { text-align: right; font-weight: bold; color: #a02142; margin-bottom: 20px; font-size: 14px; }
+                
+                .info-section { margin-bottom: 20px; text-align: justify; }
+                .highlight { font-weight: bold; color: #000; }
+
+                /* Tablas */
+                table { width: 100%; border-collapse: collapse; margin-top: 5px; margin-bottom: 25px; font-size: 11px; }
+                th, td { border: 1px solid #dcc6a2; padding: 6px; text-align: center; }
+                th { background-color: #a02142; color: #ffffff; text-transform: uppercase; }
+                
+                .table-title { font-weight: bold; color: #a02142; font-size: 12px; margin-bottom: 0px; text-transform: uppercase;}
+
+                .firmas-container { width: 100%; margin-top: 50px; text-align: center; page-break-inside: avoid; }
+                .firma-box { display: inline-block; width: 45%; vertical-align: top; }
+                .linea-firma { border-top: 1px solid #39393a; margin: 40px 20px 5px 20px; }
+                .firma-nombre { font-weight: bold; font-size: 12px; text-transform: uppercase; }
+                .firma-puesto { font-size: 11px; color: #666; }
+            </style></head><body>
+            
+            <div class='header'>
+                <h1>Universidad Politécnica de Tecámac</h1>
+                <h2>RESPONSIVA DE EQUIPO DE CÓMPUTO - " + tipoUso + @"</h2>
+            </div>
+            
+            <div class='folio-box'>FOLIO: " + folioLote + @"<br><span style='color:#39393a; font-size:12px; font-weight:normal;'>Fecha de emisión: " + DateTime.Now.ToString("dd/MM/yyyy") + @"</span></div>
+
+            <div class='info-section'>
+                Por medio del presente documento, se hace constar que el/la servidor(a) público(a) 
+                <span class='highlight'>" + responsable.AdministrativoNombre + @"</span>, 
+                adscrito(a) al área de <span class='highlight'>" + responsable.AreaNombre + @"</span>, 
+                recibe bajo su entera responsabilidad un total de <span class='highlight'>" + totalEquipos + @"</span> equipo(s) 
+                de cómputo/tecnológico para fines de actividades institucionales, descritos a continuación:
+            </div>
+
+            <div class='table-title'>Especificaciones Generales del Lote</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style='width: 20%;'>Tipo de Equipo</th>
+                        <th style='width: 25%;'>Marca y Modelo</th>
+                        <th style='width: 20%;'>Procesador</th>
+                        <th style='width: 15%;'>Memoria RAM</th>
+                        <th style='width: 20%;'>Almacenamiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style='font-weight:bold;'>" + responsable.TipoEquipoNombre + @"</td>
+                        <td>" + responsable.EquipoMarca + " " + responsable.EquipoModelo + @"</td>
+                        <td>" + (!string.IsNullOrWhiteSpace(responsable.Procesador) ? responsable.Procesador : "N/A") + @"</td>
+                        <td>" + (!string.IsNullOrWhiteSpace(responsable.MemoriaRam) ? responsable.MemoriaRam : "N/A") + @"</td>
+                        <td>" + (!string.IsNullOrWhiteSpace(responsable.DiscoDuro) ? responsable.DiscoDuro : "N/A") + @"</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class='table-title'>Detalle de Equipos Asignados</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style='width: 10%;'>#</th>
+                        <th style='width: 35%;'>Código de Inventario UPT</th>
+                        <th style='width: 30%;'>Número de Serie</th>
+                        <th style='width: 25%;'>Dirección IP</th>
+                    </tr>
+                </thead>
+                <tbody>");
+
+            // Recorremos las máquinas del lote para la segunda tabla
+            int contador = 1;
+            foreach (var equipo in equiposLote)
+            {
+                // Si no tiene IP registrada, mostramos un pequeño texto por defecto
+                string ip = !string.IsNullOrWhiteSpace(equipo.EquipoDireccionIp) ? equipo.EquipoDireccionIp : "DHCP / N/A";
+
+                sb.Append("<tr>");
+                sb.Append($"<td>{contador}</td>");
+                sb.Append($"<td style='font-weight:bold;'>{equipo.CodigoInventario}</td>");
+                sb.Append($"<td>{equipo.EquipoNumeroSerie}</td>");
+                sb.Append($"<td>{ip}</td>");
+                sb.Append("</tr>");
+                contador++;
+            }
+
+            sb.Append(@"
+                </tbody>
+            </table>
+            
+            <div class='info-section' style='font-size: 11px; color: #555;'>
+                * El usuario se compromete a dar un uso adecuado y exclusivo para las funciones de la Universidad. 
+                Cualquier daño por negligencia, robo o extravío deberá ser reportado inmediatamente al área de Sistemas.
+            </div>
+
+            <div class='firmas-container'>
+                <div class='firma-box'>
+                    <div class='linea-firma'></div>
+                    <div class='firma-nombre'>ENTREGA: Lic. Amador Delgadillo Lira</div>
+                    <div class='firma-puesto'>Responsable de Sistemas</div>
+                </div>
+                <div class='firma-box'>
+                    <div class='linea-firma'></div>
+                    <div class='firma-nombre'>RECIBE DE CONFORMIDAD: " + responsable.AdministrativoNombre + @"</div>
+                    <div class='firma-puesto'>" + responsable.AreaNombre + @"</div>
+                </div>
+            </div>
+
+            </body></html>");
+
             return sb.ToString();
         }
     }
