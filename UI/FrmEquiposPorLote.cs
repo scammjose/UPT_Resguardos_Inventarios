@@ -18,9 +18,12 @@ namespace AppEscritorioUPT.UI
         // Lista dinámica para el DataGrid
         private BindingList<DetalleEquipoLote> _detallesLote = new BindingList<DetalleEquipoLote>();
 
+        private string? _folioLoteEnMemoria = null;
+
         // Servicios
         private readonly TipoEquipoService _tipoService = new TipoEquipoService();
         private readonly AdministrativoService _adminService = new AdministrativoService();
+        private readonly LaboratorioService _labService = new LaboratorioService();
         private readonly ResponsableSistemasService _responsableService = new ResponsableSistemasService();
         private readonly TipoUsoService _tipoUsoService = new TipoUsoService();
         private readonly EquipoService _equipoService = new EquipoService();
@@ -29,6 +32,7 @@ namespace AppEscritorioUPT.UI
         public FrmEquiposPorLote()
         {
             InitializeComponent();
+            this.FormClosing += FrmEquiposPorLote_FormClosing;
 
             // Eventos
             this.Load += FrmEquiposPorLote_Load;
@@ -65,6 +69,28 @@ namespace AppEscritorioUPT.UI
 
             UIConfigHelper.ConfigurarControles(this);
             ThemeHelper.AplicarTema(this);
+        }
+
+        private void FrmEquiposPorLote_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            // Si la memoria no está vacía, significa que hay un lote a medias
+            if (!string.IsNullOrEmpty(_folioLoteEnMemoria))
+            {
+                var result = MessageBox.Show(
+                    "Tienes un Lote Colectivo abierto en este momento.\n\nSi cierras la ventana, ya no podrás agregar más equipos a este folio y el lote se considerará cerrado.\n\n¿Estás seguro de que deseas salir?",
+                    "⚠️ Lote Abierto", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                // Si el usuario dice que NO quiere salir, cancelamos el cierre de la ventana
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+                else
+                {
+                    // Si dice que sí, limpiamos la memoria por buena práctica y dejamos que se cierre
+                    _folioLoteEnMemoria = null;
+                }
+            }
         }
 
         private void FrmEquiposPorLote_Load(object? sender, EventArgs e)
@@ -115,6 +141,12 @@ namespace AppEscritorioUPT.UI
             // Seleccionar "USO ADMINISTRATIVO" (Id = 1) por defecto si existe
             if (tiposUso.Any(t => t.Id == 1))
                 cmbTipoUso.SelectedValue = 1;
+
+            var laboratorios = _labService.ObtenerTodos().ToList();
+            ComboBoxHelper.CargarConSeleccionDefault(
+                cmbLaboratorio, laboratorios, "Nombre", "Id",
+                new Laboratorio { Id = 0, Nombre = "Seleccione el Tipo de Uso..." }
+            );
         }
 
         // ===== LÓGICA DE PANELES (Basada en FrmEquipos) =====
@@ -314,17 +346,48 @@ namespace AppEscritorioUPT.UI
                 int idAdmin = cmbAdministrativo.SelectedValue is int a && a > 0 ? a : 0;
                 int idTec = cmbResponsableSistemas.SelectedValue is int t && t > 0 ? t : 0;
                 int idUso = cmbTipoUso.SelectedValue is int u && u > 0 ? u : 1;
+                int? idLab = cmbLaboratorio.SelectedValue is int l && l > 0 ? l : null;
 
                 if (idAdmin > 0 && idTec > 0 && idsGenerados.Any())
                 {
-                    // ¡Reutilizamos la magia masiva de resguardos que hicimos ayer!
-                    _resguardoService.CrearResguardoColectivo(
-                        idsGenerados, idAdmin, idTec, DateTime.Today, null,idUso);
+                    _folioLoteEnMemoria = _resguardoService.CrearResguardoColectivo(
+                        idsGenerados, idAdmin, idTec, DateTime.Today, "Resguardo Colectivo Mixto", idUso, _folioLoteEnMemoria, idLab);
                 }
 
-                MessageBox.Show($"¡Éxito! Se registraron {idsGenerados.Count} equipos.", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Verificamos si el usuario marcó la casilla de lote mixto (o si ya estábamos en medio de uno)
+                if (chkMantenerLote.Checked)
+                {
+                    var respuesta = MessageBox.Show(
+                        $"Se agregaron {idsGenerados.Count} equipos exitosamente al lote:\n{_folioLoteEnMemoria}\n\n¿Deseas continuar agregando MÁS equipos (de otra marca/modelo) a este MISMO lote?",
+                        "Continuar Lote", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                LimpiarTodo();
+                    if (respuesta == DialogResult.Yes)
+                    {
+                        // El usuario quiere seguir. 
+                        chkMantenerLote.Checked = true; // Aseguramos que siga marcado visualmente
+
+                        // Limpiamos SOLO la tabla y cajas de PC, dejando al maestro intacto
+                        LimpiarDatosAlCambiarTipo();
+                    }
+                    else
+                    {
+                        // El usuario ya terminó con este lote.
+                        MessageBox.Show("Lote cerrado y guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Matamos la memoria, desmarcamos el check y limpiamos todo el formulario
+                        _folioLoteEnMemoria = null;
+                        chkMantenerLote.Checked = false;
+                        LimpiarTodo();
+                    }
+                }
+                else
+                {
+                    // Flujo normal: el usuario nunca marcó el check, asume que es un lote único de modelos iguales
+                    MessageBox.Show($"¡Lote guardado con éxito bajo el folio:\n{_folioLoteEnMemoria}!", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    _folioLoteEnMemoria = null;
+                    LimpiarTodo();
+                }
             }
             catch (Exception ex)
             {
@@ -352,6 +415,7 @@ namespace AppEscritorioUPT.UI
             // Esto provocará automáticamente que se dispare tu evento CmbTipoEquipo_SelectedIndexChanged,
             // el cual ocultará los paneles y apagará las columnas del DataGrid.
             if (cmbTipoEquipo.Items.Count > 0) cmbTipoEquipo.SelectedValue = 0;
+            if (cmbLaboratorio.Items.Count > 0) cmbLaboratorio.SelectedValue = 0;
         }
 
         private void DgvEquipos_CurrentCellDirtyStateChanged(object? sender, EventArgs e)

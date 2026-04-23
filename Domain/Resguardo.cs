@@ -28,5 +28,6 @@ namespace AppEscritorioUPT.Domain
         public string? ResponsableSistemasNombre { get; set; }
         public string? AreaNombre { get; set; }
         public string TipoUsoNombre { get; set; } = string.Empty;
+        public int? LaboratorioId { get; set; }
     }
 }

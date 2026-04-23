@@ -257,7 +257,8 @@ namespace AppEscritorioUPT.Services
             }
         }
 
-        public void CrearResguardoColectivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, DateTime fechaResguardo, string? notas = null, int tipoUsoId = 1)
+        public string CrearResguardoColectivo(List<int> equiposIds, int administrativoId, int responsableSistemasId, 
+            DateTime fechaResguardo, string? notas = null, int tipoUsoId = 1, string? folioLoteExistente = null, int? laboratorioId = null)
         {
             if (equiposIds == null || !equiposIds.Any())
                 throw new ArgumentException("Debe seleccionar al menos un equipo para resguardar.");
@@ -284,7 +285,7 @@ namespace AppEscritorioUPT.Services
 
             // 3. ¡EL TRUCO DEL LOTE! Generamos un folio maestro para este grupo. 
             // Ej: "LOTE-RECTORIA-202604231106"
-            string folioColectivo = $"LOTE-{area.NomenclaturaInventario}-{DateTime.Now:yyyyMMddHHmmss}";
+            string folioColectivo = folioLoteExistente ?? $"LOTE-{area.NomenclaturaInventario}-{DateTime.Now:yyyyMMddHHmmss}";
 
             // 4. Procesamos todos los equipos de golpe
             foreach (var equipoId in equiposIds)
@@ -303,7 +304,8 @@ namespace AppEscritorioUPT.Services
 
                     // ¡ASIGNAMOS EL LOTE!
                     FolioLote = folioColectivo,
-                    TipoResguardo = "COLECTIVO"
+                    TipoResguardo = "COLECTIVO",
+                    LaboratorioId = laboratorioId
                 };
 
                 // OJO: Asegúrate de que el método Add de tu repositorio esté preparado para 
@@ -312,6 +314,7 @@ namespace AppEscritorioUPT.Services
 
                 consecutivoActual++;
             }
+            return folioColectivo;
         }
 
         public List<LoteResguardoDto> ObtenerLotesDisponibles() => _resguardoRepo.ObtenerLotesDisponibles();

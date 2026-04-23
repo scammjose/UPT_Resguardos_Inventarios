@@ -362,6 +362,24 @@ namespace AppEscritorioUPT.Data
                 ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN FolioLote TEXT;");
                 ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN TipoResguardo TEXT NOT NULL DEFAULT 'INDIVIDUAL';");
             }
+
+            // 21. MIGRACIÓN: Agregar columna LaboratorioId a Resguardos
+            bool columnaLabExiste = false;
+            using (var cmdInfo = connection.CreateCommand())
+            {
+                cmdInfo.CommandText = "PRAGMA table_info(Resguardos);";
+                using var reader = cmdInfo.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["name"].ToString() == "LaboratorioId") { columnaLabExiste = true; break; }
+                }
+            }
+
+            if (!columnaLabExiste)
+            {
+                // Usamos NULL porque los resguardos individuales de los maestros no tienen laboratorio
+                ExecuteNonQuery(connection, "ALTER TABLE Resguardos ADD COLUMN LaboratorioId INTEGER NULL REFERENCES Laboratorios(Id);");
+            }
         }
 
         /// <summary>

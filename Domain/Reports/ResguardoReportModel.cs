@@ -70,5 +70,7 @@ namespace AppEscritorioUPT.Domain.Reports
         // Útil para mostrar en un solo campo si quieres
         public string EquipoDescripcion
             => $"{EquipoMarca} {EquipoModelo} - {EquipoNumeroSerie}".Trim();
+
+        public string LaboratorioNombre { get; set; } = "";
     }
 }

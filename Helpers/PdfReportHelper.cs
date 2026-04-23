@@ -182,13 +182,28 @@ namespace AppEscritorioUPT.Helpers
 
             var sb = new StringBuilder();
 
-            // Tomamos los datos del administrativo y características comunes de la primera máquina
+            // Los datos de la persona (Admin, Área, Tipo de Uso) son los mismos para todo el lote
             var responsable = equiposLote.First();
             int totalEquipos = equiposLote.Count;
 
-            // Obtenemos el tipo de uso (Ej. "USO ESTUDIANTIL / KIOSCO")
-            // Nota: Si esto sale en blanco, revisa la nota que te dejé debajo del código
             string tipoUso = string.IsNullOrEmpty(responsable.TipoUsoNombre) ? "USO GENERAL" : responsable.TipoUsoNombre;
+
+            // ==========================================
+            // MAGIA DE AGRUPACIÓN (Para lotes mixtos)
+            // ==========================================
+            var gruposHardware = equiposLote.GroupBy(e => new
+            {
+                e.TipoEquipoNombre,
+                e.EquipoMarca,
+                e.EquipoModelo,
+                e.Procesador,
+                e.MemoriaRam,
+                e.DiscoDuro
+            }).ToList();
+
+            string subtituloLaboratorio = !string.IsNullOrWhiteSpace(responsable.LaboratorioNombre)
+            ? $"<h3 style='color: #a02142; margin-top: 5px; margin-bottom: 0px; font-size: 15px;'>ASIGNACIÓN: {responsable.LaboratorioNombre.ToUpper()}</h3>"
+            : "";
 
             sb.Append(@"
             <!DOCTYPE html><html lang='es'><head><meta charset='UTF-8'>
@@ -196,17 +211,16 @@ namespace AppEscritorioUPT.Helpers
                 body { font-family: 'Segoe UI', Arial, sans-serif; color: #39393a; margin: 30px; font-size: 13px; line-height: 1.5; }
                 .header { text-align: center; margin-bottom: 20px; border-bottom: 3px solid #a0825a; padding-bottom: 10px; }
                 .header h1 { color: #a02142; margin: 0; font-size: 22px; text-transform: uppercase; font-weight: 800; }
-                .header h2 { color: #39393a; margin: 5px 0; font-size: 16px; text-transform: uppercase; }
+                .header h2 { color: #39393a; margin: 5px 0 0 0; font-size: 16px; text-transform: uppercase; }
                 .folio-box { text-align: right; font-weight: bold; color: #a02142; margin-bottom: 20px; font-size: 14px; }
-                
+        
                 .info-section { margin-bottom: 20px; text-align: justify; }
                 .highlight { font-weight: bold; color: #000; }
 
-                /* Tablas */
                 table { width: 100%; border-collapse: collapse; margin-top: 5px; margin-bottom: 25px; font-size: 11px; }
                 th, td { border: 1px solid #dcc6a2; padding: 6px; text-align: center; }
                 th { background-color: #a02142; color: #ffffff; text-transform: uppercase; }
-                
+        
                 .table-title { font-weight: bold; color: #a02142; font-size: 12px; margin-bottom: 0px; text-transform: uppercase;}
 
                 .firmas-container { width: 100%; margin-top: 50px; text-align: center; page-break-inside: avoid; }
@@ -215,12 +229,13 @@ namespace AppEscritorioUPT.Helpers
                 .firma-nombre { font-weight: bold; font-size: 12px; text-transform: uppercase; }
                 .firma-puesto { font-size: 11px; color: #666; }
             </style></head><body>
-            
+    
             <div class='header'>
                 <h1>Universidad Politécnica de Tecámac</h1>
                 <h2>RESPONSIVA DE EQUIPO DE CÓMPUTO - " + tipoUso + @"</h2>
+                " + subtituloLaboratorio + @"
             </div>
-            
+    
             <div class='folio-box'>FOLIO: " + folioLote + @"<br><span style='color:#39393a; font-size:12px; font-weight:normal;'>Fecha de emisión: " + DateTime.Now.ToString("dd/MM/yyyy") + @"</span></div>
 
             <div class='info-section'>
@@ -235,46 +250,56 @@ namespace AppEscritorioUPT.Helpers
             <table>
                 <thead>
                     <tr>
+                        <th style='width: 5%;'>Cant.</th>
                         <th style='width: 20%;'>Tipo de Equipo</th>
                         <th style='width: 25%;'>Marca y Modelo</th>
                         <th style='width: 20%;'>Procesador</th>
                         <th style='width: 15%;'>Memoria RAM</th>
-                        <th style='width: 20%;'>Almacenamiento</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style='font-weight:bold;'>" + responsable.TipoEquipoNombre + @"</td>
-                        <td>" + responsable.EquipoMarca + " " + responsable.EquipoModelo + @"</td>
-                        <td>" + (!string.IsNullOrWhiteSpace(responsable.Procesador) ? responsable.Procesador : "N/A") + @"</td>
-                        <td>" + (!string.IsNullOrWhiteSpace(responsable.MemoriaRam) ? responsable.MemoriaRam : "N/A") + @"</td>
-                        <td>" + (!string.IsNullOrWhiteSpace(responsable.DiscoDuro) ? responsable.DiscoDuro : "N/A") + @"</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class='table-title'>Detalle de Equipos Asignados</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th style='width: 10%;'>#</th>
-                        <th style='width: 35%;'>Código de Inventario UPT</th>
-                        <th style='width: 30%;'>Número de Serie</th>
-                        <th style='width: 25%;'>Dirección IP</th>
+                        <th style='width: 15%;'>Almacenamiento</th>
                     </tr>
                 </thead>
                 <tbody>");
 
-            // Recorremos las máquinas del lote para la segunda tabla
+            // Imprimimos un renglón por cada modelo de máquina diferente que haya en el lote
+            foreach (var grupo in gruposHardware)
+            {
+                sb.Append("<tr>");
+                sb.Append($"<td style='font-weight:bold; color:#a02142;'>{grupo.Count()}</td>"); // Imprime 25, 15, etc.
+                sb.Append($"<td>{grupo.Key.TipoEquipoNombre}</td>");
+                sb.Append($"<td>{grupo.Key.EquipoMarca} {grupo.Key.EquipoModelo}</td>");
+                sb.Append($"<td>{(!string.IsNullOrWhiteSpace(grupo.Key.Procesador) ? grupo.Key.Procesador : "N/A")}</td>");
+                sb.Append($"<td>{(!string.IsNullOrWhiteSpace(grupo.Key.MemoriaRam) ? grupo.Key.MemoriaRam : "N/A")}</td>");
+                sb.Append($"<td>{(!string.IsNullOrWhiteSpace(grupo.Key.DiscoDuro) ? grupo.Key.DiscoDuro : "N/A")}</td>");
+                sb.Append("</tr>");
+            }
+
+            sb.Append(@"
+                </tbody>
+            </table>
+
+            <div class='table-title'>Detalle de Equipos Asignados (Números de Serie)</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style='width: 5%;'>#</th>
+                        <th style='width: 25%;'>Código de Inventario UPT</th>
+                        <th style='width: 30%;'>Marca/Modelo</th>
+                        <th style='width: 20%;'>Número de Serie</th>
+                        <th style='width: 20%;'>Dirección IP</th>
+                    </tr>
+                </thead>
+                <tbody>");
+
+            // Recorremos TODAS las máquinas una por una para la tabla de abajo
             int contador = 1;
             foreach (var equipo in equiposLote)
             {
-                // Si no tiene IP registrada, mostramos un pequeño texto por defecto
-                string ip = !string.IsNullOrWhiteSpace(equipo.EquipoDireccionIp) ? equipo.EquipoDireccionIp : "DHCP / N/A";
+                string ip = !string.IsNullOrWhiteSpace(equipo.EquipoDireccionIp) ? equipo.EquipoDireccionIp : "DHCP";
 
                 sb.Append("<tr>");
                 sb.Append($"<td>{contador}</td>");
                 sb.Append($"<td style='font-weight:bold;'>{equipo.CodigoInventario}</td>");
+                sb.Append($"<td style='font-size:10px;'>{equipo.EquipoMarca} {equipo.EquipoModelo}</td>"); // Agregamos la marca pequeñita para identificarlas
                 sb.Append($"<td>{equipo.EquipoNumeroSerie}</td>");
                 sb.Append($"<td>{ip}</td>");
                 sb.Append("</tr>");

@@ -55,6 +55,9 @@
             label3 = new Label();
             cmbTipoUso = new ComboBox();
             label4 = new Label();
+            chkMantenerLote = new CheckBox();
+            cmbLaboratorio = new ComboBox();
+            label5 = new Label();
             pnlPc.SuspendLayout();
             gbTipoPc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)nudCantidad).BeginInit();
@@ -247,9 +250,9 @@
             // dgvEquipos
             // 
             dgvEquipos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEquipos.Location = new Point(24, 292);
+            dgvEquipos.Location = new Point(24, 341);
             dgvEquipos.Name = "dgvEquipos";
-            dgvEquipos.Size = new Size(1196, 399);
+            dgvEquipos.Size = new Size(1196, 350);
             dgvEquipos.TabIndex = 26;
             // 
             // btnGuardar
@@ -264,7 +267,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(218, 218);
+            label2.Location = new Point(360, 218);
             label2.Name = "label2";
             label2.Size = new Size(138, 15);
             label2.TabIndex = 28;
@@ -273,7 +276,7 @@
             // cmbAdministrativo
             // 
             cmbAdministrativo.FormattingEnabled = true;
-            cmbAdministrativo.Location = new Point(218, 235);
+            cmbAdministrativo.Location = new Point(360, 235);
             cmbAdministrativo.Name = "cmbAdministrativo";
             cmbAdministrativo.Size = new Size(250, 23);
             cmbAdministrativo.TabIndex = 29;
@@ -281,7 +284,7 @@
             // cmbResponsableSistemas
             // 
             cmbResponsableSistemas.FormattingEnabled = true;
-            cmbResponsableSistemas.Location = new Point(522, 236);
+            cmbResponsableSistemas.Location = new Point(664, 236);
             cmbResponsableSistemas.Name = "cmbResponsableSistemas";
             cmbResponsableSistemas.Size = new Size(250, 23);
             cmbResponsableSistemas.TabIndex = 31;
@@ -289,7 +292,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(522, 219);
+            label3.Location = new Point(664, 219);
             label3.Name = "label3";
             label3.Size = new Size(138, 15);
             label3.TabIndex = 30;
@@ -298,25 +301,55 @@
             // cmbTipoUso
             // 
             cmbTipoUso.FormattingEnabled = true;
-            cmbTipoUso.Location = new Point(831, 236);
+            cmbTipoUso.Location = new Point(973, 236);
             cmbTipoUso.Name = "cmbTipoUso";
-            cmbTipoUso.Size = new Size(250, 23);
+            cmbTipoUso.Size = new Size(247, 23);
             cmbTipoUso.TabIndex = 33;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(831, 219);
+            label4.Location = new Point(973, 219);
             label4.Name = "label4";
             label4.Size = new Size(69, 15);
             label4.TabIndex = 32;
             label4.Text = "Tipo de Uso";
+            // 
+            // chkMantenerLote
+            // 
+            chkMantenerLote.AutoSize = true;
+            chkMantenerLote.Location = new Point(172, 236);
+            chkMantenerLote.Name = "chkMantenerLote";
+            chkMantenerLote.Size = new Size(165, 19);
+            chkMantenerLote.TabIndex = 34;
+            chkMantenerLote.Text = "Mantener Lote de Registro";
+            chkMantenerLote.UseVisualStyleBackColor = true;
+            // 
+            // cmbLaboratorio
+            // 
+            cmbLaboratorio.FormattingEnabled = true;
+            cmbLaboratorio.Location = new Point(360, 302);
+            cmbLaboratorio.Name = "cmbLaboratorio";
+            cmbLaboratorio.Size = new Size(551, 23);
+            cmbLaboratorio.TabIndex = 35;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(363, 284);
+            label5.Name = "label5";
+            label5.Size = new Size(127, 15);
+            label5.TabIndex = 36;
+            label5.Text = "Laboratorio (Opcional)";
             // 
             // FrmEquiposPorLote
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1232, 808);
+            Controls.Add(label5);
+            Controls.Add(cmbLaboratorio);
+            Controls.Add(chkMantenerLote);
             Controls.Add(cmbTipoUso);
             Controls.Add(label4);
             Controls.Add(cmbResponsableSistemas);
@@ -375,5 +408,8 @@
         private Label label3;
         private ComboBox cmbTipoUso;
         private Label label4;
+        private CheckBox chkMantenerLote;
+        private ComboBox cmbLaboratorio;
+        private Label label5;
     }
 }
