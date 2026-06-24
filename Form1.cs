@@ -331,5 +331,25 @@ namespace AppEscritorioUPT
             }
             ;
         }
+
+        private void transpasarResguardoColectivoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmTraspasoLotes())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
+
+        private void concentradoGeneralToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var frm = new FrmDashboard())
+            {
+                frm.StartPosition = FormStartPosition.CenterParent;
+                frm.ShowDialog(this);
+            }
+            ;
+        }
     }
 }

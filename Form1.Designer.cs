@@ -51,6 +51,8 @@
             transferenciaDeResguardosToolStripMenuItem = new ToolStripMenuItem();
             generarPDFPorÁreaToolStripMenuItem = new ToolStripMenuItem();
             reasignaciónDeCódigoDeInventarioToolStripMenuItem = new ToolStripMenuItem();
+            resguardosColectivosToolStripMenuItem = new ToolStripMenuItem();
+            transpasarResguardoColectivoToolStripMenuItem = new ToolStripMenuItem();
             mantenimientosToolStripMenuItem = new ToolStripMenuItem();
             menuAsignarCheckList = new ToolStripMenuItem();
             asignarCheckListPorÁreaToolStripMenuItem = new ToolStripMenuItem();
@@ -66,14 +68,15 @@
             entregaDeConsumiblesToolStripMenuItem = new ToolStripMenuItem();
             reportesToolStripMenuItem = new ToolStripMenuItem();
             tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
-            resguardosColectivosToolStripMenuItem = new ToolStripMenuItem();
+            estadToolStripMenuItem = new ToolStripMenuItem();
+            concentradoGeneralToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem, menuResguardos, mantenimientosToolStripMenuItem, checkLisDeMantenimientosToolStripMenuItem, inventarioDeTonersToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { catálogosToolStripMenuItem, menuResguardos, mantenimientosToolStripMenuItem, checkLisDeMantenimientosToolStripMenuItem, inventarioDeTonersToolStripMenuItem, estadToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(5, 2, 0, 2);
@@ -167,7 +170,7 @@
             // 
             // menuResguardos
             // 
-            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem, reasignaciónDeCódigoDeInventarioToolStripMenuItem, resguardosColectivosToolStripMenuItem });
+            menuResguardos.DropDownItems.AddRange(new ToolStripItem[] { menuRegistrarResguardo, menuPorAdministrativo, menuEstadisticos, registrarResguardoMasivoToolStripMenuItem, faltantesDeResguardoToolStripMenuItem, transferenciaDeResguardosToolStripMenuItem, generarPDFPorÁreaToolStripMenuItem, reasignaciónDeCódigoDeInventarioToolStripMenuItem, resguardosColectivosToolStripMenuItem, transpasarResguardoColectivoToolStripMenuItem });
             menuResguardos.Name = "menuResguardos";
             menuResguardos.Size = new Size(80, 20);
             menuResguardos.Text = "Resguardos";
@@ -227,6 +230,20 @@
             reasignaciónDeCódigoDeInventarioToolStripMenuItem.Size = new Size(274, 22);
             reasignaciónDeCódigoDeInventarioToolStripMenuItem.Text = "Reasignación de Código de Inventario";
             reasignaciónDeCódigoDeInventarioToolStripMenuItem.Click += reasignaciónDeCódigoDeInventarioToolStripMenuItem_Click;
+            // 
+            // resguardosColectivosToolStripMenuItem
+            // 
+            resguardosColectivosToolStripMenuItem.Name = "resguardosColectivosToolStripMenuItem";
+            resguardosColectivosToolStripMenuItem.Size = new Size(274, 22);
+            resguardosColectivosToolStripMenuItem.Text = "Resguardos Colectivos";
+            resguardosColectivosToolStripMenuItem.Click += resguardosColectivosToolStripMenuItem_Click;
+            // 
+            // transpasarResguardoColectivoToolStripMenuItem
+            // 
+            transpasarResguardoColectivoToolStripMenuItem.Name = "transpasarResguardoColectivoToolStripMenuItem";
+            transpasarResguardoColectivoToolStripMenuItem.Size = new Size(274, 22);
+            transpasarResguardoColectivoToolStripMenuItem.Text = "Transpasar Resguardo Colectivo";
+            transpasarResguardoColectivoToolStripMenuItem.Click += transpasarResguardoColectivoToolStripMenuItem_Click;
             // 
             // mantenimientosToolStripMenuItem
             // 
@@ -331,12 +348,19 @@
             tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
             tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
-            // resguardosColectivosToolStripMenuItem
+            // estadToolStripMenuItem
             // 
-            resguardosColectivosToolStripMenuItem.Name = "resguardosColectivosToolStripMenuItem";
-            resguardosColectivosToolStripMenuItem.Size = new Size(274, 22);
-            resguardosColectivosToolStripMenuItem.Text = "Resguardos Colectivos";
-            resguardosColectivosToolStripMenuItem.Click += resguardosColectivosToolStripMenuItem_Click;
+            estadToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { concentradoGeneralToolStripMenuItem });
+            estadToolStripMenuItem.Name = "estadToolStripMenuItem";
+            estadToolStripMenuItem.Size = new Size(80, 20);
+            estadToolStripMenuItem.Text = "Estadisticos";
+            // 
+            // concentradoGeneralToolStripMenuItem
+            // 
+            concentradoGeneralToolStripMenuItem.Name = "concentradoGeneralToolStripMenuItem";
+            concentradoGeneralToolStripMenuItem.Size = new Size(186, 22);
+            concentradoGeneralToolStripMenuItem.Text = "Concentrado General";
+            concentradoGeneralToolStripMenuItem.Click += concentradoGeneralToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -395,5 +419,8 @@
         private ToolStripMenuItem entregaDeConsumiblesToolStripMenuItem;
         private ToolStripMenuItem reportesToolStripMenuItem;
         private ToolStripMenuItem resguardosColectivosToolStripMenuItem;
+        private ToolStripMenuItem transpasarResguardoColectivoToolStripMenuItem;
+        private ToolStripMenuItem estadToolStripMenuItem;
+        private ToolStripMenuItem concentradoGeneralToolStripMenuItem;
     }
 }

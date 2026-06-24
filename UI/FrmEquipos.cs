@@ -608,6 +608,7 @@ namespace AppEscritorioUPT.UI
 
             // ====== COMPUTADORAS ======
             if (tipoTexto.Contains("pc") ||
+                tipoTexto.Contains("servidor") ||
                 tipoTexto.Contains("escritorio") ||
                 tipoTexto.Contains("laptop") ||
                 tipoTexto.Contains("all in one") ||

@@ -328,5 +328,48 @@ namespace AppEscritorioUPT.Services
             return _resguardoRepo.GetByFolioLoteForReport(folioLote);
         }
 
+        public string TransferirLoteColectivo(string folioLoteActual, int nuevoAdministrativoId, int nuevoResponsableSistemasId, DateTime nuevaFecha)
+        {
+            if (string.IsNullOrWhiteSpace(folioLoteActual))
+                throw new ArgumentException("Debe proporcionar el folio del lote a transferir.");
+            if (nuevoAdministrativoId <= 0 || nuevoResponsableSistemasId <= 0)
+                throw new ArgumentException("Debe seleccionar el personal de origen y destino válidos.");
+
+            // 1. Obtenemos los IDs de los resguardos que pertenecen a ese lote
+            // Usamos tu método de reporte para saber cuáles son
+            var resguardosDelLote = _resguardoRepo.GetByFolioLoteForReport(folioLoteActual);
+
+            if (resguardosDelLote == null || !resguardosDelLote.Any())
+                throw new Exception("No se encontraron equipos activos en el lote seleccionado.");
+
+            // 2. Preparamos el NUEVO folio basado en el área del NUEVO dueño
+            var adminNuevo = _adminRepo.GetById(nuevoAdministrativoId) ?? throw new InvalidOperationException("No se encontró el administrativo destino.");
+            var areaNueva = _areaRepo.GetById(adminNuevo.AreaId) ?? throw new InvalidOperationException("No se encontró el área destino.");
+
+            string nuevoFolio = $"LOTE-{areaNueva.NomenclaturaInventario}-{DateTime.Now:yyyyMMddHHmmss}";
+
+            // 3. Procesamos el traspaso máquina por máquina
+            foreach (var item in resguardosDelLote)
+            {
+                // Obtenemos la entidad real de la base de datos para modificarla
+                var resguardo = _resguardoRepo.GetById(item.Id);
+
+                if (resguardo != null)
+                {
+                    resguardo.AdministrativoId = nuevoAdministrativoId;
+                    resguardo.ResponsableSistemasId = nuevoResponsableSistemasId;
+                    resguardo.FechaResguardo = nuevaFecha.ToString("yyyy-MM-dd");
+                    resguardo.FolioLote = nuevoFolio; // ¡Cambiamos de caja!
+
+                    // Nota: Si quieres que el código de inventario cambie (por ejemplo, si pasó de Rectoría a Sistemas), 
+                    // tendrías que regenerar el código UPT. Pero normalmente el equipo conserva su código aunque cambie de dueño.
+
+                    _resguardoRepo.Update(resguardo);
+                }
+            }
+
+            return nuevoFolio;
+        }
+
     }
 }
