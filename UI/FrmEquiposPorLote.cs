@@ -45,6 +45,9 @@ namespace AppEscritorioUPT.UI
             // Evento del ComboBox
             cmbTipoEquipo.SelectedIndexChanged += CmbTipoEquipo_SelectedIndexChanged;
 
+            // Evento para el menú contextual de llenado rápido (Clic derecho)
+            dgvEquipos.CellMouseClick += DgvEquipos_CellMouseClick;
+
             btnGuardar.Click += BtnGuardar_Click;
 
             // 1. Cajas de texto (cada vez que teclean una letra)
@@ -477,6 +480,64 @@ namespace AppEscritorioUPT.UI
 
             // 5. Encender o apagar el botón
             btnGuardar.Enabled = todoLleno;
+        }
+
+        private void DgvEquipos_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Solo actuamos si el usuario dio CLIC DERECHO y está tocando una celda válida (no encabezados)
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                // 1. Forzamos a la tabla a seleccionar la celda que acabamos de tocar
+                dgvEquipos.CurrentCell = dgvEquipos.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                // 2. IMPORTANTE: Obtenemos el nombre de la propiedad real a la que está conectada la columna
+                string propiedadDatos = dgvEquipos.Columns[e.ColumnIndex].DataPropertyName;
+                var valorActual = dgvEquipos.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
+
+                // Si la celda está vacía o es una columna sin datos, no mostramos el menú
+                if (string.IsNullOrWhiteSpace(valorActual) || string.IsNullOrWhiteSpace(propiedadDatos))
+                    return;
+
+                // 3. Construimos el menú flotante
+                ContextMenuStrip menu = new ContextMenuStrip();
+                ToolStripMenuItem itemRellenar = new ToolStripMenuItem($"Replicar '{valorActual}' hacia abajo");
+
+                // Guardamos la info para usarla al hacer clic
+                itemRellenar.Tag = new Tuple<string, string>(propiedadDatos, valorActual);
+                itemRellenar.Click += ExecutarLlenadoColumna_Click;
+
+                menu.Items.Add(itemRellenar);
+
+                // 4. Forzamos a que el menú aparezca exactamente en la punta del cursor
+                menu.Show(Cursor.Position);
+            }
+        }
+
+        private void ExecutarLlenadoColumna_Click(object? sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem item && item.Tag is Tuple<string, string> datosCelda)
+            {
+                string propiedadDatos = datosCelda.Item1; // Ej. "MouseMarca"
+                string valorAPropagar = datosCelda.Item2; // Ej. "Logitech"
+
+                // Como usamos BindingList, modificamos los objetos directamente por detrás
+                foreach (var equipoFila in _detallesLote)
+                {
+                    // Buscamos la propiedad en nuestra clase DetalleEquipoLote
+                    var propiedadInfo = typeof(DetalleEquipoLote).GetProperty(propiedadDatos);
+
+                    if (propiedadInfo != null && propiedadInfo.CanWrite)
+                    {
+                        propiedadInfo.SetValue(equipoFila, valorAPropagar);
+                    }
+                }
+
+                // Refrescamos la tabla para que se vean los cambios al instante
+                dgvEquipos.Refresh();
+
+                // Evaluamos si ya se llenó todo para encender el botón de Guardar
+                EvaluarEstadoBotonGuardar();
+            }
         }
 
     }

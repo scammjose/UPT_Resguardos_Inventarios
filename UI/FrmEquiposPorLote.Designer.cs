@@ -249,6 +249,7 @@
             // 
             // dgvEquipos
             // 
+            dgvEquipos.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dgvEquipos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvEquipos.Location = new Point(24, 341);
             dgvEquipos.Name = "dgvEquipos";
@@ -257,6 +258,7 @@
             // 
             // btnGuardar
             // 
+            btnGuardar.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnGuardar.Location = new Point(24, 725);
             btnGuardar.Name = "btnGuardar";
             btnGuardar.Size = new Size(131, 40);

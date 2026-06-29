@@ -371,5 +371,13 @@ namespace AppEscritorioUPT.Services
             return nuevoFolio;
         }
 
+        public List<ResguardoReportModel> GetEquiposPorLaboratorio(int laboratorioId)
+        {
+            if (laboratorioId <= 0)
+                throw new ArgumentException("ID de Laboratorio inválido.");
+
+            return _resguardoRepo.GetEquiposPorLaboratorio(laboratorioId);
+        }
+
     }
 }

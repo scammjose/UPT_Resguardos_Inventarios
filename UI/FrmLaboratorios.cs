@@ -39,6 +39,7 @@ namespace AppEscritorioUPT.UI
             btnEliminar.Click += BtnEliminar_Click;
 
             dgvLaboratorios.CellClick += DgvLaboratorios_CellClick;
+            dgvLaboratorios.CellMouseClick += DgvLaboratorios_CellMouseClick;
 
             UIConfigHelper.ConfigurarControles(this);
             ThemeHelper.AplicarTema(this);
@@ -248,5 +249,37 @@ namespace AppEscritorioUPT.UI
                 GestionarBotones(false);
             }
         }
+
+        private void DgvLaboratorios_CellMouseClick(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Verificamos que sea clic DERECHO y en una fila válida
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                // Seleccionamos la fila automáticamente
+                dgvLaboratorios.CurrentCell = dgvLaboratorios.Rows[e.RowIndex].Cells[e.ColumnIndex];
+
+                // Extraemos el ID y Nombre de esa fila. 
+                // IMPORTANTE: Asegúrate de que los nombres "Id" y "Nombre" coincidan con las columnas de tu DataGrid
+                int labId = Convert.ToInt32(dgvLaboratorios.Rows[e.RowIndex].Cells["Id"].Value);
+                string labNombre = dgvLaboratorios.Rows[e.RowIndex].Cells["Nombre"].Value?.ToString() ?? "Laboratorio";
+
+                // Creamos el menú contextual
+                ContextMenuStrip menu = new ContextMenuStrip();
+                ToolStripMenuItem itemVerEquipos = new ToolStripMenuItem("🔍 Ver equipos asignados a este laboratorio");
+
+                itemVerEquipos.Click += (s, args) =>
+                {
+                    // Al hacer clic, abrimos la nueva ventana pasándole los datos
+                    using (var frm = new FrmEquiposLaboratorio(labId, labNombre))
+                    {
+                        frm.ShowDialog(this);
+                    }
+                };
+
+                menu.Items.Add(itemVerEquipos);
+                menu.Show(Cursor.Position);
+            }
+        }
+
     }
 }

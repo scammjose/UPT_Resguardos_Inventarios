@@ -738,5 +738,68 @@ namespace AppEscritorioUPT.Data.Repositories
             return lista;
         }
 
+        public List<ResguardoReportModel> GetEquiposPorLaboratorio(int laboratorioId)
+        {
+            using var connection = Database.GetOpenConnection();
+            using var cmd = connection.CreateCommand();
+
+            cmd.CommandText = @"
+        SELECT 
+            r.Id, r.EquipoId, r.CodigoInventario, r.FechaResguardo, r.Notas, r.FolioLote,
+            tu.Nombre AS TipoUsoNombre, 
+            IFNULL(lab.Nombre, '') AS LaboratorioNombre,
+            a.NombreCompleto AS AdministrativoNombre, IFNULL(a.Puesto, '') AS AdministrativoPuesto,
+            ar.Nombre AS AreaNombre,
+            aResp.NombreCompleto AS ResponsableSistemasNombre, IFNULL(aResp.Puesto, '') AS ResponsableSistemasPuesto,
+            te.Nombre AS TipoEquipoNombre,
+            e.Marca AS EquipoMarca, e.Modelo AS EquipoModelo, IFNULL(e.NumeroSerie, '') AS EquipoNumeroSerie,
+            IFNULL(e.DireccionIp, '') AS EquipoDireccionIp,
+            IFNULL(e.MemoriaRam, '') AS MemoriaRam, IFNULL(e.Procesador, '') AS Procesador, IFNULL(e.DiscoDuro, '') AS DiscoDuro,
+            IFNULL(e.TieneLectorCd, 0) AS TieneLectorCd, IFNULL(e.EsPcEscritorio, 0) AS EsPcEscritorio, IFNULL(e.EsAllInOne, 0) AS EsAllInOne,
+            IFNULL(e.MarcaMonitor, '') AS MarcaMonitor, IFNULL(e.ModeloMonitor, '') AS ModeloMonitor, IFNULL(e.SerieMonitor, '') AS SerieMonitor,
+            IFNULL(e.MarcaTeclado, '') AS MarcaTeclado, IFNULL(e.ModeloTeclado, '') AS ModeloTeclado, IFNULL(e.SerieTeclado, '') AS SerieTeclado,
+            IFNULL(e.MarcaMouse, '') AS MarcaMouse, IFNULL(e.ModeloMouse, '') AS ModeloMouse, IFNULL(e.SerieMouse, '') AS SerieMouse,
+            IFNULL(e.MarcaWebcam, '') AS MarcaWebcam, IFNULL(e.ModeloWebcam, '') AS ModeloWebcam, IFNULL(e.SerieWebcam, '') AS SerieWebcam,
+            IFNULL(e.TipoImpresion, '') AS TipoImpresion,
+            IFNULL(e.MacAddress, '') AS MacAddress, IFNULL(e.NumeroExtension, '') AS NumeroExtension, IFNULL(e.PrivilegiosLlamadas, '') AS PrivilegiosLlamadas
+        FROM Resguardos r
+        INNER JOIN Equipos e ON e.Id = r.EquipoId
+        INNER JOIN TiposEquipos te ON te.Id = e.TipoEquipoId
+        INNER JOIN Administrativos a ON a.Id = r.AdministrativoId
+        INNER JOIN Areas ar ON ar.Id = a.AreaId
+        INNER JOIN ResponsablesSistemas rs ON rs.Id = r.ResponsableSistemasId
+        INNER JOIN Administrativos aResp ON aResp.Id = rs.AdministrativoId
+        INNER JOIN TiposUso tu ON tu.Id = r.TipoUsoId
+        INNER JOIN Laboratorios lab ON lab.Id = r.LaboratorioId 
+        WHERE r.LaboratorioId = @LabId
+        ORDER BY r.CodigoInventario ASC; 
+    ";
+
+            cmd.Parameters.AddWithValue("@LabId", laboratorioId);
+
+            using var reader = cmd.ExecuteReader();
+            var lista = new List<ResguardoReportModel>();
+
+            while (reader.Read())
+            {
+                lista.Add(new ResguardoReportModel
+                {
+                    Id = reader.GetInt32(0),
+                    EquipoId = reader.GetInt32(1),
+                    CodigoInventario = reader["CodigoInventario"].ToString() ?? "",
+                    FechaResguardo = reader["FechaResguardo"]?.ToString() ?? "",
+                    FolioLote = reader["FolioLote"]?.ToString() ?? "", // Agregamos el Folio Lote
+                    LaboratorioNombre = reader["LaboratorioNombre"].ToString() ?? "",
+                    TipoEquipoNombre = reader["TipoEquipoNombre"].ToString() ?? "",
+                    EquipoMarca = reader["EquipoMarca"].ToString() ?? "",
+                    EquipoModelo = reader["EquipoModelo"].ToString() ?? "",
+                    EquipoNumeroSerie = reader["EquipoNumeroSerie"].ToString() ?? "",
+                    EquipoDireccionIp = reader["EquipoDireccionIp"].ToString() ?? ""
+                    // Omito las demás para no saturar, con estas nos basta para la tabla visual
+                });
+            }
+            return lista;
+        }
+
     }
 }

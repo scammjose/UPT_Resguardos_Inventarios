@@ -30,5 +30,7 @@ namespace AppEscritorioUPT.Data.Interfaces
         List<ResguardoReportModel> GetByFolioLoteForReport(string folioLote);
         List<ResguardoReportModel> GetByAdministrativoIdForReport(int administrativoId);
         List<LoteResguardoDto> ObtenerLotesDisponibles();
+
+        List<ResguardoReportModel> GetEquiposPorLaboratorio(int laboratorioId);
     }
 }

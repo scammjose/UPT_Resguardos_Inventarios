@@ -46,6 +46,12 @@ namespace AppEscritorioUPT.UI
 
         }
 
+        // Este es el que te permite abrir la ventana haciendo: new FrmEquipos(ID)
+        public FrmEquipos(int equipoId) : this()
+        {
+            this.EquipoIdParaEditar = equipoId;
+        }
+
         // ========== LOAD ==========
 
         private void FrmEquipos_Load(object? sender, EventArgs e)

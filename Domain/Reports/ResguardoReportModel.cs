@@ -72,5 +72,7 @@ namespace AppEscritorioUPT.Domain.Reports
             => $"{EquipoMarca} {EquipoModelo} - {EquipoNumeroSerie}".Trim();
 
         public string LaboratorioNombre { get; set; } = "";
+
+        public string FolioLote { get; set; } = "";
     }
 }
