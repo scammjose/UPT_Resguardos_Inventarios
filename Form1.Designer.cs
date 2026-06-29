@@ -67,9 +67,9 @@
             asinarTonerAImpresoraToolStripMenuItem = new ToolStripMenuItem();
             entregaDeConsumiblesToolStripMenuItem = new ToolStripMenuItem();
             reportesToolStripMenuItem = new ToolStripMenuItem();
-            tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
             estadToolStripMenuItem = new ToolStripMenuItem();
             concentradoGeneralToolStripMenuItem = new ToolStripMenuItem();
+            tiposDeEquiposToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -94,78 +94,78 @@
             // menuAreas
             // 
             menuAreas.Name = "menuAreas";
-            menuAreas.Size = new Size(212, 22);
+            menuAreas.Size = new Size(234, 22);
             menuAreas.Text = "Áreas";
             menuAreas.Click += menuAreas_Click;
             // 
             // menuTipos
             // 
             menuTipos.Name = "menuTipos";
-            menuTipos.Size = new Size(212, 22);
+            menuTipos.Size = new Size(234, 22);
             menuTipos.Text = "Tipos de Equipos";
             menuTipos.Click += menuTipos_Click;
             // 
             // menuAdministrativos
             // 
             menuAdministrativos.Name = "menuAdministrativos";
-            menuAdministrativos.Size = new Size(212, 22);
+            menuAdministrativos.Size = new Size(234, 22);
             menuAdministrativos.Text = "Administrativos";
             menuAdministrativos.Click += menuAdministrativos_Click;
             // 
             // menuEquipos
             // 
             menuEquipos.Name = "menuEquipos";
-            menuEquipos.Size = new Size(212, 22);
+            menuEquipos.Size = new Size(234, 22);
             menuEquipos.Text = "Equipos";
             menuEquipos.Click += menuEquipos_Click;
             // 
             // menuResponsablesSistemas
             // 
             menuResponsablesSistemas.Name = "menuResponsablesSistemas";
-            menuResponsablesSistemas.Size = new Size(212, 22);
+            menuResponsablesSistemas.Size = new Size(234, 22);
             menuResponsablesSistemas.Text = "Responsables de Sistemas";
             menuResponsablesSistemas.Click += menuResponsablesSistemas_Click;
             // 
             // menuEdificios
             // 
             menuEdificios.Name = "menuEdificios";
-            menuEdificios.Size = new Size(212, 22);
+            menuEdificios.Size = new Size(234, 22);
             menuEdificios.Text = "Edificios";
             menuEdificios.Click += menuEdificios_Click;
             // 
             // menuTiposMantenimiento
             // 
             menuTiposMantenimiento.Name = "menuTiposMantenimiento";
-            menuTiposMantenimiento.Size = new Size(212, 22);
+            menuTiposMantenimiento.Size = new Size(234, 22);
             menuTiposMantenimiento.Text = "Tipos de Mantenimientos";
             menuTiposMantenimiento.Click += menuTiposMantenimiento_Click;
             // 
             // menuLaboratorios
             // 
             menuLaboratorios.Name = "menuLaboratorios";
-            menuLaboratorios.Size = new Size(212, 22);
+            menuLaboratorios.Size = new Size(234, 22);
             menuLaboratorios.Text = "Laboratorios";
             menuLaboratorios.Click += menuLaboratorios_Click;
             // 
             // consultarEquiposToolStripMenuItem
             // 
             consultarEquiposToolStripMenuItem.Name = "consultarEquiposToolStripMenuItem";
-            consultarEquiposToolStripMenuItem.Size = new Size(212, 22);
+            consultarEquiposToolStripMenuItem.Size = new Size(234, 22);
             consultarEquiposToolStripMenuItem.Text = "Consultar Equipos";
             consultarEquiposToolStripMenuItem.Click += consultarEquiposToolStripMenuItem_Click;
             // 
             // tipoDeUsoToolStripMenuItem
             // 
             tipoDeUsoToolStripMenuItem.Name = "tipoDeUsoToolStripMenuItem";
-            tipoDeUsoToolStripMenuItem.Size = new Size(212, 22);
+            tipoDeUsoToolStripMenuItem.Size = new Size(234, 22);
             tipoDeUsoToolStripMenuItem.Text = "Tipo de Uso";
             tipoDeUsoToolStripMenuItem.Click += tipoDeUsoToolStripMenuItem_Click;
             // 
             // registrarEquiposPorLoteToolStripMenuItem
             // 
             registrarEquiposPorLoteToolStripMenuItem.Name = "registrarEquiposPorLoteToolStripMenuItem";
-            registrarEquiposPorLoteToolStripMenuItem.Size = new Size(212, 22);
-            registrarEquiposPorLoteToolStripMenuItem.Text = "Registrar Equipos por Lote";
+            registrarEquiposPorLoteToolStripMenuItem.Size = new Size(234, 22);
+            registrarEquiposPorLoteToolStripMenuItem.Text = "Registrar Equipos Laboratorios";
             registrarEquiposPorLoteToolStripMenuItem.Click += registrarEquiposPorLoteToolStripMenuItem_Click;
             // 
             // menuResguardos
@@ -242,7 +242,7 @@
             // 
             transpasarResguardoColectivoToolStripMenuItem.Name = "transpasarResguardoColectivoToolStripMenuItem";
             transpasarResguardoColectivoToolStripMenuItem.Size = new Size(274, 22);
-            transpasarResguardoColectivoToolStripMenuItem.Text = "Transpasar Resguardo Colectivo";
+            transpasarResguardoColectivoToolStripMenuItem.Text = "Transpasar Resguardo Laboratorios";
             transpasarResguardoColectivoToolStripMenuItem.Click += transpasarResguardoColectivoToolStripMenuItem_Click;
             // 
             // mantenimientosToolStripMenuItem
@@ -343,11 +343,6 @@
             reportesToolStripMenuItem.Text = "Reporte Consumibles";
             reportesToolStripMenuItem.Click += reportesToolStripMenuItem_Click;
             // 
-            // tiposDeEquiposToolStripMenuItem
-            // 
-            tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
-            tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
-            // 
             // estadToolStripMenuItem
             // 
             estadToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { concentradoGeneralToolStripMenuItem });
@@ -361,6 +356,11 @@
             concentradoGeneralToolStripMenuItem.Size = new Size(186, 22);
             concentradoGeneralToolStripMenuItem.Text = "Concentrado General";
             concentradoGeneralToolStripMenuItem.Click += concentradoGeneralToolStripMenuItem_Click;
+            // 
+            // tiposDeEquiposToolStripMenuItem
+            // 
+            tiposDeEquiposToolStripMenuItem.Name = "tiposDeEquiposToolStripMenuItem";
+            tiposDeEquiposToolStripMenuItem.Size = new Size(32, 19);
             // 
             // Form1
             // 
